@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.munchymarket.MunchyMarket.domain.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +20,8 @@ public class VerificationCode {
 
     private String phoneNumber;
 
-    @Column(name = "verification_code", length = 6)
-    private String verificationCode;
+    @Column(name = "code", length = 6)
+    private String code;
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
@@ -31,10 +32,18 @@ public class VerificationCode {
     @Column(name = "expired_date")
     private LocalDateTime expiredDate;
 
-    public VerificationCode(String phoneNumber, String verificationCode, LocalDateTime createdDate, LocalDateTime expiredDate) {
+    @Enumerated(EnumType.STRING)
+    private StatusType status;
+
+    public VerificationCode(String phoneNumber, String code, LocalDateTime createdDate, LocalDateTime expiredDate, StatusType status) {
         this.phoneNumber = phoneNumber;
-        this.verificationCode = verificationCode;
+        this.code = code;
         this.createdDate = createdDate;
         this.expiredDate = expiredDate;
+        this.status = status;
+    }
+
+    public void changeStatus(StatusType status) {
+        this.status = status;
     }
 }
