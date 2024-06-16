@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LoginIdCheckRequest {
     private String loginId;
+    private String email;
 }
