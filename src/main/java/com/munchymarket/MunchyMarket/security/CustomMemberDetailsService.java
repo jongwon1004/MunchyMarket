@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.security;
 
-import com.munchymarket.MunchyMarket.repository.MemberRepository;
+import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

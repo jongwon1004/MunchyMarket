@@ -23,11 +23,11 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String email1 = request.getParameter("email");
-        log.info("email1 = {}", email1);
+        String loginId = request.getParameter("loginId");
+        log.info("loginId = {}", loginId);
         log.info("request.getRequestURI() = {}", request.getRequestURI());
         // 로그인 경로에 대한 요청은 JWT 검증을 건너뛴다.
-        if (request.getRequestURI().equals("/api/login")) {
+        if (request.getRequestURI().equals("/api/member/login")) {
             log.info("JWTFilter에서 JWT검증을 건너뜁니다");
             filterChain.doFilter(request, response);
             return;
@@ -62,7 +62,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
 
         // tokenからemail, roleを取得
-        String email = jwtUtil.getEmail(token);
+        String email = jwtUtil.getLoginId(token);
         String role = jwtUtil.getRole(token);
         Long id = jwtUtil.getId(token);
         log.info("id ={}", id);

@@ -15,7 +15,7 @@ import java.util.Date;
 public class JWTUtil {
 
     private static final Logger log = LoggerFactory.getLogger(JWTUtil.class);
-    private SecretKey secretKey;
+    private final SecretKey secretKey;
 
     public JWTUtil(@Value("${spring.jwt.secret}") String secret) {
         secretKey = new SecretKeySpec(
@@ -35,13 +35,13 @@ public class JWTUtil {
                 .get("id", Long.class);
     }
 
-    public String getEmail(String token) {
+    public String getLoginId(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("email", String.class);
+                .get("loginId", String.class);
     }
 
 
@@ -66,14 +66,14 @@ public class JWTUtil {
                 .before(new Date());
     }
 
-    public String createJwt(Long id, String email, String role, Long expiredMs) {
+    public String createJwt(Long id, String loginId, String role, Long expiredMs) {
 
         log.info("System.currentTimeMillis() = {}", new Date(System.currentTimeMillis()));
         log.info("expiredMs = {}", new Date(System.currentTimeMillis() + expiredMs));
 
         return Jwts.builder()
                 .claim("id", id)
-                .claim("email", email)
+                .claim("loginId", loginId)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))

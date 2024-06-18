@@ -45,7 +45,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Override
     protected String obtainUsername(HttpServletRequest request) {
-        String username = request.getParameter("email");
+        String username = request.getParameter("loginId");
         log.info("Attempting to log in with username: {}", username);
         return username;
     }
@@ -62,7 +62,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         // クライアントのRequestからusername, passwordを抽出
-        String username = obtainUsername(request);// email
+        String username = obtainUsername(request);// request.getParameter("loginId");
         String password = obtainPassword(request);
 
         log.info("username = {}", username);
@@ -87,7 +87,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomMemberDetails customMemberDetails = (CustomMemberDetails) authentication.getPrincipal();
 
-        String email = customMemberDetails.getUsername();
+        String loginId = customMemberDetails.getUsername();
         Long id = customMemberDetails.getId();
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
@@ -96,7 +96,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(id, email, role, 60 * 60 * 1000L * 10); // 10時間
+        String token = jwtUtil.createJwt(id, loginId, role, 60 * 60 * 1000L * 10); // 10時間
         log.info("token = {}", token);
 
         response.addHeader("Authorization", "Bearer " + token);
