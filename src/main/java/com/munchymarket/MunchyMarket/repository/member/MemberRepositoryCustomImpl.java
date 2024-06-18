@@ -1,11 +1,10 @@
 package com.munchymarket.MunchyMarket.repository.member;
 
-import com.munchymarket.MunchyMarket.domain.QAddress;
 import com.munchymarket.MunchyMarket.dto.AddressDto;
+import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
 import com.munchymarket.MunchyMarket.dto.MemberDto;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
@@ -45,6 +44,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return response;
     }
 
+    // 여기 서비스계층으로 옮겨야됨
     private Map<String, Object> buildResponse(boolean notExist, String param) {
         Map<String, Object> response = new HashMap<>();
         if (notExist) {
@@ -68,9 +68,28 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public MemberDto findMemberByIdToDto(Long memberId) {
+    public MemberDto findMemberById(Long memberId) {
         return queryFactory.select(
                         Projections.constructor(MemberDto.class,
+                                member.id.longValue(),
+                                member.loginId,
+                                member.name,
+                                member.ruby,
+                                member.email,
+                                member.phoneNumber,
+                                member.sex,
+                                member.birth,
+                                member.role)
+                )
+                .from(member)
+                .where(member.id.eq(memberId))
+                .fetchOne();
+    }
+
+    @Override
+    public MemberAddressDto findMemberAddressByMemberId(Long memberId) {
+        return queryFactory.select(
+                        Projections.constructor(MemberAddressDto.class,
                                 member.id,
                                 member.loginId,
                                 member.name,

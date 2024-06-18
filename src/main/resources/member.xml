@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mapper.MemberMapper">
+
+    <resultMap id="addressDtoResultMap" type="com.example.dto.AddressDto">
+        <id property="id" column="address_id"/>
+        <result property="postalCode" column="postal_code"/>
+        <result property="regionAddress" column="region_address"/>
+        <result property="detailAddress" column="detail_address"/>
+        <result property="isBaseAddress" column="is_base_address"/>
+        <result property="createdDate" column="created_date"/>
+        <result property="lastModifiedDate" column="last_modified_date"/>
+    </resultMap>
+
+    <resultMap id="memberDtoResultMap" type="com.example.dto.MemberDto">
+        <id property="id" column="member_id"/>
+        <result property="loginId" column="login_id"/>
+        <result property="name" column="name"/>
+        <result property="ruby" column="ruby"/>
+        <result property="email" column="email"/>
+        <result property="phoneNumber" column="phone_number"/>
+        <result property="sex" column="sex"/>
+        <result property="birth" column="birth"/>
+        <result property="role" column="role"/>
+        <association property="addressDto" column="address_id" javaType="com.example.dto.AddressDto" resultMap="addressDtoResultMap"/>
+    </resultMap>
+
+    <select id="findMemberByIdToDto" parameterType="java.lang.Long" resultMap="memberDtoResultMap">
+        SELECT
+            m.member_id AS member_id,
+            m.loginId,
+            m.name,
+            m.ruby,
+            m.email,
+            m.phoneNumber,
+            m.sex,
+            m.birth,
+            m.role,
+            a.address_id AS address_id,
+            a.postalCode,
+            a.regionAddress,
+            a.detailAddress,
+            a.isBaseAddress,
+            a.created_date,
+            a.last_modified_date
+        FROM
+            Member m
+                LEFT JOIN
+            Address a ON m.member_id = a.member_id
+        WHERE
+            m.member_id = #{memberId};
+    </select>
+
+</mapper>

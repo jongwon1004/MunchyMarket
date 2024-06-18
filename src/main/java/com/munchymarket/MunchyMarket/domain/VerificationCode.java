@@ -5,6 +5,7 @@ import com.munchymarket.MunchyMarket.domain.enums.StatusType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Entity
+@ToString
 public class VerificationCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
