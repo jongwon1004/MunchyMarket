@@ -2,23 +2,41 @@ package com.munchymarket.MunchyMarket;
 
 import com.munchymarket.MunchyMarket.domain.Address;
 import com.munchymarket.MunchyMarket.domain.Member;
+import com.munchymarket.MunchyMarket.domain.VerificationCode;
+import com.munchymarket.MunchyMarket.domain.enums.Role;
+import com.munchymarket.MunchyMarket.domain.enums.StatusType;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
+import com.munchymarket.MunchyMarket.repository.member.MemberRepositoryCustomImpl;
+import com.munchymarket.MunchyMarket.repository.verificationCode.VerificationCodeRepository;
+import com.munchymarket.MunchyMarket.request.JoinRequest;
+import com.munchymarket.MunchyMarket.service.JoinService;
+import com.munchymarket.MunchyMarket.service.VerificationCodeService;
+import com.munchymarket.MunchyMarket.utils.PhoneNumberUtil;
 import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
+import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.event.spi.PersistContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @SpringBootApplication
 @EnableJpaAuditing
 @RequiredArgsConstructor
+@Slf4j
 public class MunchyMarketApplication {
 
-	private final MemberRepository memberRepository;
-	private final AddressRepository addressRepository;
+	private final VerificationCodeService verificationCodeService;
 
+	private final JoinService joinService;
+	private final MemberRepository memberRepository;
 	private final BCryptPasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
@@ -28,29 +46,19 @@ public class MunchyMarketApplication {
 	@PostConstruct
 	public void init() {
 
-		Member member = new Member().builder()
-				.loginId("admin1004")
-				.password(passwordEncoder.encode("adminPassword1004"))
-				.name("CHOI BORU")
-				.ruby("チエ　ボル")
-				.email("admin@gmail.com")
-				.phoneNumber("080-5327-5296")
-				.sex("男")
-				.birth("1990-11-11")
-				.role("ROLE_ADMIN")
-				.build();
-		memberRepository.save(member);
+//		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!","藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
+//				"08053275296", "男", "1990-11-11", "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
+//
+//		log.info("joined member: {}", joinService.join(joinRequest));
 
-		Address address = new Address().builder()
-				.member(member)
-				.postalCode("557-0012")
-				.regionAddress("大阪府大阪市西成区南津守")
-				.detailAddress("１ー１０−６ Hollywood Heights 101号室")
-				.isBaseAddress(true)
-				.build();
+//		VerificationCode verificationCode = verificationCodeService.saveCode(PhoneNumberUtil.phoneNumberFormat(joinRequest.getPhoneNumber()), joinRequest.getCode());
+//		verificationCodeService.validateVerificationCode(verificationCode.getPhoneNumber(), verificationCode.getCode());
 
-		addressRepository.save(address);
 
+//		Member admin = new Member("whddnjs3340", passwordEncoder.encode("helloworld!"), "choijongwon", "チェチョンウォン", "helloworld@gmail.com", PhoneNumberUtil.phoneNumberFormat("08045326353"),
+//				"男", "1992-12-30", "ROLE_ADMIN");
+//
+//		memberRepository.save(admin);
 
 	}
 
