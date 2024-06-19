@@ -7,6 +7,7 @@ import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -46,7 +47,13 @@ public class MemberController {
         return ResponseEntity.ok(memberRepository.findMemberById(memberId));
     }
 
-    @PostMapping()
+    @PostMapping("/role-check")
+    public ResponseEntity<?> roleCheck(@RequestHeader String authorization) {
+
+        log.info("authorization = {}", authorization);
+        return ResponseEntity.ok("role check");
+
+    }
 
     @GetMapping("/")
     public ResponseEntity<MemberAddressDto> getAllMembers() {
