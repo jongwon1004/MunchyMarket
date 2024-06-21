@@ -9,7 +9,6 @@ ARG JAR_FILE=build/libs/MunchyMarket-0.0.1-SNAPSHOT.jar
 # jar 파일 복사
 COPY ${JAR_FILE} MunchyMarket.jar
 
-
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-Dspring.config.location=file:/home/ubuntu/app-settings/application.yml", "-jar", "MunchyMarket.jar"]

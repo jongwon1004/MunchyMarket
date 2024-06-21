@@ -64,7 +64,8 @@ jobs:
     - name: docker image build
       run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket --push .
 
-      # GET GitHub IP (4)
+    # GET GitHub IP (4)
+    # 추후 보안그룹에 깃허브의 포트를 열어줘야 하기 때문에, 깃허브의 IP를 얻어오는 step.
     - name: get GitHub IP 
       id: ip
       uses: haythem/public-ip@v1.2
@@ -72,6 +73,9 @@ jobs:
         maxRetries: 5 # 여길 추가하면 액션이 최대 5번까지 재시도하여 GitHub의 공용 IP주소를 가져올 수 있도록 설정함
 
     # Configure AWS Credentials (5) - AWS 접근 권한 취득(IAM)
+    # AWS 서비스에 접근하기 위해서는, 우선적으로 접근권한을 취득해야한다.
+    # 미리 설정해둔 IAM Key 를 통해서 접근권한을 취득하는 task 이다.
+    # * uses: ~ 는 GitHub actions 에서 정의한 프로토콜을 사용.
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with: 
@@ -80,11 +84,15 @@ jobs:
         aws-region: ap-northeast-3 # Osaka 
 
     # Add github ip to AWS (6)
+    # 깃허브에서 EC2에 접근하기 위해서는 보안그룹을 추가해줘야함.
+    # 깃허브의 ip를 보안그룹에 추가해주는 task.
     - name: Add GitHub IP to AWS
       run: |
         aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
 
     # AWS EC2 Server Connect & Docker 명령어 실행 (7)
+    # EC2에 연결, 수행할 Script 를 수행하는 task 이고, Docker hub 에서의 image pull & run 을 수행한다.
+    # 추가로 현재 구동중인 컨테이너를 정지 - 삭제 후 docker run 을 수행한다. (컨테이너가 중복되는것을 방지한다.)
     - name: AWS EC2 Connection
       uses: appleboy/ssh-action@v0.1.6
       with:
@@ -98,9 +106,14 @@ jobs:
           sudo docker stop munchymarket
           sudo docker rm munchymarket
           sudo docker run -d --name munchymarket -p 8080:8080 -v /home/ubuntu/app-settings/application.yml:/app/application.yml johnny1004/munchymarket
+        # 외부의 application.yml 파일을 Docker 컨테이너의
+        # app/application.yml 경로에 마운트하여
+        # Spring Boot 애플리케이션이 이를 설정 파일로 사용할 수 있도록 한다.
 
 
-      # REMOVE Github IP FROM security group (8)
+    # REMOVE Github IP FROM security group (8)
+    # EC2에 접근하기 위해서 추가해준 보안그룹을 삭제하는 task.
+    # 삭제하지 않으면, 해당 Actions가 수행될 때마다 보안그룹이 추가되고, 보안에 취약해진다.
     - name: Remove IP FROM security group
       run: |
         aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outputs.ipv4 }}/32
