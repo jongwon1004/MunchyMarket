@@ -62,7 +62,7 @@ jobs:
 
     # Docker 이미지 build (3)
     - name: docker image build
-      run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket --push .
+      run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket:latest --push .
 
     # GET GitHub IP (4)
     # 추후 보안그룹에 깃허브의 포트를 열어줘야 하기 때문에, 깃허브의 IP를 얻어오는 step.
