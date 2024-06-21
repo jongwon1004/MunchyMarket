@@ -9,6 +9,9 @@ ARG SPRING_CONFIG_LOCATION
 # jar 파일 복사
 COPY ${JAR_FILE} MunchyMarket.jar
 
+# application.yml 파일 복사
+COPY resources/application.yml /app/resources/application.yml
+
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-jar", "MunchyMarket.jar"]
