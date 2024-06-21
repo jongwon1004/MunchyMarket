@@ -104,10 +104,10 @@ jobs:
         timeout: 60s
         script: |
           whoami
-          sudo docker pull johnny1004/munchymarket:latest
-          sudo docker stop munchymarket
-          sudo docker rm munchymarket
-          sudo docker run -d --name munchymarket -p 8080:8080 -v /home/ubuntu/app-settings/application.yml:/app/application.yml johnny1004/munchymarket:latest
+          cd /home/ubuntu/munchymarket
+          sudo docker-compose pull
+          sudo docker-compose down
+          sudo docker-compose up -d
         # 외부의 application.yml 파일을 Docker 컨테이너의
         # app/application.yml 경로에 마운트하여
         # Spring Boot 애플리케이션이 이를 설정 파일로 사용할 수 있도록 한다.
