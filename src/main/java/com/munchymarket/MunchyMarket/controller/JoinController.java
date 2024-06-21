@@ -30,7 +30,9 @@ public class JoinController {
     @PostMapping("/validate")
     public ResponseEntity<Map<String, Object>> validate(@RequestBody LoginValidateCheckRequest loginValidateCheckRequest) {
         Map<String, Object> responseMap = joinService.validateCheck(loginValidateCheckRequest);
+        log.info("responseMap: {}", responseMap);
         Boolean result = (Boolean) responseMap.get("result");
+        log.info("result: {}", result);
         return result ? ResponseEntity.ok(responseMap) : ResponseEntity.status(HttpStatus.CONFLICT).body(responseMap);
     }
 
