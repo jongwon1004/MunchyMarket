@@ -1,5 +1,6 @@
 package com.munchymarket.MunchyMarket.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,15 @@ public class JWTUtil {
                 .getPayload()
                 .getExpiration()
                 .before(new Date());
+    }
+
+    public Long extractMemberId(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return Long.parseLong(claims.get("id").toString());
     }
 
     public String createJwt(Long id, String loginId, String role, Long expiredMs) {

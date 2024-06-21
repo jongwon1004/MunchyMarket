@@ -46,19 +46,19 @@ public class MunchyMarketApplication {
 	@PostConstruct
 	public void init() {
 
-//		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!","藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
-//				"08053275296", "男", "1990-11-11", "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
-//
-//		log.info("joined member: {}", joinService.join(joinRequest));
+		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!","藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
+				"08053275296", "男", "1990-11-11", "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
+
+		log.info("joined member: {}", joinService.join(joinRequest));
 
 //		VerificationCode verificationCode = verificationCodeService.saveCode(PhoneNumberUtil.phoneNumberFormat(joinRequest.getPhoneNumber()), joinRequest.getCode());
 //		verificationCodeService.validateVerificationCode(verificationCode.getPhoneNumber(), verificationCode.getCode());
 
 
-//		Member admin = new Member("whddnjs3340", passwordEncoder.encode("helloworld!"), "choijongwon", "チェチョンウォン", "helloworld@gmail.com", PhoneNumberUtil.phoneNumberFormat("08045326353"),
-//				"男", "1992-12-30", "ROLE_ADMIN");
-//
-//		memberRepository.save(admin);
+		Member admin = new Member("whddnjs3340", passwordEncoder.encode("helloworld!"), "choijongwon", "チェチョンウォン", "helloworld@gmail.com", PhoneNumberUtil.phoneNumberFormat("08045326353"),
+				"男", "1992-12-30", "ROLE_ADMIN");
+
+		memberRepository.save(admin);
 
 	}
 

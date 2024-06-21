@@ -4,6 +4,7 @@ import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.MemberLoginRequest;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
+import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberRepository memberRepository;
+    private final JWTUtil jwtUtil;
 
     @PostMapping("/login")
     public ResponseEntity<Object> login(@ModelAttribute MemberLoginRequest memberLoginRequest, HttpServletRequest request) {
@@ -51,6 +53,12 @@ public class MemberController {
     public ResponseEntity<?> roleCheck(@RequestHeader String authorization) {
 
         log.info("authorization = {}", authorization);
+        String token = authorization.substring(7);
+
+        Long memberId = jwtUtil.extractMemberId(token);
+        log.info("login memberId = {}", memberId);
+
+
         return ResponseEntity.ok("role check");
 
     }
