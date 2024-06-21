@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -93,8 +94,51 @@ public class JoinService {
     }
 
     public Map<String, Object> validateCheck(LoginValidateCheckRequest loginValidateCheckRequest) {
-        return memberRepository.findMemberByLoginIdOrEmail(loginValidateCheckRequest);
+
+        Map<String, Object> response = new HashMap<>();
+        String param = null;
+
+        if (loginValidateCheckRequest.getLoginId() != null) {
+            param = "loginId";
+            if (!loginValidateCheckRequest.getLoginId().matches("^(?=.*\\d)[a-zA-Z\\d]{8,20}$")) {
+                response.put("result", false);
+                response.put("message", "ログインIDは英字と数字を含む8文字以上20文字以下で入力してください");
+                return response;
+            } else {
+                return buildResponse(memberRepository.findMemberByLoginIdOrEmail(param, loginValidateCheckRequest), param);
+            }
+
+        } else if (loginValidateCheckRequest.getEmail() != null) {
+            param = "email";
+
+            if (!loginValidateCheckRequest.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                response.put("result", false);
+                response.put("message", "メールアドレスの形式で入力してください");
+                return response;
+            } else {
+                return buildResponse(memberRepository.findMemberByLoginIdOrEmail(param, loginValidateCheckRequest), param);
+            }
+        }
+
+        response.put("result", false);
+        response.put("message", "エラーが発生しました、再度お試しください");
+        return response;
     }
+
+
+    private Map<String, Object> buildResponse(boolean notExist, String param) {
+        Map<String, Object> response = new HashMap<>();
+        if (notExist) {
+            response.put("result", true);
+            response.put("message", param.equals("loginId") ? "使用可能なログインIDです" : "使用可能なEMAILです");
+        } else {
+            response.put("result", false);
+            response.put("message", param.equals("loginId") ? "既に登録されているログインIDです" : "既に登録されているEMAILです");
+        }
+        return response;
+    }
+
+
 
     public Boolean statusCheck(String phoneNumber, String code) {
         phoneNumber = PhoneNumberUtil.phoneNumberFormat(phoneNumber);
