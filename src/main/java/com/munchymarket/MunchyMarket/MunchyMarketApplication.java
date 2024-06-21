@@ -46,6 +46,8 @@ public class MunchyMarketApplication {
 	@PostConstruct
 	public void init() {
 
+		log.info("서버 실행됨 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
 		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!","藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
 				"08053275296", "男", "1990-11-11", "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
 
