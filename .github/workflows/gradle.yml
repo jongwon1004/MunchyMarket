@@ -62,9 +62,9 @@ jobs:
 
      # Docker 이미지 build (3)
     - name: docker image build
-      run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket --push \--build-arg SPRING_CONFIG_LOCATION=${{ secrets.APPLICATION_YML }} . # application.yml 경로를 secret에 저장하여 사용
+      run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket --push --build-arg SPRING_CONFIG_LOCATION=${{ secrets.APPLICATION_YML }} . # application.yml 경로를 secret에 저장하여 사용
 
-    # GET GitHub IP (4)
+      # GET GitHub IP (4)
     - name: get GitHub IP 
       id: ip
       uses: haythem/public-ip@v1.2
