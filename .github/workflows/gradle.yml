@@ -28,6 +28,21 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Set up QEMU #(0)
+      uses: docker/setup-qemu-action@v2
+      with:
+        platforms: arm64
+
+    - name: Set up Docker Buildx  #(0)
+      uses: docker/setup-buildx-action@v2
+      with:
+        install: true
+
+    - name: Create builder  #(0)
+      run: |
+        docker buildx create --name mybuilder --use
+        docker buildx inspect --bootstrap
+
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
     - name: Setup Gradle
