@@ -15,5 +15,6 @@ COPY src/main/resources/application.yml application.yml
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "MunchyMarket.jar", "--spring.config.location=classpath:/application.yml"]
+ENTRYPOINT ["java", "-jar", "MunchyMarket.jar", "--spring.config.location=file:/app/application.yml"]
+
 
