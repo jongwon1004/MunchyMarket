@@ -60,10 +60,6 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME  }}
         password: ${{ secrets.DOCKERHUB_PW  }}
 
-    - name: Generate application.yml from secret
-      run: |
-          echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
-
     # Docker 이미지 build (3)
     - name: docker image build
       run: docker buildx build --platform linux/amd64,linux/arm64 -t johnny1004/munchymarket --push .
