@@ -10,7 +10,8 @@ ARG JAR_FILE=build/libs/MunchyMarket-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} MunchyMarket.jar
 
 # application.yml 파일을 Docker 이미지에 추가
-COPY resource/application.yml application.yml
+COPY src/main/resources/application.yml application.yml
+
 
 EXPOSE 8080
 
