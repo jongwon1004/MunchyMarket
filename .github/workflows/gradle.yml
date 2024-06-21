@@ -33,12 +33,23 @@ jobs:
       with:
         platforms: arm64
 
+    - name: Check if Docker Buildx is set up
+      id: buildx_check
+      run: |
+        if docker buildx inspect mybuilder > /dev/null 2>&1; then
+          echo "buildx_exists=true" >> $GITHUB_ENV
+        else
+          echo "buildx_exists=false" >> $GITHUB_ENV
+        fi
+
     - name: Set up Docker Buildx  #(0)
+      if: env.buildx_exists == 'false'
       uses: docker/setup-buildx-action@v2
       with:
-        install: true
+          install: true
 
     - name: Create builder  #(0)
+      if: env.buildx_exists == 'false'
       run: |
         docker buildx create --name mybuilder --use
         docker buildx inspect --bootstrap
