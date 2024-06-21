@@ -28,6 +28,16 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
+    - name: Cache Gradle dependencies
+      uses: actions/cache@v3
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: "${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}"
+        restore-keys: |
+            ${{ runner.os }}-gradle-
+
     - name: Set up QEMU #(0)
       uses: docker/setup-qemu-action@v2
       with:
@@ -60,7 +70,7 @@ jobs:
       uses: gradle/actions/setup-gradle@417ae3ccd767c252f5661f1ace9f835f9654f2b5 # v3.1.0
 
     # Spring Boot 어플리케이션 build (1)
-    # 테스트로 해보는것이기 때문에 jar 빌드시 test는 스킵했다 
+    # 테스트로 해보는것이기 때문에 jar 빌드시 test는 스킵했다
     - name: Spring Boot build
       run: ./gradlew clean build --exclude-task test
 
@@ -77,7 +87,7 @@ jobs:
 
     # GET GitHub IP (4)
     # 추후 보안그룹에 깃허브의 포트를 열어줘야 하기 때문에, 깃허브의 IP를 얻어오는 step.
-    - name: get GitHub IP 
+    - name: get GitHub IP
       id: ip
       uses: haythem/public-ip@v1.2
       with:
@@ -89,10 +99,10 @@ jobs:
     # * uses: ~ 는 GitHub actions 에서 정의한 프로토콜을 사용.
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
-      with: 
+      with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-3 # Osaka 
+        aws-region: ap-northeast-3 # Osaka
 
     # Add github ip to AWS (6)
     # 깃허브에서 EC2에 접근하기 위해서는 보안그룹을 추가해줘야함.
@@ -110,7 +120,7 @@ jobs:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }} # ubuntu
         # password: ${{ secrets.EC2_PASSWORD }}  # password 인증을 안하고 key인증으로 변경했으므로 주석처리
-        key: ${{ secrets.EC2_PRIVATE_KEY }}  # ssh 접속시 개인키값 secret 에 저장할것 
+        key: ${{ secrets.EC2_PRIVATE_KEY }}  # ssh 접속시 개인키값 secret 에 저장할것
         port: ${{ secrets.EC2_SSH_PORT }}
         timeout: 60s
         script: |
