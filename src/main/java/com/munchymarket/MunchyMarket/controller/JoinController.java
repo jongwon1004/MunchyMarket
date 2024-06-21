@@ -28,7 +28,7 @@ public class JoinController {
      * @return true: 重複なし, false: 重複あり
      */
     @PostMapping("/validate")
-    public ResponseEntity<Map<String, Object>> validateLoginId(@RequestBody LoginValidateCheckRequest loginValidateCheckRequest) {
+    public ResponseEntity<Map<String, Object>> validate(@RequestBody LoginValidateCheckRequest loginValidateCheckRequest) {
         Map<String, Object> responseMap = joinService.validateCheck(loginValidateCheckRequest);
         Boolean result = (Boolean) responseMap.get("result");
         return result ? ResponseEntity.ok(responseMap) : ResponseEntity.status(HttpStatus.CONFLICT).body(responseMap);

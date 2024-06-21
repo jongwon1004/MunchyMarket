@@ -7,6 +7,7 @@ import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.http.ResponseEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,12 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         Map<String, Object> response = new HashMap<>();
 
         if (loginValidateCheckRequest.getLoginId() != null) {
+            if (!loginValidateCheckRequest.getLoginId().matches("^(?=.*\\d)[a-zA-Z\\d]{8,20}$")) {
+                response.put("result", false);
+                response.put("message", "ログインIDは英字と数字を含む8文字以上20文字以下で入力してください");
+                return response;
+            }
+
             boolean notExist = queryFactory.selectFrom(member)
                     .where(member.loginId.eq(loginValidateCheckRequest.getLoginId()))
                     .fetchOne() == null;
@@ -34,6 +41,13 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
             response.putAll(buildResponse(notExist, "loginId"));
 
         } else if (loginValidateCheckRequest.getEmail() != null) {
+
+            if (!loginValidateCheckRequest.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+                response.put("result", false);
+                response.put("message", "メールアドレスの形式で入力してください");
+                return response;
+            }
+
             boolean notExist = queryFactory.selectFrom(member)
                     .where(member.email.eq(loginValidateCheckRequest.getEmail()))
                     .fetchOne() == null;
