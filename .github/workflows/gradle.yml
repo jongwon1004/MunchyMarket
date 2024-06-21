@@ -103,6 +103,8 @@ jobs:
         port: ${{ secrets.EC2_SSH_PORT }}
         timeout: 60s
         script: |
+          whoami
+          sudo docker pull johnny1004/munchymarket:latest
           sudo docker stop munchymarket
           sudo docker rm munchymarket
           sudo docker run -d --name munchymarket -p 8080:8080 -v /home/ubuntu/app-settings/application.yml:/app/application.yml johnny1004/munchymarket:latest
