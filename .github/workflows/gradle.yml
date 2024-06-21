@@ -101,7 +101,6 @@ jobs:
         script: |
           sudo docker stop munchymarket
           sudo docker rm munchymarket
-#          sudo docker run -it -d -p 8080:8080 --name munchymarket johnny1004/munchymarket
           sudo docker run -d --name munchymarket -p 8080:8080 -v /home/ubuntu/app-settings/application.yml:/app/application.yml johnny1004/munchymarket
 
 
