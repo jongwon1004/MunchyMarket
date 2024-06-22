@@ -29,7 +29,7 @@ public class VerificationCodeService {
     @Transactional
     public VerificationCode saveCode(String phoneNumber, String code) {
         LocalDateTime now = LocalDateTime.now();
-        return verificationCodeRepository.save( new VerificationCode(phoneNumber, code, now, now.plusMinutes(5), StatusType.UNVERIFIED));
+        return verificationCodeRepository.save(new VerificationCode(phoneNumber, code, now, now.plusMinutes(5), StatusType.UNVERIFIED));
     }
 
 
