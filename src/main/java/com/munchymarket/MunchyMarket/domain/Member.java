@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -23,26 +26,27 @@ public class Member extends TimeBaseEntity {
     @Column(nullable = false, length = 30, unique = true)
     private String loginId;
 
-    @Column(nullable = false)
+    @Column(nullable = false) //joinRequst = 8~20桁、 サーバーでハッシュ化してDB Insert (255桁)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String ruby;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 5) // '男'、'女'、'選択なし'
     private String sex;
 
     @Column(nullable = false)
-    private String birth;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birth;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -56,7 +60,7 @@ public class Member extends TimeBaseEntity {
 
 
     @Builder
-    public Member(String loginId, String password, String name, String ruby, String email, String phoneNumber, String sex, String birth, String role) {
+    public Member(String loginId, String password, String name, String ruby, String email, String phoneNumber, String sex, LocalDate birth, String role) {
         this.loginId = loginId;
         this.password = password;
         this.name = name;

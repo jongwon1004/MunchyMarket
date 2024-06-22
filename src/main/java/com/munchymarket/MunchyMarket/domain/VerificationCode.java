@@ -18,19 +18,19 @@ import java.time.LocalDateTime;
 public class VerificationCode {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "verification_code_id")
     private Long id;
 
+    @Column(nullable = false, length = 20)
     private String phoneNumber;
 
-    @Column(name = "code", length = 6)
+    @Column(name = "code", nullable = false, length = 6)
     private String code;
 
     @CreatedDate
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "expired_date")
     private LocalDateTime expiredDate;
 
