@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @Getter
 @ToString
@@ -19,7 +21,6 @@ public class MemberDto {
     private String email;
     private String phoneNumber;
     private String sex;
-    private String birth;
+    private LocalDate birth;
     private Role role;
-
 }

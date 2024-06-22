@@ -41,7 +41,7 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     public MemberDto findMemberById(Long memberId) {
         return queryFactory.select(
                         Projections.constructor(MemberDto.class,
-                                member.id.longValue(),
+                                member.id,
                                 member.loginId,
                                 member.name,
                                 member.ruby,
