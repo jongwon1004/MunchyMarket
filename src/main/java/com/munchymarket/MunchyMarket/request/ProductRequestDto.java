@@ -1,14 +1,17 @@
 package com.munchymarket.MunchyMarket.request;
 
 
+import com.munchymarket.MunchyMarket.domain.Category;
+import com.munchymarket.MunchyMarket.domain.Image;
+import com.munchymarket.MunchyMarket.domain.PackagingType;
+import com.munchymarket.MunchyMarket.domain.Product;
 import jakarta.validation.constraints.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 @NoArgsConstructor
 @Getter
@@ -55,20 +58,20 @@ public class ProductRequestDto {
     private String expirationDescription;
 
     @NotBlank(message = "アレルギー情報を入力してください")
-    @Size(max = 255, message = "アレルギー情報は255文字以下で入力してください")
+    @Size(max = 500, message = "アレルギー情報は255文字以下で入力してください")
     private String allergyDescription;
 
     @NotBlank(message = "保存方法を入力してください")
     @Size(max = 500, message = "案内事項は500文字以下で入力してください")
     private String guideDescription;
 
-//    @NotBlank(message = "mainImageを登録してください")
-//    @Size(max = 255, message = "mainImage名は255文字以下で入力してください")
-    private MultipartFile mainImageClientFilename;
+//    private MultipartFile mainImageClientFilename;
+//
+//    private MultipartFile subImageClientFilename;
 
-//    @NotBlank(message = "subImageを登録してください")
-//    @Size(max = 255, message = "subImage名は255文字以下で入力してください")
-    private MultipartFile subImageClientFilename;
+    // uploadToGcs 메서드에서 파라미터를 list로 받기위해 front에서 Map 으로 받은 후 list로 변환
+    private Map<String, MultipartFile> images = new HashMap<>();
+
 
     @NotBlank(message = "商品説明トップ1を入力してください")
     @Size(max = 255, message = "商品説明トップ1は255文字以下で入力してください")
@@ -79,13 +82,38 @@ public class ProductRequestDto {
     private String productDesTop2;
 
     @NotBlank(message = "商品説明トップ4を入力してください")
-    @Size(max = 500, message = "商品説明メインは500文字以下で入力してください")
+    @Size(message = "商品説明メインは500文字以下で入力してください")
     private String productDesTopMain;
 
     private Boolean isOnSale;
 
-    @Positive(message = "セール率は正の数でなければなりません。")
     private BigDecimal salePercentage;
 
     private Boolean isPurchaseStatus;
+
+    public Product toEntity(Category category, PackagingType packagingType, Image mainImage, Image subImage) {
+        return Product.builder()
+                .category(category)
+                .productName(this.productName)
+                .basePrice(this.basePrice)
+                .shortDescription(this.shortDescription)
+                .stock(this.stock)
+                .deliveryDescription(this.deliveryDescription)
+                .packagingType(packagingType)
+                .origin(this.origin)
+                .unit(this.unit)
+                .volume(this.volume)
+                .expirationDescription(this.expirationDescription)
+                .allergyDescription(this.allergyDescription)
+                .guideDescription(this.guideDescription)
+                .mainImage(mainImage)
+                .subImage(subImage)
+                .productDesTop1(this.productDesTop1)
+                .productDesTop2(this.productDesTop2)
+                .productDesMain(this.productDesTopMain)
+                .isOnSale(this.isOnSale)
+                .salePercentage(this.salePercentage)
+                .isPurchaseStatus(this.isPurchaseStatus)
+                .build();
+    }
 }
