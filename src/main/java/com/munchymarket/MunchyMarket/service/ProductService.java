@@ -4,10 +4,10 @@ import com.munchymarket.MunchyMarket.domain.Category;
 import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.PackagingType;
 import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.repository.CategoryRepository;
-import com.munchymarket.MunchyMarket.repository.ImageRepository;
-import com.munchymarket.MunchyMarket.repository.PackagingTypeRepository;
-import com.munchymarket.MunchyMarket.repository.ProductRepository;
+import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
+import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
+import com.munchymarket.MunchyMarket.repository.packagingtype.PackagingTypeRepository;
+import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.Map;
 
 import static com.munchymarket.MunchyMarket.utils.FileSizeUtils.readableFileSize;
