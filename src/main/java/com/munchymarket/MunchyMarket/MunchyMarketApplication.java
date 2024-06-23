@@ -19,6 +19,7 @@ import jdk.jshell.Snippet;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.event.spi.PersistContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -44,24 +45,29 @@ public class MunchyMarketApplication {
 		SpringApplication.run(MunchyMarketApplication.class, args);
 	}
 
+	@Value("${spring.cloud.gcp.storage.bucket}")
+	private String bucketName;
+
 	@PostConstruct
 	public void init() {
 
 		log.info("서버 실행됨 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@!!");
-
-		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!", "藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
-				"08053275296", "男", LocalDate.of(1999, 10, 4), "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
-
-		log.info("joined member: {}", joinService.join(joinRequest));
-
-//		VerificationCode verificationCode = verificationCodeService.saveCode(PhoneNumberUtil.phoneNumberFormat(joinRequest.getPhoneNumber()), joinRequest.getCode());
-//		verificationCodeService.validateVerificationCode(verificationCode.getPhoneNumber(), verificationCode.getCode());
+		log.info("bucketName: {}", bucketName);
 
 
-		Member admin = new Member("whddnjs3340", passwordEncoder.encode("helloworld!"), "choijongwon", "チェチョンウォン", "helloworld@gmail.com", PhoneNumberUtil.phoneNumberFormat("08045326353"),
-				"男", LocalDate.of(1990, 11, 22), "ROLE_ADMIN");
-
-		memberRepository.save(admin);
+//		JoinRequest joinRequest = new JoinRequest("noboru1004", "hellonoboru!", "hellonoboru!", "藤田　昇", "フジタ　ノボル", "noboru99@gmail.com",
+//				"08053275296", "男", LocalDate.of(1999, 10, 4), "557-0012", "大阪府大阪市西成区南津守", "１ー１０−６ Hollywood Heights 101号室", "618553", true);
+//
+//		log.info("joined member: {}", joinService.join(joinRequest));
+//
+////		VerificationCode verificationCode = verificationCodeService.saveCode(PhoneNumberUtil.phoneNumberFormat(joinRequest.getPhoneNumber()), joinRequest.getCode());
+////		verificationCodeService.validateVerificationCode(verificationCode.getPhoneNumber(), verificationCode.getCode());
+//
+//
+//		Member admin = new Member("whddnjs3340", passwordEncoder.encode("helloworld!"), "choijongwon", "チェチョンウォン", "helloworld@gmail.com", PhoneNumberUtil.phoneNumberFormat("08045326353"),
+//				"男", LocalDate.of(1990, 11, 22), "ROLE_ADMIN");
+//
+//		memberRepository.save(admin);
 
 	}
 

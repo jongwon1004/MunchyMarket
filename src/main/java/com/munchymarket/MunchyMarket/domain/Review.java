@@ -15,6 +15,5 @@ public class Review {
     @Column(name = "review_id", updatable = false)
     private Long id;
 
-
 }
 

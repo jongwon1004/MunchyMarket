@@ -12,5 +12,3 @@ COPY ${JAR_FILE} MunchyMarket.jar
 EXPOSE 8080
 
 ENTRYPOINT ["java", "-Dspring.config.location=file:/app/application.yml", "-jar", "MunchyMarket.jar"]
-
-

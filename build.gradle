@@ -52,13 +52,13 @@ dependencies {
 
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-//	// Twilio(인증번호송신)추가
-//	implementation 'com.twilio.sdk:twilio:8.8.0'
 
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
 	implementation 'org.json:json:20201115'
 
 
+	// Google Cloud Storage GCP
+	implementation group: 'com.google.cloud', name: 'spring-cloud-gcp-storage', version: '4.8.1'
 
 
 

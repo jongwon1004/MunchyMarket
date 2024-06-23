@@ -158,7 +158,7 @@ public class JoinService {
         Member savedMember = memberRepository.save(joinRequest.toEntity());
         log.info("member joined: {}", savedMember);
 
-        Address memberAddress = new Address().builder()
+        Address memberAddress = Address.builder()
                 .member(savedMember)
                 .postalCode(joinRequest.getPostalCode())
                 .regionAddress(joinRequest.getRegionAddress())

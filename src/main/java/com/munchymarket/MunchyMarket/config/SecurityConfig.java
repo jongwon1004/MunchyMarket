@@ -68,6 +68,7 @@ public class SecurityConfig {
                 .authorizeRequests(authorize -> authorize
                         .requestMatchers("/api/member/", "/api/member/login",
                                 "/api/member/send-sms", "/api/member/validate", "/api/member/verification-code", "/api/member/join",
+                                "/api/product/register",
                                 "/logout", "/error", "/swagger-ui-custom.html").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
                         .requestMatchers("/profile", "/api/accounts/register/", "/api/accounts/**").authenticated() // 認証済みのユーザーだけアクセス可能
