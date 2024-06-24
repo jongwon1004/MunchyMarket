@@ -1,6 +1,9 @@
-package com.munchymarket.MunchyMarket.exception;
+package com.munchymarket.MunchyMarket.exception.handler;
 
+import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
+import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -31,6 +34,21 @@ public class GlobalExceptionHandler {
         }
 
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(ProductRegisterException.class)
+    public ResponseEntity<Map<String, Object>> handleCategoryNotFoundException(ProductRegisterException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("errors", ex.getErrors());
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+    @ExceptionHandler(GcsFileUploadFailException.class)
+    public ResponseEntity<Map<String, Object>> handleGcsFileUploadFailException(GcsFileUploadFailException ex) {
+        Map<String, Object> errorResponse = new HashMap<>();
+        errorResponse.put("error", ex.getMessage());
+        errorResponse.put("cause", ex.getCause() != null ? ex.getCause().getMessage() : "Unknown cause");
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
 }
