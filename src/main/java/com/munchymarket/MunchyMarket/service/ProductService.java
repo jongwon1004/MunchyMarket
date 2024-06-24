@@ -4,6 +4,10 @@ import com.munchymarket.MunchyMarket.domain.Category;
 import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.PackagingType;
 import com.munchymarket.MunchyMarket.domain.Product;
+import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.exception.ErrorCode;
+import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
+import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
 import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.packagingtype.PackagingTypeRepository;
@@ -16,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static com.munchymarket.MunchyMarket.utils.FileSizeUtils.readableFileSize;
@@ -33,38 +39,34 @@ public class ProductService {
     private final ImageRepository imageRepository;
 
     @Transactional
-    public void registerProduct(ProductRequestDto productRequestDto) {
+    public RegisteredProductDto registerProduct(ProductRequestDto productRequestDto) {
 
+        List<String> errors = new ArrayList<>();
 
-        PackagingType packagingType = packagingTypeRepository.findById(productRequestDto.getPackagingTypeId())
-                .orElseThrow(() -> new IllegalArgumentException("該当する包装タイプがありません"));
+        PackagingType packagingType = fetchPackagingType(productRequestDto.getPackagingTypeId(), errors);
+        Category category = fetchCategory(productRequestDto.getCategoryId(), errors);
 
-        Category category = categoryRepository.findById(productRequestDto.getCategoryId())
-                .orElseThrow(() -> new IllegalArgumentException("該当するカテゴリがありません"));
+        if (!errors.isEmpty()) {
+            throw new ProductRegisterException(errors);
+        }
 
+        Map<String, MultipartFile> images = productRequestDto.getImages();
         Image mainImage = null;
         Image subImage = null;
         // GCS 에 이미지 등록
         try {
 
-            // 상품등록때 main,sub 로 나뉘어서 이미지가 등록되니까,
-            // uploadToGcs 파라미터를 List<MultipartFile> 이 아닌 각각 MultipartFile 로 받음
-            Map<String, MultipartFile> images = productRequestDto.getImages();
-            for (Map.Entry<String, MultipartFile> entry : images.entrySet()) {
-
-                if ("mainImage".equals(entry.getKey())) {
-                    mainImage = buildAndSaveImage(entry.getValue());
-                } else if ("subImage".equals(entry.getKey())) {
-                    subImage = buildAndSaveImage(entry.getValue());
-                }
-            }
+            mainImage = buildAndSaveImage(images.get("mainImage"));
+            subImage = buildAndSaveImage(images.get("subImage"));
 
         } catch (IOException e) {
-            throw new RuntimeException("Failed to upload images", e);
+            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR.getMessage(), e);
         }
 
         Product product = productRequestDto.toEntity(category, packagingType, mainImage, subImage);
-        productRepository.save(product);
+        Long savedProductId = productRepository.save(product).getId();
+
+        return productRepository.findByProductId(savedProductId);
     }
 
     private Image buildAndSaveImage(MultipartFile file) throws IOException {
@@ -79,6 +81,20 @@ public class ProductService {
                 .build();
 
         return imageRepository.save(image);
+    }
+
+    private PackagingType fetchPackagingType(Long packagingTypeId, List<String> errors) {
+        return packagingTypeRepository.findById(packagingTypeId).orElseGet(() -> {
+            errors.add(ErrorCode.PACKAGING_TYPE_NOT_FOUND.formatMessage(packagingTypeId));
+            return null;
+        });
+    }
+
+    private Category fetchCategory(Long categoryId, List<String> errors) {
+        return categoryRepository.findById(categoryId).orElseGet(() -> {
+            errors.add(ErrorCode.CATEGORY_NOT_FOUND.formatMessage(categoryId));
+            return null;
+        });
     }
 
 }
