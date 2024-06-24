@@ -8,6 +8,7 @@ ARG JAR_FILE=build/libs/MunchyMarket-0.0.1-SNAPSHOT.jar
 
 # jar 파일 복사
 COPY ${JAR_FILE} MunchyMarket.jar
+ENV GOOGLE_APPLICATION_CREDENTIALS=/app/munchymarket-bucket-credentials.json
 
 EXPOSE 8080
 
