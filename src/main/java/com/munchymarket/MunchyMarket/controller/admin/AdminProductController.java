@@ -1,23 +1,26 @@
 package com.munchymarket.MunchyMarket.controller.admin;
 
+import com.munchymarket.MunchyMarket.dto.CategoryListDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
+import com.munchymarket.MunchyMarket.service.CategoryService;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/product")
 public class AdminProductController {
+
     private final ProductService productService;
+    private final CategoryService categoryService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto) {
@@ -46,6 +49,11 @@ public class AdminProductController {
 
         RegisteredProductDto registeredProductDto = productService.registerProduct(productRequestDto);
         return registeredProductDto != null ? ResponseEntity.ok().body(registeredProductDto) : ResponseEntity.badRequest().body("商品登録に失敗しました。");
+    }
+
+    @GetMapping("/categories")
+    public ResponseEntity<List<CategoryListDto>> getCategories() {
+        return ResponseEntity.ok().body(categoryService.getCategories());
     }
 
 
