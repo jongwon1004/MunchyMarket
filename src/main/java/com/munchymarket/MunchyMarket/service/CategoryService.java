@@ -16,7 +16,14 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     public List<CategoryListDto> getCategories() {
-        return categoryRepository.findAllCategories();
+        List<CategoryListDto> allCategories = categoryRepository.findAllCategories();
+        log.info("allCategories: {}", allCategories);
+
+        allCategories.forEach(category -> {
+            category.setChildCategories(categoryRepository.findSubCategoriesByParentId(category.getParentCategoryId()));
+        });
+
+        return allCategories;
     }
 
 }

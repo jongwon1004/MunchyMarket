@@ -23,3 +23,26 @@ Category
 
                  o 생선 o 갑각류 o 해산물
                  o 수산가공품 o 해산물가공품
+
+{
+    id: 901,
+    name: "쌀 채소 등등",
+    subCategories: [
+      {
+        id: 901001,
+        subCategoryName: "쌀",
+      },
+      {
+        id: 901002,
+        subCategoryName: "채소",
+      },
+      {
+        id: 901003,
+        subCategoryName: "감자",
+      },
+      {
+        id: 901004,
+        subCategoryName: "브로콜리",
+      },
+    ],
+  },

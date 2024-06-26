@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.repository.category;
 
 import com.munchymarket.MunchyMarket.dto.CategoryListDto;
+import com.munchymarket.MunchyMarket.dto.ChildCategoryListDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -24,6 +25,18 @@ public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
                                 category.categoryName)
                 )
                 .from(category)
+                .fetch();
+    }
+
+    @Override
+    public List<ChildCategoryListDto> findSubCategoriesByParentId(Long parentCategoryId) {
+        return queryFactory.select(
+                        Projections.constructor(ChildCategoryListDto.class,
+                                category.id,
+                                category.categoryName)
+                )
+                .from(category)
+                .where(category.parent.id.eq(parentCategoryId))
                 .fetch();
     }
 }
