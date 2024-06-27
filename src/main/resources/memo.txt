@@ -46,3 +46,50 @@ Category
       },
     ],
   },
+
+      {
+          "parentId": 903,
+          "parentCategoryName": "정육・가공육・계란",
+          "childCategories": [
+              {
+                  "parentId": 903001,
+                  "parentCategoryName": "국내산 소고기",
+              },
+              {
+                  "parentId": 903002,
+                  "parentCategoryName": "수입산 소고기",
+              },
+              {
+                  "parentId": 903003,
+                  "parentCategoryName": "국내산 돼지고기",
+              },
+              {
+                  "parentId": 903004,
+                  "parentCategoryName": "수입산 돼지고기・양고기",
+              },
+              {
+                  "parentId": 903005,
+                  "parentCategoryName": "닭・오리고기",
+              },
+              {
+                  "parentId": 903006,
+                  "parentCategoryName": "식단관리용 가공육",
+              },
+              {
+                  "parentId": 903007,
+                  "parentCategoryName": "양념육",
+              },
+              {
+                  "parentId": 903008,
+                  "parentCategoryName": "돈까스・떡갈비・함박",
+              },
+              {
+                  "parentId": 903009,
+                  "parentCategoryName": "소시지・베이컨・하몽",
+              },
+              {
+                  "parentId": 903010,
+                  "parentCategoryName": "계란・가공란",
+              }
+          ]
+      },
