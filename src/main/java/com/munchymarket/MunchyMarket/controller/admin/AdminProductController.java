@@ -1,9 +1,12 @@
 package com.munchymarket.MunchyMarket.controller.admin;
 
-import com.munchymarket.MunchyMarket.dto.CategoryListDto;
+import com.munchymarket.MunchyMarket.dto.CategoryDto;
+import com.munchymarket.MunchyMarket.dto.PackagingTypeDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.ResponseWrapper;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
 import com.munchymarket.MunchyMarket.service.CategoryService;
+import com.munchymarket.MunchyMarket.service.PackagingTypeService;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class AdminProductController {
 
     private final ProductService productService;
     private final CategoryService categoryService;
+    private final PackagingTypeService packagingTypeService;
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto) {
@@ -51,9 +55,15 @@ public class AdminProductController {
         return registeredProductDto != null ? ResponseEntity.ok().body(registeredProductDto) : ResponseEntity.badRequest().body("商品登録に失敗しました。");
     }
 
+
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryListDto>> getCategories() {
-        return ResponseEntity.ok().body(categoryService.getCategories());
+    public ResponseEntity<ResponseWrapper<CategoryDto>> getAllCategories() {
+        return ResponseEntity.ok(new ResponseWrapper<>(categoryService.getAllCategories()));
+    }
+
+    @GetMapping("/packaging-types")
+    public ResponseEntity<ResponseWrapper<PackagingTypeDto>> getAllPackagingTypes() {
+        return ResponseEntity.ok(new ResponseWrapper<>(packagingTypeService.getAllPackagingTypes()));
     }
 
 

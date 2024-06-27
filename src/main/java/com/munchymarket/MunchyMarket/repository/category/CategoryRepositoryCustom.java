@@ -1,13 +1,13 @@
 package com.munchymarket.MunchyMarket.repository.category;
 
-import com.munchymarket.MunchyMarket.dto.CategoryListDto;
-import com.munchymarket.MunchyMarket.dto.ChildCategoryListDto;
+import com.munchymarket.MunchyMarket.dto.CategoryDto;
+import com.munchymarket.MunchyMarket.dto.ParentCategoryDto;
+import com.munchymarket.MunchyMarket.dto.ChildCategoryDto;
 
 import java.util.List;
 
 public interface CategoryRepositoryCustom {
 
-    public List<CategoryListDto> findAllCategories();
 
-    List<ChildCategoryListDto> findSubCategoriesByParentId(Long parentCategoryId);
+    List<CategoryDto> findAllCategories();
 }

@@ -1,16 +1,19 @@
 package com.munchymarket.MunchyMarket.repository.category;
 
-import com.munchymarket.MunchyMarket.dto.CategoryListDto;
-import com.munchymarket.MunchyMarket.dto.ChildCategoryListDto;
-import com.querydsl.core.types.Projections;
+import com.munchymarket.MunchyMarket.domain.Category;
+import com.munchymarket.MunchyMarket.dto.CategoryDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.munchymarket.MunchyMarket.domain.QCategory.category;
 
+
 public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
+
+
 
     private final JPAQueryFactory queryFactory;
 
@@ -18,25 +21,24 @@ public class CategoryRepositoryCustomImpl implements CategoryRepositoryCustom {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    public List<CategoryListDto> findAllCategories() {
-        return queryFactory.select(
-                        Projections.constructor(CategoryListDto.class,
-                                category.id,
-                                category.categoryName)
-                )
-                .from(category)
+    @Override
+    public List<CategoryDto> findAllCategories() {
+        List<Category> topCategories = queryFactory.selectFrom(category)
+                .leftJoin(category.children).fetchJoin()
+                .where(category.parent.isNull())
                 .fetch();
+
+
+        return topCategories.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
-    @Override
-    public List<ChildCategoryListDto> findSubCategoriesByParentId(Long parentCategoryId) {
-        return queryFactory.select(
-                        Projections.constructor(ChildCategoryListDto.class,
-                                category.id,
-                                category.categoryName)
-                )
-                .from(category)
-                .where(category.parent.id.eq(parentCategoryId))
-                .fetch();
+    private CategoryDto convertToDto(Category category) {
+        List<CategoryDto> childrenDtos = category.getChildren().stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return new CategoryDto(category.getId(), category.getCategoryName(), childrenDtos);
     }
+
 }
