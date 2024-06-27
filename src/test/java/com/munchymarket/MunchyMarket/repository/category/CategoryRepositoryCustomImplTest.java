@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.category;
 
-import com.munchymarket.MunchyMarket.dto.ParentCategoryDto;
+import com.munchymarket.MunchyMarket.dto.CategoryDto;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ class CategoryRepositoryCustomImplTest {
 
     @Test
     void findAllCategories() {
-//        List<ParentCategoryDto> allCategories = categoryRepository.findAllCategories();
+//        List<CategoryDto> allCategories = categoryRepository.findAllCategories();
 //        log.info("allCategories: {}", allCategories);
     }
 
