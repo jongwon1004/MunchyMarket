@@ -10,7 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = "children")
 @Entity
 public class Category {
 
