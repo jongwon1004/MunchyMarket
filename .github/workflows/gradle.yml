@@ -89,7 +89,7 @@ jobs:
     # 추후 보안그룹에 깃허브의 포트를 열어줘야 하기 때문에, 깃허브의 IP를 얻어오는 step.
     - name: get GitHub IP
       id: ip
-      uses: haythem/public-ip@v1.2
+      uses: haythem/public-ip@v1.3
       with:
         maxRetries: 5 # 여길 추가하면 액션이 최대 5번까지 재시도하여 GitHub의 공용 IP주소를 가져올 수 있도록 설정함
 
