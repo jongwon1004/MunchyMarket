@@ -65,10 +65,6 @@ public class ProductRequestDto {
     @Size(max = 500, message = "案内事項は500文字以下で入力してください")
     private String guideDescription;
 
-//    private MultipartFile mainImageClientFilename;
-//
-//    private MultipartFile subImageClientFilename;
-
     // uploadToGcs 메서드에서 파라미터를 list로 받기위해 front에서 Map 으로 받은 후 list로 변환
     private Map<String, MultipartFile> images = new HashMap<>();
 

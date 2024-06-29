@@ -4,6 +4,7 @@ import com.munchymarket.MunchyMarket.domain.Category;
 import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.PackagingType;
 import com.munchymarket.MunchyMarket.domain.Product;
+import com.munchymarket.MunchyMarket.dto.ProductDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.exception.ErrorCode;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
@@ -16,6 +17,9 @@ import com.munchymarket.MunchyMarket.request.ProductRequestDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -97,4 +101,7 @@ public class ProductService {
         });
     }
 
+    public Slice<ProductDto> getProductsByCategoryId(Long categoryId, PageRequest pageRequest) {
+        return productRepository.findProductsByCategoryId(categoryId, pageRequest);
+    }
 }
