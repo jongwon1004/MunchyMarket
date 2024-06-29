@@ -11,6 +11,8 @@ import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RequiredArgsConstructor
@@ -28,6 +30,13 @@ public class CategoryController {
     public ResponseEntity<ResponseWrapper<CategoryDto>> getAllCategories() {
         return ResponseEntity.ok(new ResponseWrapper<>(categoryService.getAllCategories()));
     }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<ResponseWrapper<CategoryDto>> getCategory(@PathVariable Long categoryId) {
+        CategoryDto category = categoryService.getCategoryWithChildren(categoryId);
+        return ResponseEntity.ok(new ResponseWrapper<>(List.of(category)));
+    }
+
 
 
 //    /**
