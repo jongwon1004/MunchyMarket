@@ -23,6 +23,7 @@ public class CategoryController {
 
     private final ProductService productService;
     private final SortTypeRepository sortTypeRepository;
+    private final CategoryRepository categoryRepository;
 
 
     /**
@@ -34,6 +35,12 @@ public class CategoryController {
      *     return ResponseEntity.ok().body(categoryRepository.findByIdWithChildren(categoryId));
      * }
      */
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<?> categories(@PathVariable("categoryId") Long categoryId) {;
+        return ResponseEntity.ok().body(categoryRepository.findByIdWithChildren(categoryId));
+    }
+
 
 
     /**
