@@ -37,5 +37,6 @@ public class Image {
         this.clientFilename = clientFilename;
         this.serverFilename = serverFilename;
         this.fileSize = fileSize;
+        this.createdDate = LocalDateTime.now();
     }
 }
