@@ -56,11 +56,6 @@ public class AdminProductController {
     }
 
 
-    @GetMapping("/categories")
-    public ResponseEntity<ResponseWrapper<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok(new ResponseWrapper<>(categoryService.getAllCategories()));
-    }
-
     @GetMapping("/packaging-types")
     public ResponseEntity<ResponseWrapper<PackagingTypeDto>> getAllPackagingTypes() {
         return ResponseEntity.ok(new ResponseWrapper<>(packagingTypeService.getAllPackagingTypes()));

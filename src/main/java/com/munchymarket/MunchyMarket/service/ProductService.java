@@ -101,7 +101,7 @@ public class ProductService {
         });
     }
 
-    public Slice<ProductDto> getProductsByCategoryId(Long categoryId, PageRequest pageRequest) {
+    public Page<ProductDto> getProductsByCategoryId(Long categoryId, PageRequest pageRequest) {
         return productRepository.findProductsByCategoryId(categoryId, pageRequest);
     }
 }

@@ -66,7 +66,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public Slice<ProductDto> findProductsByCategoryId(Long categoryId, Pageable pageable) {
+    public Page<ProductDto> findProductsByCategoryId(Long categoryId, Pageable pageable) {
 
         List<ProductDto> productDtos = queryFactory
                 .select(
@@ -91,20 +91,25 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
         boolean hasNext = productDtos.size() > pageable.getPageSize();
 
+        // `Slice`를 반환하기 위해 `Pageable`을 `Page`로 변환
+        if (hasNext) {
+            productDtos.remove(productDtos.size() - 1);
+        }
+
 
         /*
             Slice 사용으로 카운트 쿼리 삭제
          */
-//        Long total = queryFactory
-//                .select(Wildcard.count)
-//                .from(product)
-//                .where(product.category.id.eq(categoryId)
-//                        .or(product.category.parent.id.eq(categoryId)))
-//                .fetchOne();
+        Long total = queryFactory
+                .select(Wildcard.count)
+                .from(product)
+                .where(product.category.id.eq(categoryId)
+                        .or(product.category.parent.id.eq(categoryId)))
+                .fetchOne();
 
-//        long totalElements = (total != null) ? total : 0L;
+        long totalElements = (total != null) ? total : 0L;
 
-        return new SliceImpl<>(productDtos, pageable, hasNext);
+        return new PageImpl<>(productDtos, pageable, totalElements);
     }
 
     /**

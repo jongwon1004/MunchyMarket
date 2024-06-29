@@ -1,8 +1,6 @@
 package com.munchymarket.MunchyMarket.controller;
 
-import com.munchymarket.MunchyMarket.dto.ProductDto;
-import com.munchymarket.MunchyMarket.dto.ResponseWrapper;
-import com.munchymarket.MunchyMarket.dto.SortTypeDto;
+import com.munchymarket.MunchyMarket.dto.*;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
 import com.munchymarket.MunchyMarket.repository.sorttype.SortTypeRepository;
 import com.munchymarket.MunchyMarket.service.CategoryService;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -24,22 +21,22 @@ public class CategoryController {
     private final ProductService productService;
     private final SortTypeRepository sortTypeRepository;
     private final CategoryRepository categoryRepository;
+    private final CategoryService categoryService;
 
 
-    /**
-     * 카테고리 누르고 상품 리스트에 들어와서 카테고리 리스트는 프론트쪽에서 상태로 데이터를 가지고 있기때문에, 이 메서드는 사용하지 않는것으로.
-     * private final CategoryRepository categoryRepository;
-     *
-     * @GetMapping("/{categoryId}")
-     * public ResponseEntity<?> categories(@PathVariable("categoryId") Long categoryId) {;
-     *     return ResponseEntity.ok().body(categoryRepository.findByIdWithChildren(categoryId));
-     * }
-     */
-
-    @GetMapping("/{categoryId}")
-    public ResponseEntity<?> categories(@PathVariable("categoryId") Long categoryId) {;
-        return ResponseEntity.ok().body(categoryRepository.findByIdWithChildren(categoryId));
+    @GetMapping
+    public ResponseEntity<ResponseWrapper<CategoryDto>> getAllCategories() {
+        return ResponseEntity.ok(new ResponseWrapper<>(categoryService.getAllCategories()));
     }
+
+
+//    /**
+//     * 상품 리스트 표시 페이지에서 상단에 카테고리 리스트 데이터
+//     */
+//    @GetMapping("/{categoryId}")
+//    public ResponseEntity<?> categories(@PathVariable("categoryId") Long categoryId) {;
+//        return ResponseEntity.ok().body(categoryRepository.findByIdWithChildren(categoryId));
+//    }
 
 
 
@@ -47,7 +44,7 @@ public class CategoryController {
      * TODO : Repository 바로 호출하기때문에 Service 추가할것
      * @return
      */
-    @GetMapping("/sort-type")
+    @GetMapping("/sort-types")
     public ResponseEntity<ResponseWrapper<SortTypeDto>> sortType() {
         return ResponseEntity.ok().body(new ResponseWrapper<>(sortTypeRepository.getSortTypes()));
     }
@@ -56,10 +53,10 @@ public class CategoryController {
      * TODO: Sort 테이블 만들어서 프론트에서 sorted_type= 0 이면 신상품순, 1이면 판매량순, 3이면 낮은가격순, 4이면 높은 가격순 으로 정렬
      */
     @GetMapping("/{categoryId}/products")
-    public ResponseEntity<Slice<ProductDto>> products(@PathVariable("categoryId") Long categoryId,
-                                                      @RequestParam("page") int page,
-                                                      @RequestParam(value = "size", defaultValue = "9") int size,
-                                                      @RequestParam(value = "sorted_type", defaultValue = "id") String sort){
+    public ResponseEntity<ProductListResponseDto> products(@PathVariable("categoryId") Long categoryId,
+                                                           @RequestParam("page") int page,
+                                                           @RequestParam(value = "size", defaultValue = "9") int size,
+                                                           @RequestParam(value = "sorted_type", defaultValue = "id") String sort){
 
         /**
          * sorted_type = 0, 신상품 순
@@ -80,7 +77,13 @@ public class CategoryController {
         log.info("pageRequest = {}", pageRequest);
         log.info("pageRequest.getOffset() = {}", pageRequest.getOffset());
 
-        return ResponseEntity.ok().body(productService.getProductsByCategoryId(categoryId, pageRequest));
+        Page<ProductDto> productPage = productService.getProductsByCategoryId(categoryId, pageRequest);
+
+        Slice<ProductDto> productSlice = new SliceImpl<>(productPage.getContent(), pageRequest, productPage.hasNext());
+        ProductListResponseDto productListResponseDto =
+                new ProductListResponseDto(productSlice,productPage.getTotalElements(), productPage.getTotalPages());
+
+        return ResponseEntity.ok().body(productListResponseDto);
     }
 
 }
