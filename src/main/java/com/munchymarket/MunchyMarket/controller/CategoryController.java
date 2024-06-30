@@ -32,9 +32,9 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<ResponseWrapper<CategoryDto>> getCategory(@PathVariable Long categoryId) {
+    public ResponseEntity<CategoryDto> getCategory(@PathVariable Long categoryId) {
         CategoryDto category = categoryService.getCategoryWithChildren(categoryId);
-        return ResponseEntity.ok(new ResponseWrapper<>(List.of(category)));
+        return ResponseEntity.ok(category);
     }
 
 
