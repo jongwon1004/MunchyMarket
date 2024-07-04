@@ -86,11 +86,17 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                         .or(product.category.parent.id.eq(categoryId)))
                 .orderBy(getOrderSpecifiers(pageable.getSort()))  // Sort 적용
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1) // limit 에 1을 더해서 다음 페이지가 있는지 확인
+                .limit(pageable.getPageSize() + 1) // + 1 해서 다음 페이지가 있는지 확인하는데, 다음 페이지가 없으면 list 의 size() 가 pageSize() 만큼 가져옴 -> 밑에 조건식 false
                 .fetch();
 
+        // 등록된 상품은 10개, productDtos.size() = 10, pageable.getPageSize() = 9
+        log.info("productDtos.size() = {}", productDtos.size());
+        log.info("pageable.getPageSize() = {}", pageable.getPageSize());
+
+        // 등록된 상품은 10개고, 각 페이지당 9 개 상품을 보여줄 수 있으니까, hasNext = true
         boolean hasNext = productDtos.size() > pageable.getPageSize();
 
+        // hasNext = true -> 다음 페이지가 존재함
         // `Slice`를 반환하기 위해 `Pageable`을 `Page`로 변환
         if (hasNext) {
             productDtos.remove(productDtos.size() - 1);
@@ -98,7 +104,8 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
 
 
         /*
-            Slice 사용으로 카운트 쿼리 삭제
+            Slice 와 Page 를 동시에 사용하기에 카운트 쿼리도 날려준다.
+            Slice 만 쓰면 카운트 쿼리는 필요없음!
          */
         Long total = queryFactory
                 .select(Wildcard.count)
