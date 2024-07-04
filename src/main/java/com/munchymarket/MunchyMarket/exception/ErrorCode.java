@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
     PACKAGING_TYPE_NOT_FOUND("該当する包装タイプがありません: %s"),
     CATEGORY_NOT_FOUND("該当するカテゴリがありません: %s"),
+    SORT_TYPE_NOT_FOUND("該当するソートタイプがありません: %s"),
     GCS_FILE_UPLOAD_ERROR("GCSファイルアップロードに失敗しました");
 
     private final String message;
