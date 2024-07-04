@@ -8,6 +8,8 @@ import org.springframework.data.domain.Slice;
 @Getter
 @ToString
 public class ProductListResponseDto {
+
+    private String sortedType;
     private Slice<ProductDto> products;
     private long totalElements;
     private int totalPages;
