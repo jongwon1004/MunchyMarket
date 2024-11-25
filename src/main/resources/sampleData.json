@@ -1,0 +1,102 @@
+[
+	{
+		"categoryId": 901003,
+		"productName": "ノルウェー生鮭200g（冷蔵）",
+		"basePrice": 14800,
+		"shortDescription": "一人でも負担のないサーモン刺身",
+		"stock": 100,
+		"deliveryDescription": "23時前にご注文の際、明日の朝7時前に到着",
+		"packagingTypeId": 3,
+		"origin": "ノルウェー",
+		"unit": "1パック",
+		"volume": "200グラム",
+		"expirationDescription": "受領後、なるべく当日お召し上がりください",
+		"allergyDescription": "刺身醤油ソース-大豆、小麦含有",
+		"guideDescription": "非破壊糖度選別と糖度には差がある場合があります。",
+		"productImages": {
+			"mainImage": "/Users/choijongwon/Desktop/UploadFile/blueberry1.jpg",
+			"subImage": "/Users/choijongwon/Desktop/UploadFile/blueberry2.jpg"
+		},
+		"productDesTop1": "一人でも負担のないサーモン刺身",
+		"productDesTop2": "ノルウェー生鮭200g（冷蔵）",
+		"productDesTopMain": "適切な脂肪層が成し遂げる香ばしい味。",
+		"isOnSale": false,
+		"salePercentage": 0.00,
+		"isPurchaseStatus": true
+	},
+	{
+		"categoryId": 901004,
+		"productName": "新鮮マグロ250g（冷蔵）",
+		"basePrice": 15800,
+		"shortDescription": "新鮮なマグロの刺身",
+		"stock": 120,
+		"deliveryDescription": "22時までの注文で翌日配送",
+		"packagingTypeId": 4,
+		"origin": "日本",
+		"unit": "1パック",
+		"volume": "250グラム",
+		"expirationDescription": "冷蔵保存で3日以内にお召し上がりください",
+		"allergyDescription": "マグロ、大豆、小麦含有",
+		"guideDescription": "商品の特性上、大きさと形にばらつきがあります。",
+		"productImages": {
+			"mainImage": "/Users/choijongwon/Desktop/UploadFile/banana1.jpg",
+			"subImage": "/Users/choijongwon/Desktop/UploadFile/banana2.jpg"
+		},
+		"productDesTop1": "新鮮なマグロの刺身",
+		"productDesTop2": "新鮮マグロ250g（冷蔵）",
+		"productDesTopMain": "漁港から直送された新鮮なマグロ。",
+		"isOnSale": true,
+		"salePercentage": 10.00,
+		"isPurchaseStatus": true
+	},
+	{
+		"categoryId": 901005,
+		"productName": "有機ブルーベリー500g（冷凍）",
+		"basePrice": 9800,
+		"shortDescription": "有機農法で育てたブルーベリー",
+		"stock": 50,
+		"deliveryDescription": "冷凍便で迅速にお届けします",
+		"packagingTypeId": 5,
+		"origin": "アメリカ",
+		"unit": "1パック",
+		"volume": "500グラム",
+		"expirationDescription": "冷凍保存で6ヶ月以内にお召し上がりください",
+		"allergyDescription": "ブルーベリー",
+		"guideDescription": "冷凍のため解凍後はすぐにお召し上がりください。",
+		"productImages": {
+			"mainImage": "/Users/choijongwon/Desktop/UploadFile/coconut1.jpg",
+			"subImage": "/Users/choijongwon/Desktop/UploadFile/coconut2.jpg"
+		},
+		"productDesTop1": "有機ブルーベリー",
+		"productDesTop2": "有機ブルーベリー500g（冷凍）",
+		"productDesTopMain": "無農薬栽培のブルーベリー。",
+		"isOnSale": false,
+		"salePercentage": 0.00,
+		"isPurchaseStatus": true
+	},
+	{
+		"categoryId": 901006,
+		"productName": "冷凍エビ500g（冷凍）",
+		"basePrice": 12800,
+		"shortDescription": "プリプリ食感の冷凍エビ",
+		"stock": 80,
+		"deliveryDescription": "冷凍便で新鮮さを保ったままお届けします",
+		"packagingTypeId": 5,
+		"origin": "ベトナム",
+		"unit": "1パック",
+		"volume": "500グラム",
+		"expirationDescription": "冷凍保存で1ヶ月以内にお召し上がりください",
+		"allergyDescription": "エビ、大豆含有",
+		"guideDescription": "冷凍のため解凍後は早めに調理してください。",
+		"productImages": {
+			"mainImage": "/Users/choijongwon/Desktop/UploadFile/shrimp1.jpg",
+			"subImage": "/Users/choijongwon/Desktop/UploadFile/shrimp2.jpg"
+		},
+		"productDesTop1": "プリプリ冷凍エビ",
+		"productDesTop2": "冷凍エビ500g（冷凍）",
+		"productDesTopMain": "新鮮なエビを冷凍した高品質商品。",
+		"isOnSale": true,
+		"salePercentage": 15.00,
+		"isPurchaseStatus": true
+	}
+]
