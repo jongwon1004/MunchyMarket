@@ -1,9 +1,10 @@
 package com.munchymarket.MunchyMarket.dto;
 
-import lombok.AllArgsConstructor;
-
 import java.math.BigDecimal;
 
+/**
+ * 등록된 상품 정보 DTO
+ */
 public record RegisteredProductDto(
         Long productId,
         Long categoryId,

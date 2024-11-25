@@ -6,6 +6,8 @@ import com.munchymarket.MunchyMarket.domain.PackagingType;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.dto.ProductDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.sample.CustomMultipartFile;
+import com.munchymarket.MunchyMarket.dto.sample.SampleProductRequestDto;
 import com.munchymarket.MunchyMarket.exception.ErrorCode;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
@@ -103,5 +105,43 @@ public class ProductService {
 
     public Page<ProductDto> getProductsByCategoryId(Long categoryId, PageRequest pageRequest) {
         return productRepository.findProductsByCategoryId(categoryId, pageRequest);
+    }
+
+    public RegisteredProductDto getProduct(Long productId) {
+        return productRepository.findByProductId(productId);
+    }
+
+
+    /**
+     * 샘플데이터 등록용 메서드
+     */
+    @Transactional
+    public RegisteredProductDto registerSampleProduct(SampleProductRequestDto sampleProductRequestDto) {
+
+        List<String> errors = new ArrayList<>();
+
+        PackagingType packagingType = fetchPackagingType(sampleProductRequestDto.getPackagingTypeId(), errors);
+        Category category = fetchCategory(sampleProductRequestDto.getCategoryId(), errors);
+
+        if (!errors.isEmpty()) {
+            throw new ProductRegisterException(errors);
+        }
+
+        Map<String, String> images = sampleProductRequestDto.getProductImages();
+        Image mainImage = null;
+        Image subImage = null;
+        // GCS 에 이미지 등록
+        try {
+            mainImage = buildAndSaveImage(new CustomMultipartFile(images.get("mainImage")));
+            subImage = buildAndSaveImage(new CustomMultipartFile(images.get("subImage")));
+
+        } catch (IOException e) {
+            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR.getMessage(), e);
+        }
+
+        Product product = sampleProductRequestDto.toEntity(category, packagingType, mainImage, subImage);
+        Long savedProductId = productRepository.save(product).getId();
+
+        return productRepository.findByProductId(savedProductId);
     }
 }

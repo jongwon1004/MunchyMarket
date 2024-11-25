@@ -22,10 +22,10 @@ public class Address extends TimeBaseEntity {
     @Column(name = "postal_code", nullable = false, length = 10)
     private String postalCode;
 
-    @Column(name = "region_address", nullable = false, length = 50) // "大阪府大阪市西成区南津守"
+    @Column(name = "region_address", nullable = false, length = 50)
     private String regionAddress;
 
-    @Column(name = "detail_address", nullable = false, length = 50) // １ー１０−６ Hollywood Heights 101号室
+    @Column(name = "detail_address", nullable = false, length = 50)
     private String detailAddress;
 
     @Column(name = "is_base_address", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 1")

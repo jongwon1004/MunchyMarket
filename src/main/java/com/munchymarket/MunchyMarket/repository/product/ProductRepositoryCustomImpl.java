@@ -11,6 +11,7 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.hibernate.annotations.BatchSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,8 +51,12 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                                 product.expirationDescription,
                                 product.allergyDescription,
                                 product.guideDescription,
-                                Expressions.stringTemplate("concat('https://storage.googleapis.com/', {0}, '/', {1})", bucketName, product.mainImage.serverFilename),
-                                Expressions.stringTemplate("concat('https://storage.googleapis.com/', {0}, '/', {1})", bucketName, product.subImage.serverFilename),
+                                Expressions.stringTemplate(
+                                        "concat('https://storage.googleapis.com/', {0}, '/', {1})", bucketName, product.mainImage.serverFilename
+                                ),
+                                Expressions.stringTemplate(
+                                        "concat('https://storage.googleapis.com/', {0}, '/', {1})", bucketName, product.subImage.serverFilename
+                                ),
                                 product.productDesTop1,
                                 product.productDesTop2,
                                 product.productDesMain,
