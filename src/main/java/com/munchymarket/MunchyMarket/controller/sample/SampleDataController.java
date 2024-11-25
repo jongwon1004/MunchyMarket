@@ -30,7 +30,7 @@ public class SampleDataController {
 
 
         for (SampleProductRequestDto productRequestDto : sampleProductRequestDto) {
-            RegisteredProductDto registeredProductDto = productService.registerProduct(productRequestDto);
+            RegisteredProductDto registeredProductDto = productService.registerSampleProduct(productRequestDto);
             System.out.println("registeredProductDto = " + registeredProductDto);
         }
 
