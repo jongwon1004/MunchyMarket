@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -32,6 +33,9 @@ public class JWTFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+
+        log.info("Current time = {}",   new Date(System.currentTimeMillis()));
+
 
         // RequestのHeaderからJWTを取得
         String authorization = request.getHeader("Authorization");

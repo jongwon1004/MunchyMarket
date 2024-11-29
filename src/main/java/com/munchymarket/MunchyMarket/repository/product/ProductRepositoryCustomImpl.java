@@ -146,11 +146,24 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
         return sort.stream()
                 .map(order -> {
                     // order.getProperty() 값 로그 출력
-                    // log.info("order.getProperty() = {}", order.getProperty());
+                     log.info("order.getProperty() = {}", order.getProperty());
                     return new OrderSpecifier(
                             order.isAscending() ? com.querydsl.core.types.Order.ASC : com.querydsl.core.types.Order.DESC,
-                            Expressions.path(Product.class, QProduct.product, order.getProperty()));
+                            Expressions.path(Product.class, product, toCamelCase(order.getProperty())));
+                    // order.getProperty() 가 base_price 로 리턴하고, Product 엔티티에서는 필드가 basePrice 로 되어있기 때문에 toCamelCase() 메서드로 변환
                 })
                 .toArray(OrderSpecifier[]::new);
     }
+
+    private String toCamelCase(String snakeCase) {
+        String[] parts = snakeCase.split("_"); // {"base", "price"}
+        StringBuilder camelCase = new StringBuilder(parts[0]); // base
+        for (int i = 1; i < parts.length; i++) {
+            camelCase.append(parts[i].substring(0, 1).toUpperCase()) // 첫 글자 대문자
+                    .append(parts[i].substring(1));
+        }
+        log.info("camelCase = {}", camelCase.toString());
+        return camelCase.toString();
+    }
+
 }

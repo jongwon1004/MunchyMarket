@@ -59,7 +59,7 @@ public class CategoryController {
 
     @GetMapping("/{categoryId}/products")
     public ResponseEntity<ProductListResponseDto> products(@PathVariable("categoryId") Long categoryId,
-                                                           @RequestParam("page") int page,
+                                                           @RequestParam(value = "page", defaultValue = "1", required = false) int page,
                                                            @RequestParam(value = "size", defaultValue = "9") int size,
                                                            @RequestParam(value = "sorted_type", defaultValue = "1") long sortId){
 
@@ -87,6 +87,8 @@ public class CategoryController {
         Sort sort = Sort.by(sortType.getSortTypeField());
         sort = sortType.getSortDirection()
                 .equals("desc") ? sort.descending() : sort.ascending();
+
+        log.info("sort = {}", sort); // #############
 
         PageRequest pageRequest = PageRequest.of(page-1, size, sort);
         log.info("pageRequest = {}", pageRequest);

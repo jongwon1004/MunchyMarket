@@ -1,6 +1,8 @@
 package com.munchymarket.MunchyMarket.controller;
 
 
+import com.munchymarket.MunchyMarket.dto.ProductDetailDto;
+import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +25,16 @@ public class ProductController {
      *
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<?> getProduct(@PathVariable Long productId) {
-        return ResponseEntity.ok().body(productService.getProduct(productId));
+    public ResponseEntity<ProductDetailDto> getProduct(@PathVariable Long productId) {
+
+//        ProductDetailDto productDetailDto = new ProductDetailDto();
+//        productDetailDto.setProduct(productService.getProduct(productId));
+
+        RegisteredProductDto product = productService.getProduct(productId);
+        log.info("product = {}", product);
+
+        return ResponseEntity.ok().build();
+
     }
 
 }
