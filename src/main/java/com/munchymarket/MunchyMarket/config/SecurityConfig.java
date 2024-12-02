@@ -127,14 +127,26 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173", "https://munchymarket.org")); // 실제 사용 시, '*' 대신 구체적인 오리진 지정
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "https://munchymarket.org",
+                "https://www.munchymarket.org"
+        )); // 명확히 도메인 지정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
         configuration.setAllowCredentials(true);
+
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:*",   // 로컬 개발 환경
+                "https://*.munchymarket.org" // 모든 서브도메인 허용
+        ));
+
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
