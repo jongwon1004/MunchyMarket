@@ -27,13 +27,11 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDetailDto> getProduct(@PathVariable Long productId) {
 
-//        ProductDetailDto productDetailDto = new ProductDetailDto();
-//        productDetailDto.setProduct(productService.getProduct(productId));
+        ProductDetailDto productDetailDto = new ProductDetailDto();
+        productDetailDto.setProduct(productService.getProduct(productId));
 
-        RegisteredProductDto product = productService.getProduct(productId);
-        log.info("product = {}", product);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(productDetailDto);
 
     }
 

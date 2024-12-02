@@ -69,7 +69,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/member/", "/api/member/login",
                                 "/api/member/send-sms", "/api/member/validate", "/api/member/verification-code", "/api/member/join",
                                 "/api/admin/product/register", "/api/admin/product/categories", "/api/admin/product/packaging-types", //テスト段階なので、一時的に許可
-                                "/api/categories/**",
+                                "/api/categories/**","/api/products/**",
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",
                                 "/logout", "/error", "/swagger-ui-custom.html").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
@@ -130,7 +130,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173", "https://15.152.139.214")); // 실제 사용 시, '*' 대신 구체적인 오리진 지정
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173", "https://munchymarket.org")); // 실제 사용 시, '*' 대신 구체적인 오리진 지정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setExposedHeaders(Arrays.asList("Authorization"));

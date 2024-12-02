@@ -2,7 +2,9 @@ package com.munchymarket.MunchyMarket.dto;
 
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @NoArgsConstructor
@@ -11,6 +13,7 @@ import java.util.Map;
 @Setter @Getter
 public class ProductDetailDto {
 
-    Map<String, Object> reviews = new HashMap<>();
     RegisteredProductDto product;
+    List<?> reviews = new ArrayList<>();
+    List<?> inquiries = new ArrayList<>();
 }
