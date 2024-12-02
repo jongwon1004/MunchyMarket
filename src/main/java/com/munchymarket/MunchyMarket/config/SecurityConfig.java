@@ -128,30 +128,30 @@ public class SecurityConfig {
     }
 
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000",
-                "http://localhost:5173",
-                "https://munchymarket.org",
-                "https://www.munchymarket.org"
-        )); // 명확히 도메인 지정
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-        configuration.setAllowCredentials(true);
-
-        configuration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost:*",   // 로컬 개발 환경
-                "https://*.munchymarket.org" // 모든 서브도메인 허용
-        ));
-
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Arrays.asList(
+//                "http://localhost:3000",
+//                "http://localhost:5173",
+//                "https://munchymarket.org",
+//                "https://www.munchymarket.org"
+//        )); // 명확히 도메인 지정
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+//        configuration.setAllowedHeaders(Arrays.asList("*"));
+//        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+//        configuration.setAllowCredentials(true);
+//
+//        configuration.setAllowedOriginPatterns(Arrays.asList(
+//                "http://localhost:*",   // 로컬 개발 환경
+//                "https://*.munchymarket.org" // 모든 서브도메인 허용
+//        ));
+//
+//
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
 
     //    // 인증 관리자 관련 설정, 사용자 정보를 가져올 서비스를 재정의 하거나, 인증 방법 등을 설정
 //    @Bean
