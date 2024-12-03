@@ -37,7 +37,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
         // SecurityConfig에서 설정된 허용 경로를 체크
         String uri = request.getRequestURI();
-        List<String> permittedPaths = List.of("/api/payment/**", "/api/member/**");
+        List<String> permittedPaths = List.of("/api/payment/**", "/api/member/**", "/api/webhooks/**");
         if (permittedPaths.stream().anyMatch(uri::startsWith)) {
             filterChain.doFilter(request, response);
             return;
