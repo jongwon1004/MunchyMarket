@@ -25,6 +25,8 @@ public class PaymentWebhooksController {
     @PostMapping("/stripe")
     public ResponseEntity<String> handleStripeWebhook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
 
+        log.info("payload = {}", payload);
+        log.info("sigHeader = {}", sigHeader);
 
         try {
             // Stripe의 시그니처 확인
