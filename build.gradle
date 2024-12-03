@@ -77,6 +77,8 @@ dependencies {
 	// WebClient 사용을 위한 추가
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
 
+	implementation "com.stripe:stripe-java:28.1.0"
+
 }
 
 task run(type: JavaExec) {

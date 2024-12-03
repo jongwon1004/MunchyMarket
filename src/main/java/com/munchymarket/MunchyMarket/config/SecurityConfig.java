@@ -70,6 +70,7 @@ public class SecurityConfig {
                                 "/api/member/send-sms", "/api/member/validate", "/api/member/verification-code", "/api/member/join",
                                 "/api/admin/product/register", "/api/admin/product/categories", "/api/admin/product/packaging-types", //テスト段階なので、一時的に許可
                                 "/api/categories/**","/api/products/**",
+                                "/api/payment/**",
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",
                                 "/logout", "/error", "/swagger-ui-custom.html").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
@@ -128,6 +129,10 @@ public class SecurityConfig {
     }
 
 
+    /**
+     * SpringBoot 에서 CORS 설정을 하려고했는데 해결이 안됨
+     * Apache 서버 (/etc/apache2/sites-available/192.***.conf) 에서 CORS 설정을 하고 Response Header 확인하면 Origin 이 설정되어있는걸 확인했음
+     */
 //    @Bean
 //    CorsConfigurationSource corsConfigurationSource() {
 //        CorsConfiguration configuration = new CorsConfiguration();
