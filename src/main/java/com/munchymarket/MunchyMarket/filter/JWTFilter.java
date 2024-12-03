@@ -15,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -25,16 +26,22 @@ public class JWTFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String loginId = request.getParameter("loginId");
-        log.info("loginId = {}", loginId);
-        log.info("request.getRequestURI() = {}", request.getRequestURI());
+//        log.info("loginId = {}", loginId);
+//        log.info("request.getRequestURI() = {}", request.getRequestURI());
         // 로그인 경로에 대한 요청은 JWT 검증을 건너뛴다.
-        if (request.getRequestURI().equals("/api/member/login")) {
-            log.info("JWTFilter에서 JWT검증을 건너뜁니다");
+//        if (request.getRequestURI().equals("/api/member/login")) {
+//            log.info("JWTFilter에서 JWT검증을 건너뜁니다");
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
+
+        // SecurityConfig에서 설정된 허용 경로를 체크
+        String uri = request.getRequestURI();
+        List<String> permittedPaths = List.of("/api/payment/**", "/api/member/**");
+        if (permittedPaths.stream().anyMatch(uri::startsWith)) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        log.info("Current time = {}",   new Date(System.currentTimeMillis()));
 
 
         // RequestのHeaderからJWTを取得
