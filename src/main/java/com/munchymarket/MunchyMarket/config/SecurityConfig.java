@@ -139,6 +139,8 @@ public class SecurityConfig {
 //        configuration.setAllowedOrigins(Arrays.asList(
 //                "http://localhost:3000",
 //                "http://localhost:5173",
+//                "http://localhost:5500",
+//                "http://127.0.0.1:5500",
 //                "https://munchymarket.org",
 //                "https://www.munchymarket.org"
 //        )); // 명확히 도메인 지정

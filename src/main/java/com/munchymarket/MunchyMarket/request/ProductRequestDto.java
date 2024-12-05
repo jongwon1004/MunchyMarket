@@ -83,7 +83,7 @@ public class ProductRequestDto {
 
     private Boolean isOnSale;
 
-    private BigDecimal salePercentage;
+    private int salePercentage;
 
     private Boolean isPurchaseStatus;
 

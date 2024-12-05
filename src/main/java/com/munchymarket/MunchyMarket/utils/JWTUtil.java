@@ -28,6 +28,11 @@ public class JWTUtil {
 
 
     public Long getId(String token) {
+
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7).trim(); // "Bearer " 제거 후 공백 제거
+        }
+
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()

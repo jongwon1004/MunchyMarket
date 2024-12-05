@@ -15,5 +15,5 @@ public class ProductDetailDto {
 
     RegisteredProductDto product;
     List<?> reviews = new ArrayList<>();
-    List<?> inquiries = new ArrayList<>();
+    List<?> inquiries = new ArrayList<>(); // 상품문의 리스트
 }

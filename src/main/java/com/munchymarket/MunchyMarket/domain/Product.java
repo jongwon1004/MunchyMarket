@@ -29,6 +29,9 @@ public class Product extends TimeBaseEntity {
     @Column(name = "base_price", nullable = false)
     private int basePrice;
 
+    @Column(name = "final_price", nullable = false)
+    private int finalPrice;
+
     @Column(name = "short_description", length = 500, nullable = false)
     private String shortDescription;
 
@@ -81,8 +84,8 @@ public class Product extends TimeBaseEntity {
     @Column(name = "is_on_sale", columnDefinition = "tinyint(1) default 0")
     private Boolean isOnSale;
 
-    @Column(name = "sale_percentage", columnDefinition = "decimal(10,2) default 0")
-    private BigDecimal salePercentage;
+    @Column(name = "sale_percentage", columnDefinition = "int default 0")
+    private int salePercentage;
 
     @Column(name = "is_purchase_status", columnDefinition = "tinyint(1) default 1")
     private Boolean isPurchaseStatus;
@@ -93,7 +96,7 @@ public class Product extends TimeBaseEntity {
                    String unit, String volume, String expirationDescription, String allergyDescription,
                    String guideDescription, Image mainImage, Image subImage, String productDesTop1,
                    String productDesTop2, String productDesMain, Boolean isOnSale,
-                   BigDecimal salePercentage, Boolean isPurchaseStatus) {
+                   int salePercentage, Boolean isPurchaseStatus) {
         this.id = id;
         this.category = category;
         this.productName = productName;

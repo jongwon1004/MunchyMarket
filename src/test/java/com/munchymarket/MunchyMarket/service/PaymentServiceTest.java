@@ -50,6 +50,8 @@ class PaymentServiceTest {
         // mockPaymentIntent.getId() 를 호출하면 무조건 "pi_1JQ5Zv2eZvKYlo2C5J9J9J9J" 를 리턴하도록 동작을 정의한것임
         // mockPaymentIntent.getAmount() 를 호출하면 무조건 5000L 을 리턴하도록 동작을 정의한것임
 
+        Mockito.when(mockPaymentIntent.getPaymentMethod()).thenReturn("pm_1QSXy8G1ONWjX9Kxeek4SJtf");
+
 
         Map<String, String> mockMetadata = new HashMap<>();
         mockMetadata.put("member_id", "1");
@@ -69,10 +71,12 @@ class PaymentServiceTest {
         paymentRequest.setAmount(5000L);
         paymentRequest.setCurrency("jpy");
         paymentRequest.setMetadata(metaData);
+        paymentRequest.setPaymentMethodId("pm_1QSXy8G1ONWjX9Kxeek4SJtf");
 
 
         // 테스트 대상 호출
         PaymentIntent paymentIntent = new PaymentService().createPaymentIntent(paymentRequest);
+        System.out.println("paymentIntent.getPaymentMethod() = " + paymentIntent.getPaymentMethod());
 
         // 테스트
         assertThat(paymentIntent.getId()).isEqualTo("pi_1JQ5Zv2eZvKYlo2C5J9J9J9J");
