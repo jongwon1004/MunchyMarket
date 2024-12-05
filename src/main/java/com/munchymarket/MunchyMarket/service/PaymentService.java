@@ -25,6 +25,7 @@ public class PaymentService {
         Map<String, Object> params = new HashMap<>();
         params.put("amount", paymentRequest.getAmount());
         params.put("currency", paymentRequest.getCurrency());
+        params.put("metadata", paymentRequest.getMetadata());
         params.put("payment_method_types", paymentMethodTypes);
 
         return PaymentIntent.create(params);
