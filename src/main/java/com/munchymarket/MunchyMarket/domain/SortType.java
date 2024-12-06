@@ -8,6 +8,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
+@Table(name = "sort_types")
 @Entity
 public class SortType {
 

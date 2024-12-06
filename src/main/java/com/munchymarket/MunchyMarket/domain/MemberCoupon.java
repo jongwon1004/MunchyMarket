@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
+@Table(name = "member_coupons")
 @Entity
 public class MemberCoupon {
 

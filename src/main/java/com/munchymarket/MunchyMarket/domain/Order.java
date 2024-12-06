@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name = "Orders")
+@Table(name = "orders")
 public class Order extends TimeBaseEntity {
 
     @Id

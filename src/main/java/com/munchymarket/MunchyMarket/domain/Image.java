@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @ToString
+@Table(name = "images")
 @Entity
 public class Image {
 

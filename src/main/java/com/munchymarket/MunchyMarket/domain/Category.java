@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "children")
+@Table(name = "categories")
 @Entity
 public class Category {
 

@@ -5,10 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Entity
 @NoArgsConstructor
 @Getter
-@ToString(of = {"id"})
+@Table(
+        name = "review_images",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"review_id", "image_id"})
+)
+@Entity
 public class ReviewImage {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

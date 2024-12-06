@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
+@Table(name = "coupons")
 @Entity
 public class Coupon extends TimeBaseEntity {
 

@@ -8,6 +8,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @ToString(of = {"id", "packagingTypeName", "packagingTypeDescription"})
+@Table(name = "packaging_types")
 @Entity
 public class PackagingType {
 

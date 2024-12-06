@@ -11,10 +11,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Entity
 @NoArgsConstructor
 @Getter
 @ToString(of = {"id", "loginId", "name", "ruby", "email", "phoneNumber", "sex", "birth", "role"})
+@Table(name = "members")
+@Entity
 public class Member extends TimeBaseEntity {
 
     @Id

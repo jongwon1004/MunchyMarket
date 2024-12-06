@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Getter
 @ToString
+@Table(name = "products")
 @Entity
 public class Product extends TimeBaseEntity {
 
@@ -91,7 +92,7 @@ public class Product extends TimeBaseEntity {
     private Boolean isPurchaseStatus;
 
     @Builder
-    public Product(Long id, Category category, String productName, int basePrice, String shortDescription,
+    public Product(Long id, Category category, String productName, int basePrice,int finalPrice, String shortDescription,
                    int stock, String deliveryDescription, PackagingType packagingType, String origin,
                    String unit, String volume, String expirationDescription, String allergyDescription,
                    String guideDescription, Image mainImage, Image subImage, String productDesTop1,
@@ -101,6 +102,7 @@ public class Product extends TimeBaseEntity {
         this.category = category;
         this.productName = productName;
         this.basePrice = basePrice;
+        this.finalPrice = finalPrice;
         this.shortDescription = shortDescription;
         this.stock = stock;
         this.deliveryDescription = deliveryDescription;
