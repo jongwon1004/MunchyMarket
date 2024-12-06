@@ -3,6 +3,7 @@ package com.munchymarket.MunchyMarket.filter;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,73 +26,71 @@ public class JWTFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String loginId = request.getParameter("loginId");
-//        log.info("loginId = {}", loginId);
-//        log.info("request.getRequestURI() = {}", request.getRequestURI());
-        // 로그인 경로에 대한 요청은 JWT 검증을 건너뛴다.
-//        if (request.getRequestURI().equals("/api/member/login")) {
-//            log.info("JWTFilter에서 JWT검증을 건너뜁니다");
-//            filterChain.doFilter(request, response);
-//            return;
+        try {
+            String token = extractToken(request);
+
+            // JWT가 있는 경우
+            if (token != null) {
+                // 토큰 만료 여부 확인
+                if (jwtUtil.isExpired(token)) {
+                    throw new ExpiredJwtException(null, null, "JWT 토큰이 만료되었습니다.");
+                }
+
+                // 인증 설정
+                setAuthentication(token);
+            }
+
+            // 필터 체인 계속 실행
+            filterChain.doFilter(request, response);
+        } catch (ExpiredJwtException ex) {
+            handleExpiredJwtException(request, response, ex);
+        }
+//        catch (Exception ex) {
+//            handleOtherExceptions(request, response, ex);
 //        }
+    }
 
-        // SecurityConfig에서 설정된 허용 경로를 체크
-        String uri = request.getRequestURI();
-        List<String> permittedPaths = List.of("/api/payment/**", "/api/member/**", "/api/webhooks/**");
-        if (permittedPaths.stream().anyMatch(uri::startsWith)) {
-            filterChain.doFilter(request, response);
-            return;
+    private String extractToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
         }
+        return null;
+    }
 
 
-        // RequestのHeaderからJWTを取得
-        String authorization = request.getHeader("Authorization");
-        log.info("authorization = {}", authorization);
+    private void handleExpiredJwtException(HttpServletRequest request, HttpServletResponse response, ExpiredJwtException ex) throws IOException {
+        log.error("Expired JWT token: {}", ex.getMessage());
 
-        // Authorization Header検証
-        if(authorization == null || !authorization.startsWith("Bearer ")) {
-            log.error("token is null");
-            filterChain.doFilter(request, response);
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"error\": \"JWT 토큰이 만료되었습니다. 다시 로그인해주세요.\"}");
+    }
 
-            // 条件が該当するとメソッド終了（必須）
-            return;
-        }
+//    private void handleOtherExceptions(HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {
+//        log.error("An error occurred: {}", ex.getMessage());
+//
+//        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write("{\"error\": \"서버에서 문제가 발생했습니다.\"}");
+//    }
 
-        log.info("authorization now");
-        log.info("authorization = {}", authorization);
 
-        // Bearerを取り除いてJWTを取得
-        String token = authorization.split(" ")[1];
-
-        // Tokenの消滅時間を検証
-        if(jwtUtil.isExpired(token)) {
-            log.error("token is expired");
-            filterChain.doFilter(request, response);
-
-            // 条件が該当するとメソッド終了（必須）
-            return;
-        }
-
-        // tokenからemail, roleを取得
+    private void setAuthentication(String token) {
         String email = jwtUtil.getLoginId(token);
         String role = jwtUtil.getRole(token);
         Long id = jwtUtil.getId(token);
-        log.info("id ={}", id);
 
-
-        // Memberを生成して値をSet
         Member member = new Member(id, email, role);
-
-        // MemberDetailsにMemberの情報を入れる
         CustomMemberDetails customMemberDetails = new CustomMemberDetails(member);
 
-        // Spring Security認証Token生成
-        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(customMemberDetails, null, customMemberDetails.getAuthorities());
 
-        // Sessionに使用者登録
         SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        filterChain.doFilter(request, response);
     }
+
 }
 
