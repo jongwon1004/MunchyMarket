@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
  * 등록된 상품 정보 DTO
  */
 
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegisteredProductDto {

@@ -21,7 +21,7 @@ public class ProductDto {
     private int stock;
     private String mainImage;
     private Boolean isOnSale;
-    private BigDecimal salePercentage;
+    private int salePercentage;
     private Boolean isPurchaseStatus;
 
 }
