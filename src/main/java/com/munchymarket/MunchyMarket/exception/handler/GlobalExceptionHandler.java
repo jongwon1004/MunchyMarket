@@ -1,5 +1,6 @@
 package com.munchymarket.MunchyMarket.exception.handler;
 
+import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,11 +54,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<String> handleExpiredJwtException(ExpiredJwtException ex) {
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED) // 401 Unauthorized
-                .body("JWT token has expired. Please log in again.");
+
+
+    @ExceptionHandler(DuplicateReviewException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateReviewException(DuplicateReviewException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
 
 

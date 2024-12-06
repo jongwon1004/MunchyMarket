@@ -1,12 +1,17 @@
 package com.munchymarket.MunchyMarket.controller;
 
 import com.munchymarket.MunchyMarket.dto.ReviewCreateDto;
+import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.service.ReviewService;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,10 +28,10 @@ public class ReviewController {
     public ResponseEntity<?> createReview(@ModelAttribute ReviewCreateDto reviewCreateDto, @RequestHeader("Authorization") String tk) {
 
         reviewCreateDto.setMemberId(jwtUtil.getId(tk));
-
         log.info("reviewCreateDto: {}", reviewCreateDto);
+
         reviewService.createReview(reviewCreateDto);
-        return ResponseEntity.ok().body("reviewCreateDto");
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "리뷰가 등록되었습니다."));
     }
 
 }

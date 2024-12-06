@@ -1,17 +1,25 @@
 package com.munchymarket.MunchyMarket.service;
 
+import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.Review;
-import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.dto.ReviewCreateDto;
+import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
+import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
+import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.repository.review.ReviewRepository;
+import com.munchymarket.MunchyMarket.utils.FileSizeUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,17 +31,47 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
 
     @Transactional
-    public void createReview(ReviewCreateDto reviewCreateDto) {
+    public void createReview(ReviewCreateDto reviewCreateDto) throws DuplicateReviewException {
+
 
         Product product = findProductById(reviewCreateDto.getProductId());
         Member member = findMemberById(reviewCreateDto.getMemberId());
 
-        Review review = convertToEntity(member, product, reviewCreateDto);
-        Review savedReview = reviewRepository.save(review);
+        // 중복 리뷰 등록 검증
+        boolean reviewExists = reviewRepository.existsByMemberIdAndProductId(member.getId(), product.getId());
+        if (reviewExists) {
+            throw new DuplicateReviewException("既にこの商品に対するレビューが登録されています。"); // 전역 예외 처리
+        }
 
-        log.info("Saved review ID: {}", savedReview.getId());
+        Review review = convertToEntity(member, product, reviewCreateDto);
+
+        log.info("review: {}", review);
+
+        List<MultipartFile> reviewImages = reviewCreateDto.getReviewImages();
+        for (MultipartFile reviewImage : reviewImages) {
+            String imageUrl = null;
+            try {
+                imageUrl = gcsUploadService.uploadToGcs(reviewImage); // serverFilename
+
+                Image image = Image.builder()
+                        .clientFilename(reviewImage.getOriginalFilename())
+                        .serverFilename(imageUrl)
+                        .fileSize(FileSizeUtils.readableFileSize(reviewImage.getSize()))
+                        .build();
+
+                imageRepository.save(image);
+
+                review.addReviewImage(image); // cascade
+            } catch (IOException e) {
+                throw new GcsFileUploadFailException(e.getMessage());
+            }
+
+        }
+
+        reviewRepository.save(review);
     }
 
     private Product findProductById(Long productId) {

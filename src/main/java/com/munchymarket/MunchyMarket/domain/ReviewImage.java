@@ -25,4 +25,9 @@ public class ReviewImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
+
+    public ReviewImage(Review review, Image image) {
+        this.review = review;
+        this.image = image;
+    }
 }
