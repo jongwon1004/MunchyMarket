@@ -140,7 +140,10 @@ public class ProductService {
         }
 
         Product product = sampleProductRequestDto.toEntity(category, packagingType, mainImage, subImage);
+        log.info("product : {}", product);
+
         Long savedProductId = productRepository.save(product).getId();
+        log.info("savedProductId : {}", savedProductId);
 
         return productRepository.findByProductId(savedProductId);
     }

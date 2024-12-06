@@ -28,6 +28,7 @@ public class SampleDataController {
     @PostMapping("/register")
     public ResponseEntity<String> registerProduct(@RequestBody List<SampleProductRequestDto> sampleProductRequestDto) {
 
+        log.info("sampleProductRequestDto = {}", sampleProductRequestDto);
 
         for (SampleProductRequestDto productRequestDto : sampleProductRequestDto) {
             RegisteredProductDto registeredProductDto = productService.registerSampleProduct(productRequestDto);

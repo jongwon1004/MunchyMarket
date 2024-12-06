@@ -29,6 +29,9 @@ public class SampleProductRequestDto {
     @PositiveOrZero(message = "基本価格は正の数でなければなりません。") // 0 포함 양수만 허용
     private int basePrice;
 
+    @PositiveOrZero(message = "最終価格は正の数でなければなりません。")
+    private int finalPrice;
+
     @Size(max = 500, message = "短い説明は255文字以下で入力してください。")
     private String shortDescription;
 
@@ -92,6 +95,7 @@ public class SampleProductRequestDto {
                 .category(category)
                 .productName(this.productName)
                 .basePrice(this.basePrice)
+                .finalPrice(this.finalPrice)
                 .shortDescription(this.shortDescription)
                 .stock(this.stock)
                 .deliveryDescription(this.deliveryDescription)
