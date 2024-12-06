@@ -41,6 +41,7 @@ public class ProductRepositoryCustomImpl implements ProductRepositoryCustom {
                                 product.category.id,
                                 product.productName,
                                 product.basePrice,
+                                product.finalPrice,
                                 product.shortDescription,
                                 product.stock,
                                 product.deliveryDescription,

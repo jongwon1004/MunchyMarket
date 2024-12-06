@@ -74,7 +74,8 @@ public class SecurityConfig {
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",
                                 "/logout", "/error", "/swagger-ui-custom.html").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
-                        .requestMatchers("/profile", "/api/accounts/register/", "/api/accounts/**").authenticated() // 認証済みのユーザーだけアクセス可能
+                        .requestMatchers("/profile", "/api/accounts/register/", "/api/accounts/**",
+                                           "/api/review").authenticated() // 認証済みのユーザーだけアクセス可能
                         .anyRequest().authenticated() // それ以外のリクエストは認証が必要 // 403 Forbidden
                 )
                 .formLogin(form -> form // ログインページををクライアント側で管理する場合は、設定不要
