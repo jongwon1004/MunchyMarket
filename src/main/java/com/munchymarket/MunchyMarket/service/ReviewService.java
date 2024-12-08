@@ -4,6 +4,7 @@ import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.Review;
+import com.munchymarket.MunchyMarket.dto.ProductReviewDto;
 import com.munchymarket.MunchyMarket.dto.ReviewCreateDto;
 import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
@@ -15,10 +16,13 @@ import com.munchymarket.MunchyMarket.utils.FileSizeUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -43,7 +47,7 @@ public class ReviewService {
         // 중복 리뷰 등록 검증
         boolean reviewExists = reviewRepository.existsByMemberIdAndProductId(member.getId(), product.getId());
         if (reviewExists) {
-            throw new DuplicateReviewException("既にこの商品に対するレビューが登録されています。"); // 전역 예외 처리
+            throw new DuplicateReviewException("既にこの商品に対するレビューが登録されています。"); // global exception handler
         }
 
         Review review = convertToEntity(member, product, reviewCreateDto);
@@ -96,4 +100,8 @@ public class ReviewService {
 
 
 
+    public List<ProductReviewDto> getReviewsByProductId(Long productId) {
+
+        return reviewRepository.getProductReviewsByProductId(productId);
+    }
 }

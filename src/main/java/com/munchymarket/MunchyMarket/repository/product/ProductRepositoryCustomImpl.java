@@ -1,8 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.product;
 
 import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.domain.QCategory;
-import com.munchymarket.MunchyMarket.domain.QProduct;
 import com.munchymarket.MunchyMarket.dto.ProductDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.querydsl.core.types.OrderSpecifier;
@@ -11,7 +9,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.hibernate.annotations.BatchSize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

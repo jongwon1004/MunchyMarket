@@ -4,6 +4,7 @@ package com.munchymarket.MunchyMarket.controller;
 import com.munchymarket.MunchyMarket.dto.ProductDetailDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.service.ProductService;
+import com.munchymarket.MunchyMarket.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
     private final ProductService productService;
+    private final ReviewService reviewService;
 
     /**
      * TODO : 상품후기, 상품후기 사진, 상품 문의 추가하니까 response DTO 새로 만들어야됨 (현재 상품 상세정보만 return)
@@ -29,6 +31,9 @@ public class ProductController {
 
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setProduct(productService.getProduct(productId));
+        productDetailDto.setReviews(reviewService.getReviewsByProductId(productId));
+
+        log.info("productDetailDto: {}", productDetailDto);
 
 
         return ResponseEntity.ok().body(productDetailDto);

@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -25,13 +24,14 @@ public class ReviewController {
 
 
     @PostMapping
-    public ResponseEntity<?> createReview(@ModelAttribute ReviewCreateDto reviewCreateDto, @RequestHeader("Authorization") String tk) {
+    public ResponseEntity<Map<String, String>> createReview(@ModelAttribute ReviewCreateDto reviewCreateDto, @RequestHeader("Authorization") String tk) {
 
         reviewCreateDto.setMemberId(jwtUtil.getId(tk));
         log.info("reviewCreateDto: {}", reviewCreateDto);
 
         reviewService.createReview(reviewCreateDto);
-        return ResponseEntity.ok().body(Collections.singletonMap("message", "리뷰가 등록되었습니다."));
+        return ResponseEntity.ok().body(Collections.singletonMap("message", "レビューが登録されました。"));
     }
+
 
 }

@@ -1,9 +1,6 @@
 package com.munchymarket.MunchyMarket.dto;
 
 
-import com.munchymarket.MunchyMarket.domain.Member;
-import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.domain.Review;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,8 +21,5 @@ public class ReviewCreateDto {
 
     private List<MultipartFile> reviewImages = new ArrayList<>();
 
-    public void setMemberId(Long memberId) {
-        this.memberId = memberId;
-    }
 
 }

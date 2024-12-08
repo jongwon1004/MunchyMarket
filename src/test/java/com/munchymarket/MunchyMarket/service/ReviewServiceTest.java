@@ -1,4 +1,4 @@
-package com.munchymarket.MunchyMarket.repository.review;
+package com.munchymarket.MunchyMarket.service;
 
 import com.munchymarket.MunchyMarket.dto.ProductReviewDto;
 import com.munchymarket.MunchyMarket.dto.ReviewImageResponse;
@@ -7,8 +7,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 
 import java.util.List;
 
@@ -18,26 +20,33 @@ import static com.munchymarket.MunchyMarket.domain.QReviewImage.reviewImage;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
-@Slf4j
-public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
 
+@SpringBootTest
+@Transactional
+@Commit
+class ReviewServiceTest {
 
-    private final JPAQueryFactory queryFactory;
+    @Autowired
+    ReviewService reviewService;
 
-    public ReviewRepositoryCustomImpl(EntityManager em) {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
+    @Autowired
+    EntityManager em;
 
-    @Value("${spring.cloud.gcp.storage.bucket}")
-    private String bucketName;
+    @Autowired
+    JPAQueryFactory queryFactory;
 
+//    @Test
+//    void test() {
+//        List<ProductReviewDto> reviewsByProductId = reviewService.getReviewsByProductId(3L);
+//        System.out.println("reviewsByProductId = " + reviewsByProductId);
+//    }
 
+    @Test
+    void productReviewsByProductIdV2() {
 
-    @Override
-    @Transactional
-    public List<ProductReviewDto> getProductReviewsByProductId(Long productId) {
+        Long productId = 3L;
 
-        List<ProductReviewDto> transform = queryFactory.from(review)
+        List<ProductReviewDto> reviews = queryFactory.from(review)
                 .leftJoin(review.reviewImages, reviewImage)
                 .leftJoin(reviewImage.image, image)
                 .where(review.product.id.eq(productId))
@@ -61,11 +70,10 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
                                 review.lastModifiedDate
                         )
                 ));
-        log.info("transform = " + transform);
-        return null;
+
+        System.out.println("reviews = " + reviews);
+
+
     }
-
-
-
 
 }
