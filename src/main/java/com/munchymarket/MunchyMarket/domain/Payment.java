@@ -44,4 +44,8 @@ public class Payment {
     private String receiptEmail;
 
 
+    public void changeStatus(PaymentStatus status) {
+        this.status = status;
+    }
+
 }
