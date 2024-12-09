@@ -1,9 +1,11 @@
 package com.munchymarket.MunchyMarket.service.common;
 
+import com.munchymarket.MunchyMarket.domain.Coupon;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
+import com.munchymarket.MunchyMarket.repository.coupon.CouponRepository;
 import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.repository.packagingtype.PackagingTypeRepository;
@@ -30,6 +32,7 @@ public class CommonLogicsService {
     private final SortTypeRepository sortTypeRepository;
     private final VerificationCodeRepository verificationCodeRepository;
     private final PackagingTypeRepository packagingTypeRepository;
+    private final CouponRepository couponRepository;
 
     public final Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
@@ -39,6 +42,11 @@ public class CommonLogicsService {
     public final Product findProductById(Long productId) {
         return productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+    }
+
+    public final Coupon findCouponById(Long couponId) {
+        return couponRepository.findById(couponId)
+                .orElseThrow(() -> new IllegalArgumentException("Coupon not found"));
     }
 
 
