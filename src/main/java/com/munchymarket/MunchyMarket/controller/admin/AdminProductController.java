@@ -1,6 +1,5 @@
 package com.munchymarket.MunchyMarket.controller.admin;
 
-import com.munchymarket.MunchyMarket.dto.CategoryDto;
 import com.munchymarket.MunchyMarket.dto.PackagingTypeDto;
 import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.dto.ResponseWrapper;
@@ -13,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j

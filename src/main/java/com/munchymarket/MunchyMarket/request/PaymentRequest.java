@@ -1,5 +1,6 @@
 package com.munchymarket.MunchyMarket.request;
 
+import com.munchymarket.MunchyMarket.domain.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,12 +15,11 @@ import java.util.Map;
 @ToString
 public class PaymentRequest {
 
-
-    private Long customer;
-    private Long amount;
+    private int amount;
     private String currency;
     private String paymentMethodId;
     private String pi;
+    private String receiptEmail;
 
     private Map<String, String> metadata = new HashMap<>();
 }

@@ -12,6 +12,7 @@ import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.repository.review.ReviewRepository;
+import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
 import com.munchymarket.MunchyMarket.utils.FileSizeUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -36,13 +35,14 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
+    private final CommonLogicsService commonLogicsService;
 
     @Transactional
     public void createReview(ReviewCreateDto reviewCreateDto) throws DuplicateReviewException {
 
 
-        Product product = findProductById(reviewCreateDto.getProductId());
-        Member member = findMemberById(reviewCreateDto.getMemberId());
+        Product product = commonLogicsService.findProductById(reviewCreateDto.getProductId());
+        Member member = commonLogicsService.findMemberById(reviewCreateDto.getMemberId());
 
         // 중복 리뷰 등록 검증
         boolean reviewExists = reviewRepository.existsByMemberIdAndProductId(member.getId(), product.getId());
@@ -78,15 +78,6 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    private Product findProductById(Long productId) {
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-    }
-
-    private Member findMemberById(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-    }
 
     private Review convertToEntity(Member member, Product product, ReviewCreateDto reviewCreateDto) {
         return Review.builder()

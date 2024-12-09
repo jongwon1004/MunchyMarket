@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,18 +25,22 @@ public class PaymentController {
 
 
     @PostMapping("/create")
-    public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest)
+    public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest, @RequestHeader("Authorization") String tk)
             throws StripeException {
 
-        log.info("paymentRequest = {}", paymentRequest);
-        Map<String, String> response = new HashMap<>();
 
-        PaymentIntent paymentIntent = paymentService.createPaymentIntent(paymentRequest);
-        log.info("paymentIntent.getClientSecret() = {}", paymentIntent.getClientSecret());
-        log.info("paymentIntent.getId() = {}", paymentIntent.getId());
+        log.info("paymentRequest: {}", paymentRequest);
+        Long memberId = Long.valueOf(paymentRequest.getMetadata().get("memberId"));
+        log.info("memberId: {}", memberId);
 
-        response.put("clientSecret", paymentIntent.getClientSecret());
-        response.put("pi", paymentIntent.getId());
+        Long id = jwtUtil.getId(tk);
+        log.info("id: {}", id);
+
+        if (!jwtUtil.getId(tk).equals(Long.valueOf(paymentRequest.getMetadata().get("memberId")))) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "jwt tokenとmetadataのmemberIdが一致しません。"));
+        }
+
+        Map<String, String> response = paymentService.createPaymentIntent(paymentRequest);
 
         return ResponseEntity.ok(response);
     }

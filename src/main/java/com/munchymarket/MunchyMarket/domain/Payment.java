@@ -2,12 +2,16 @@ package com.munchymarket.MunchyMarket.domain;
 
 import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Table(name = "payments")
+@Builder
 @Entity
 public class Payment {
 
@@ -20,22 +24,23 @@ public class Payment {
     private String stripePaymentIntentId;
 
     @Column(nullable = false)
-    private int amount;
+    private Long amount;
 
     @Column(nullable = false, length = 10)
     private String currency;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 10, columnDefinition = "varchar(10) default 'PENDING'")
     private PaymentStatus status;
 
     @Column(name = "payment_method", nullable = false, length = 50)
     private String paymentMethod;
 
-    @Column(name = "member_id", nullable = false)
-    private Long memberId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member memberId;
 
-    @Column(name = "recipt_email", length = 100)
+    @Column(name = "receipt_email", length = 100)
     private String receiptEmail;
 
 
