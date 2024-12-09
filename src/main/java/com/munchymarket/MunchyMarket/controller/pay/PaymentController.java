@@ -28,14 +28,6 @@ public class PaymentController {
     public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest, @RequestHeader("Authorization") String tk)
             throws StripeException {
 
-
-        log.info("paymentRequest: {}", paymentRequest);
-        Long memberId = Long.valueOf(paymentRequest.getMetadata().get("memberId"));
-        log.info("memberId: {}", memberId);
-
-        Long id = jwtUtil.getId(tk);
-        log.info("id: {}", id);
-
         if (!jwtUtil.getId(tk).equals(Long.valueOf(paymentRequest.getMetadata().get("memberId")))) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "jwt tokenとmetadataのmemberIdが一致しません。"));
         }

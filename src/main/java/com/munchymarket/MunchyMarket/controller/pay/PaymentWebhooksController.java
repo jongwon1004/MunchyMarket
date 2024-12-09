@@ -55,6 +55,12 @@ public class PaymentWebhooksController {
                     log.info("Charge succeeded = {}", charge.getId());
                     break;
 
+                case "payment_intent.payment_failed":
+                    PaymentIntent paymentIntentFailed = (PaymentIntent) event.getDataObjectDeserializer().getObject().orElse(null);
+                    log.info("PaymentIntent failed = {}", paymentIntentFailed.getId());
+                    paymentRepository.updateStatusByStripePaymentIntentId(paymentIntentFailed.getId(), PaymentStatus.FAILED);
+                    break;
+
                 default:
                     log.info("Unhandled event type: {}", event.getType());
             }

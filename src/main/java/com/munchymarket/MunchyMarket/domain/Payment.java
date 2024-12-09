@@ -40,9 +40,6 @@ public class Payment {
     @JoinColumn(name = "member_id", nullable = false)
     private Member memberId;
 
-    @Column(name = "receipt_email", length = 100)
-    private String receiptEmail;
-
 
     public void changeStatus(PaymentStatus status) {
         this.status = status;

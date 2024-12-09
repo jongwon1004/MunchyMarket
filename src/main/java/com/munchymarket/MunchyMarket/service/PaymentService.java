@@ -36,7 +36,6 @@ public class PaymentService {
         params.put("currency", paymentRequest.getCurrency());
         params.put("metadata", paymentRequest.getMetadata());
         params.put("payment_method_types", paymentMethodTypes);
-        params.put("receipt_email", paymentRequest.getReceiptEmail());
 
         Map<String, String> response = new HashMap<>();
         PaymentIntent paymentIntent = PaymentIntent.create(params); // paymentIntent 생성
@@ -58,7 +57,6 @@ public class PaymentService {
                 .currency(paymentIntent.getCurrency())
                 .paymentMethod(paymentRequest.getPaymentMethodId())
                 .stripePaymentIntentId(paymentIntent.getId())
-                .receiptEmail(paymentRequest.getReceiptEmail())
                 .memberId(commonLogicsService.findMemberById(Long.valueOf(paymentRequest.getMetadata().get("memberId"))))
                 .status(PaymentStatus.PENDING)
                 .build();

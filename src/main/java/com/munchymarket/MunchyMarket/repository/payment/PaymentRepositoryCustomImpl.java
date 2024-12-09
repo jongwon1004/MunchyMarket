@@ -2,9 +2,7 @@ package com.munchymarket.MunchyMarket.repository.payment;
 
 
 import com.munchymarket.MunchyMarket.domain.Payment;
-import com.munchymarket.MunchyMarket.domain.QPayment;
 import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
-import com.munchymarket.MunchyMarket.request.PaymentRequest;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;

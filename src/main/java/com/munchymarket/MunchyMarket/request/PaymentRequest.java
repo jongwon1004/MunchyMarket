@@ -19,7 +19,6 @@ public class PaymentRequest {
     private String currency;
     private String paymentMethodId;
     private String pi;
-    private String receiptEmail;
 
     private Map<String, String> metadata = new HashMap<>();
 }
