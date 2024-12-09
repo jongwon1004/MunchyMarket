@@ -29,7 +29,7 @@ public class Order extends TimeBaseEntity {
     @Column(name = "status", nullable = false, length = 20, columnDefinition = "VARCHAR(20) DEFAULT 'PENDING'")
     private OrderStatus status = OrderStatus.PENDING;
 
-    @Column(name = "subtotal", nullable = false)
+    @Column(name = "sub_total", nullable = false)
     private Integer subtotal;
 
     @Column(name = "discount_amount", nullable = false, columnDefinition = "INT DEFAULT 0")
