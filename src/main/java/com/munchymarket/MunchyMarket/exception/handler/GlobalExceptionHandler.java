@@ -3,6 +3,7 @@ package com.munchymarket.MunchyMarket.exception.handler;
 import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
+import com.stripe.exception.StripeException;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,6 +59,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateReviewException.class)
     public ResponseEntity<Map<String, String>> handleDuplicateReviewException(DuplicateReviewException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    }
+
+    @ExceptionHandler(StripeException.class)
+    public ResponseEntity<Map<String, String>> handleStripeException(StripeException e) {
         return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
     }
 

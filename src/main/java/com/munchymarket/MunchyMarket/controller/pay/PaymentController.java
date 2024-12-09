@@ -22,31 +22,25 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final JWTUtil jwtUtil;
 
-//    @PostMapping("/jwt/jwt-test")
-//    public ResponseEntity<String> jwtTest(@RequestHeader("Authorization") String token) {
-//        log.info("token ={}", token);
-//        Long id = jwtUtil.getId(token);
-//        log.info("id = {}", id);
-//        return ResponseEntity.ok("jwtTest");
-//    }
 
-    @PostMapping("/pi-create")
+    @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest)
             throws StripeException {
-
 
         log.info("paymentRequest = {}", paymentRequest);
         Map<String, String> response = new HashMap<>();
 
         PaymentIntent paymentIntent = paymentService.createPaymentIntent(paymentRequest);
-        String paymentStr = paymentIntent.toJson();
-        log.info("paymentStr = {}", paymentStr);
+        log.info("paymentIntent.getClientSecret() = {}", paymentIntent.getClientSecret());
+        log.info("paymentIntent.getId() = {}", paymentIntent.getId());
+
         response.put("clientSecret", paymentIntent.getClientSecret());
+        response.put("pi", paymentIntent.getId());
 
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/pi-confirm")
+    @PostMapping("/confirm")
     public ResponseEntity<?> confirmPaymentIntent(@RequestBody PaymentRequest paymentRequest)
             throws StripeException {
 
