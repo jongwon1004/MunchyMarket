@@ -134,32 +134,32 @@ public class SecurityConfig {
      * SpringBoot 에서 CORS 설정을 하려고했는데 해결이 안됨
      * Apache 서버 (/etc/apache2/sites-available/192.***.conf) 에서 CORS 설정을 하고 Response Header 확인하면 Origin 이 설정되어있는걸 확인했음
      */
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList(
-//                "http://localhost:3000",
-//                "http://localhost:5173",
-//                "http://localhost:5500",
-//                "http://127.0.0.1:5500",
-//                "https://munchymarket.org",
-//                "https://www.munchymarket.org"
-//        )); // 명확히 도메인 지정
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
-//        configuration.setExposedHeaders(Arrays.asList("Authorization"));
-//        configuration.setAllowCredentials(true);
-//
-//        configuration.setAllowedOriginPatterns(Arrays.asList(
-//                "http://localhost:*",   // 로컬 개발 환경
-//                "https://*.munchymarket.org" // 모든 서브도메인 허용
-//        ));
-//
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "http://localhost:5500",
+                "http://127.0.0.1:5500",
+                "https://munchymarket.org",
+                "https://www.munchymarket.org"
+        )); // 명확히 도메인 지정
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setAllowCredentials(true);
+
+        configuration.setAllowedOriginPatterns(Arrays.asList(
+                "http://localhost:*",   // 로컬 개발 환경
+                "https://*.munchymarket.org" // 모든 서브도메인 허용
+        ));
+
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     //    // 인증 관리자 관련 설정, 사용자 정보를 가져올 서비스를 재정의 하거나, 인증 방법 등을 설정
 //    @Bean

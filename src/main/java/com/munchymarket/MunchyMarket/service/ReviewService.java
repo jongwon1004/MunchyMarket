@@ -97,11 +97,16 @@ public class ReviewService {
                 .build();
     }
 
+    @Value("${spring.cloud.gcp.storage.bucket}")
+    private String bucketName;
 
-
-
+    @Transactional
     public List<ProductReviewDto> getReviewsByProductId(Long productId) {
+        List<ProductReviewDto> productReviews = reviewRepository.getProductReviewsByProductId(productId);
 
-        return reviewRepository.getProductReviewsByProductId(productId);
+        // 각 DTO에 대해 GCP 스토리지 URL 설정
+        productReviews.forEach(review -> review.setFinalReviewImages(bucketName));
+
+        return productReviews;
     }
 }

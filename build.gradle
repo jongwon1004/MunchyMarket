@@ -69,6 +69,8 @@ dependencies {
 
 
 
+
+
 //	implementation 'org.hibernate.orm:hibernate-core:6.2.13.Final' // 호환 가능한 버전 선택
 
 

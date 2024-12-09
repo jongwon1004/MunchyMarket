@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -28,16 +31,19 @@ public class PaymentController {
 //    }
 
     @PostMapping("/pi-create")
-    public ResponseEntity<String> createPaymentIntent(@RequestBody PaymentRequest paymentRequest)
+    public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest)
             throws StripeException {
 
 
         log.info("paymentRequest = {}", paymentRequest);
+        Map<String, String> response = new HashMap<>();
 
         PaymentIntent paymentIntent = paymentService.createPaymentIntent(paymentRequest);
         String paymentStr = paymentIntent.toJson();
+        log.info("paymentStr = {}", paymentStr);
+        response.put("clientSecret", paymentIntent.getClientSecret());
 
-        return ResponseEntity.ok(paymentStr);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/pi-confirm")

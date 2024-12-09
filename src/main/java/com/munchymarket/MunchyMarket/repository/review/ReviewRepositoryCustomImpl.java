@@ -36,36 +36,25 @@ public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {
     @Override
     @Transactional
     public List<ProductReviewDto> getProductReviewsByProductId(Long productId) {
+            return queryFactory.select(
+                            Projections.fields(ProductReviewDto.class,
+                                    review.id.as("reviewId"),
+                                    review.member.id.as("memberId"),
+                                    review.member.name.as("memberName"),
+                                    review.rating.as("rating"),
+                                    review.content.as("content"),
+                                    review.createdDate.as("createdDate"),
+                                    review.lastModifiedDate.as("lastModifiedDate"),
+                                    Expressions.stringTemplate("GROUP_CONCAT({0})", reviewImage.image.serverFilename).as("reviewImagesRaw") // 이미지 파일명 리스트를 문자열로
 
-        List<ProductReviewDto> transform = queryFactory.from(review)
-                .leftJoin(review.reviewImages, reviewImage)
-                .leftJoin(reviewImage.image, image)
-                .where(review.product.id.eq(productId))
-                .orderBy(review.id.desc())
-                .transform(groupBy(review.id).list( // 리뷰 ID로 그룹화
-                        Projections.constructor(ProductReviewDto.class,
-                                review.id,
-                                review.member.id,
-                                review.member.name,
-                                review.rating,
-                                review.content,
-                                list( // 이미지 데이터를 리스트로 변환
-                                        Projections.constructor(ReviewImageResponse.class,
-                                                image.id,
-                                                Expressions.stringTemplate(
-                                                        "concat('https://storage.googleapis.com/', {0}, '/', {1})", "munchymarket-bucket", image.serverFilename
-                                                )
-                                        )
-                                ),
-                                review.createdDate,
-                                review.lastModifiedDate
-                        )
-                ));
-        log.info("transform = " + transform);
-        return null;
+                            )
+                    )
+                    .from(review)
+                    .leftJoin(review.reviewImages, reviewImage)
+                    .leftJoin(reviewImage.image, image)
+                    .where(review.product.id.eq(productId))
+                    .groupBy(review.id)
+                    .fetch();
     }
-
-
-
 
 }
