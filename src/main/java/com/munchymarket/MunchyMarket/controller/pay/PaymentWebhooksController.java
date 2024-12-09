@@ -1,5 +1,7 @@
 package com.munchymarket.MunchyMarket.controller.pay;
 
+import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
+import com.munchymarket.MunchyMarket.repository.payment.PaymentRepository;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.model.Charge;
 import com.stripe.model.Event;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/webhooks")
 public class PaymentWebhooksController {
+
+    private final PaymentRepository paymentRepository;
 
 
     @Value("${stripe.webhooks.secret}")
@@ -43,6 +47,7 @@ public class PaymentWebhooksController {
                 case "payment_intent.succeeded":
                     PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject().orElse(null);
                     log.info("PaymentIntent succeeded = {}", paymentIntent.getId());
+                    paymentRepository.updateStatusByStripePaymentIntentId(paymentIntent.getId(), PaymentStatus.SUCCEEDED);
                     break;
 
                 case "charge.succeeded":
