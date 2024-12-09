@@ -31,8 +31,11 @@ public class OrderService {
     private final CommonLogicsService commonLogicsService;
     private final ProductRepository productRepository;
 
+    /**
+     * TODO : PaymentIntent 생성쪽은 아직 구현하지 않았음
+     */
     @Transactional
-    public void createOrder(OrderPaymentRequestDto orderPaymentRequestDto) {
+    public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto) {
 
         // 회원찾는 쿼리 1 방 ( 계: 1회 )
         Member member = commonLogicsService.findMemberById(orderPaymentRequestDto.getMemberId());
@@ -85,7 +88,7 @@ public class OrderService {
 
                 order.addOrderProduct(product, quantity);
             }
-            return;
+            return order.getTotal();
         }
 
         // 쿠폰을 적용하는 경우 ( 계 : 3회)
@@ -114,5 +117,6 @@ public class OrderService {
 
             order.addOrderProduct(product, quantity);
         }
+        return order.getTotal();
     }
 }

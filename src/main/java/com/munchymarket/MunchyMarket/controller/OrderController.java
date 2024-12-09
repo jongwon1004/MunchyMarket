@@ -7,12 +7,13 @@ import com.munchymarket.MunchyMarket.service.OrderService;
 import com.munchymarket.MunchyMarket.service.PaymentService;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
+import com.stripe.exception.StripeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -35,15 +36,24 @@ public class OrderController {
      * @return
      */
     @PostMapping("/create")
-    public ResponseEntity<?> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto, @RequestHeader("Authorization") String tk) {
+    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto, @RequestHeader("Authorization") String tk)
+        throws StripeException {
+
+        Map<String, Object> response = new HashMap<>();
         log.info("orderPaymentRequestDto: {}", orderPaymentRequestDto);
         if (!jwtUtil.getId(tk).equals(orderPaymentRequestDto.getMemberId())) {
-            return ResponseEntity.badRequest().body("jwt tokenとmetadataのmemberIdが一致しません。");
+            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "jwt tokenとmetadataのmemberIdが一致しません。"));
         }
+
+        int orderTotal = orderService.createOrder(orderPaymentRequestDto); // amount
+
+        Map<String, String> paymentIntent = paymentService.createPaymentIntent(orderPaymentRequestDto.getPayment(), orderPaymentRequestDto.getMemberId(), orderTotal);
+
+        response.put("paymentIntent", paymentIntent);
+        response.put("message", "注文が確定されました。");
 
         // Order 생성
         // cascade 를 사용하여 OrderProduct 생성
-        orderService.createOrder(orderPaymentRequestDto);
 
 //        List<ProductIdAndQuantityDto> products = orderPaymentRequestDto.getOrder().getProducts();
 //        log.info("products: {}", products);
@@ -72,6 +82,6 @@ public class OrderController {
         // 쿠폰 사용 안할시
         // -> 할인 상품은 할인된 가격으로 계산되어 총 금액을 결제하게 됨.
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(response);
     }
 }

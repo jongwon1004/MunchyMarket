@@ -24,6 +24,9 @@ public class PaymentController {
     private final JWTUtil jwtUtil;
 
 
+    /**
+     * 사용 안함
+     */
     @PostMapping("/create")
     public ResponseEntity<Map<String, String>> createPaymentIntent(@RequestBody PaymentRequest paymentRequest, @RequestHeader("Authorization") String tk)
             throws StripeException {
@@ -32,9 +35,9 @@ public class PaymentController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", "jwt tokenとmetadataのmemberIdが一致しません。"));
         }
 
-        Map<String, String> response = paymentService.createPaymentIntent(paymentRequest);
+//        Map<String, String> response = paymentService.createPaymentIntent(paymentRequest);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/confirm")

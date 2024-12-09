@@ -2,6 +2,7 @@ package com.munchymarket.MunchyMarket.service;
 
 import com.munchymarket.MunchyMarket.domain.Payment;
 import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
+import com.munchymarket.MunchyMarket.dto.PaymentDto;
 import com.munchymarket.MunchyMarket.repository.payment.PaymentRepository;
 import com.munchymarket.MunchyMarket.request.PaymentRequest;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
@@ -27,14 +28,14 @@ public class PaymentService {
     private final CommonLogicsService commonLogicsService;
 
 
-    public Map<String, String> createPaymentIntent(PaymentRequest paymentRequest) throws StripeException {
+    public Map<String, String> createPaymentIntent(PaymentDto paymentDto, Long memberId, int amount) throws StripeException {
+//    public Map<String, String> createPaymentIntent(PaymentRequest paymentRequest) throws StripeException {
         List<String> paymentMethodTypes = new ArrayList<>();
         paymentMethodTypes.add("card");
 
         Map<String, Object> params = new HashMap<>();
-        params.put("amount", paymentRequest.getAmount());
-        params.put("currency", paymentRequest.getCurrency());
-        params.put("metadata", paymentRequest.getMetadata());
+        params.put("amount", amount);
+        params.put("currency", paymentDto.getCurrency());
         params.put("payment_method_types", paymentMethodTypes);
 
         Map<String, String> response = new HashMap<>();
@@ -45,19 +46,19 @@ public class PaymentService {
         response.put("clientSecret", paymentIntent.getClientSecret());
         response.put("pi", paymentIntent.getId());
 
-        Payment payment = convertToEntity(paymentRequest, paymentIntent);
+        Payment payment = convertToEntity(paymentDto, memberId, paymentIntent);
         paymentRepository.save(payment);
 
         return response;
     }
 
-    public Payment convertToEntity(PaymentRequest paymentRequest, PaymentIntent paymentIntent) {
+    public Payment convertToEntity(PaymentDto paymentDto, Long memberId, PaymentIntent paymentIntent) {
         return Payment.builder()
                 .amount(paymentIntent.getAmount())
                 .currency(paymentIntent.getCurrency())
-                .paymentMethod(paymentRequest.getPaymentMethodId())
+                .paymentMethod(paymentDto.getPaymentMethodId())
                 .stripePaymentIntentId(paymentIntent.getId())
-                .memberId(commonLogicsService.findMemberById(Long.valueOf(paymentRequest.getMetadata().get("memberId"))))
+                .memberId(commonLogicsService.findMemberById(memberId))
                 .status(PaymentStatus.PENDING)
                 .build();
     }
