@@ -1,7 +1,13 @@
 package com.munchymarket.MunchyMarket.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
 @Table(name = "order_products")
 @Entity
 public class OrderProduct {
@@ -20,10 +26,22 @@ public class OrderProduct {
 
     private int quantity;
 
-    @Column(name = "discounted_price")
-    private int discountedPrice;
+    @Column(name = "base_price", nullable = false)
+    private int basePrice;
+
+    @Column(name = "final_price")
+    private int finalPrice;
 
     @Column(name = "sub_total")
     private int subTotal;
 
+    @Builder
+    public OrderProduct(Order order, Product product, int basePrice, int quantity, int finalPrice, int subTotal) {
+        this.order = order;
+        this.product = product;
+        this.quantity = quantity;
+        this.basePrice = basePrice;
+        this.finalPrice = finalPrice;
+        this.subTotal = subTotal;
+    }
 }
