@@ -35,10 +35,10 @@ public class OrderService {
      * TODO : PaymentIntent 생성쪽은 아직 구현하지 않았음
      */
     @Transactional
-    public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto) {
+    public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto, Long memberId) {
 
         // 회원찾는 쿼리 1 방 ( 계: 1회 )
-        Member member = commonLogicsService.findMemberById(orderPaymentRequestDto.getMemberId());
+        Member member = commonLogicsService.findMemberById(memberId);
 
         List<ProductIdAndQuantityDto> products = orderPaymentRequestDto.getOrder().getProducts();
 

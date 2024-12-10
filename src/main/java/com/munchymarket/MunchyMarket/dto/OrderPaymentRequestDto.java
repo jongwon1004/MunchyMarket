@@ -1,5 +1,6 @@
 package com.munchymarket.MunchyMarket.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Getter
@@ -9,14 +10,19 @@ import lombok.*;
 @ToString
 public class OrderPaymentRequestDto {
 
-    private Long memberId;
-    private Long couponId; // nullable
+    @Schema(description = "쿠폰 ID (nullable)", example = "3")
+    private Long couponId;
+
+    @Schema(description = "주문 정보")
     private OrderDto order;
+
+    @Schema(description = "결제 정보")
     private PaymentDto payment;
+}
+
 
     /**
      * {
-     *   "memberId": 3,
      *   "couponId": 1,
      *   "order": {
      *     "products": [
@@ -31,4 +37,3 @@ public class OrderPaymentRequestDto {
      *   }
      * }
      */
-}

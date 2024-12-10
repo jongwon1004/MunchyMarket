@@ -1,10 +1,20 @@
 package com.munchymarket.MunchyMarket.controller;
 
 import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
+import com.munchymarket.MunchyMarket.dto.MemberDto;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.MemberLoginRequest;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,12 +28,44 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "회원 로그인 & 권한 확인 API", description = "회원 로그인 & 권한 확인 API 관리")
 @RequestMapping("/api/member")
 public class MemberController {
 
     private final MemberRepository memberRepository;
     private final JWTUtil jwtUtil;
 
+
+    private static final String LOGIN_SUCCESS_RESPONSE_EXAM = "\"{\\\"id\\\":3,\\\"loginId\\\":\\\"ichiro0720\\\",\\\"name\\\":\\\"山田　一郎\\\",\\\"ruby\\\":\\\"ヤマダ　イチロウ\\\",\\\"email\\\":\\\"ichiro20@gmail.com\\\",\\\"phoneNumber\\\":\\\"08087654321\\\",\\\"sex\\\":\\\"男\\\",\\\"birth\\\":\\\"1985-07-20\\\",\\\"role\\\":\\\"ROLE_USER\\\"}\"\n";
+    private static final String LOGIN_FAIL_RESPONSE_EXAM = "\"{\\\"error\\\":\\\"email or password is incorrect\\\"}\"";
+
+    @Operation(
+            summary = "회원 로그인",
+            description = "회원 로그인",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그인 성공",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            type = "object",
+                                            example = LOGIN_SUCCESS_RESPONSE_EXAM
+                                    )
+                            )),
+                    @ApiResponse(responseCode = "401", description = "로그인 실패",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    schema = @Schema(
+                                            type = "object",
+                                            example = LOGIN_FAIL_RESPONSE_EXAM
+                                    )
+                            )
+                    ),
+            }
+    )
+    @Parameters({
+            @Parameter(name = "loginId", description = "로그인 아이디", required = true),
+            @Parameter(name = "password", description = "비밀번호", required = true)
+    })
     @PostMapping("/login")
     public ResponseEntity<Object> login(@ModelAttribute MemberLoginRequest memberLoginRequest, HttpServletRequest request) {
 

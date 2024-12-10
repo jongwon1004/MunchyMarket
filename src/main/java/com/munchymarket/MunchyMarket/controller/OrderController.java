@@ -1,27 +1,30 @@
 package com.munchymarket.MunchyMarket.controller;
 
-import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.dto.OrderPaymentRequestDto;
-import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.service.OrderService;
 import com.munchymarket.MunchyMarket.service.PaymentService;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import com.stripe.exception.StripeException;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
-import java.util.stream.IntStream;
-
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/orders")
+@Tag(name = "결제 & 주문 API", description = "결제 & 주문 API 관리")
+@RequestMapping("/api/order")
 public class OrderController {
 
     private final OrderService orderService;
@@ -31,23 +34,46 @@ public class OrderController {
 
     private final JWTUtil jwtUtil;
 
+    private static final String ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM =
+            "{\n" +
+                    "  \"paymentIntent\": {\n" +
+                    "    \"pi\": \"pi_3JONpfG19NWjX8Wx1OhNxhwd\",\n" +
+                    "    \"clientSecret\": \"pi_3JONpfG19NWjX8Wx1OhNxhwd_secret_WdHells9on2zWkOrLD8kLotYU\"\n" +
+                    "  },\n" +
+                    "  \"message\": \"注文が確定されました。\"\n" +
+                    "}";
+
     /**
      * 주문 생성 & PaymentIntent Create
+     * TODO: 쿠폰 사용시 최소주문금액, 최대 할인 가능액 계산 다시 해야됨, 장바구니 구현 필요
      * @return
      */
+    @Operation(
+            summary = "주문 생성 & PaymentIntent Create",
+            description = "주문 생성 & PaymentIntent Create",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "주문 & PaymentIntent 생성 성공"
+                    ,content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(
+                                    type = "object",
+                                    example = ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM
+                            )
+                    )),
+                    @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
+            }
+    )
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto, @RequestHeader("Authorization") String tk)
-        throws StripeException {
+            throws StripeException {
 
         Map<String, Object> response = new HashMap<>();
-        log.info("orderPaymentRequestDto: {}", orderPaymentRequestDto);
-        if (!jwtUtil.getId(tk).equals(orderPaymentRequestDto.getMemberId())) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("message", "jwt tokenとmetadataのmemberIdが一致しません。"));
-        }
 
-        int orderTotal = orderService.createOrder(orderPaymentRequestDto); // amount
 
-        Map<String, String> paymentIntent = paymentService.createPaymentIntent(orderPaymentRequestDto.getPayment(), orderPaymentRequestDto.getMemberId(), orderTotal);
+        Long memberId = jwtUtil.getId(tk);
+        int orderTotal = orderService.createOrder(orderPaymentRequestDto, memberId); // amount
+
+        Map<String, String> paymentIntent = paymentService.createPaymentIntent(orderPaymentRequestDto.getPayment(), memberId, orderTotal);
 
         response.put("paymentIntent", paymentIntent);
         response.put("message", "注文が確定されました。");
