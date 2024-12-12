@@ -72,7 +72,7 @@ public class SecurityConfig {
                                 "/api/categories/**","/api/products/**",
                                 "/api/payment/**","/api/webhooks/stripe",
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",
-                                "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
+                                "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs", "/api/async/**").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
                         .requestMatchers("/profile", "/api/accounts/register/", "/api/accounts/**",
                                            "/api/review", "/api/order/create").authenticated() // 認証済みのユーザーだけアクセス可能

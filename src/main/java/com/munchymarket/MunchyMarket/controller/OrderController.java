@@ -37,8 +37,8 @@ public class OrderController {
     private static final String ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM =
             "{\n" +
                     "  \"paymentIntent\": {\n" +
-                    "    \"pi\": \"pi_3JONpfG19NWjX8Wx1OhNxhwd\",\n" +
-                    "    \"clientSecret\": \"pi_3JONpfG19NWjX8Wx1OhNxhwd_secret_WdHells9on2zWkOrLD8kLotYU\"\n" +
+                    "    \"pi\": \"pi_sample_19NWjX8Wx1OhNxhwd\",\n" +
+                    "    \"clientSecret\": \"pi_sample_19NWjX8Wx1OhNxhwd_secret_WdHells9on2zWkOrLD8kLotYU\"\n" +
                     "  },\n" +
                     "  \"message\": \"注文が確定されました。\"\n" +
                     "}";
@@ -109,5 +109,10 @@ public class OrderController {
         // -> 할인 상품은 할인된 가격으로 계산되어 총 금액을 결제하게 됨.
 
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/calculate")
+    public ResponseEntity<?> calculate() {
+        return ResponseEntity.ok().build();
     }
 }

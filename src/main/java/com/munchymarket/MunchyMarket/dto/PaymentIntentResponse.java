@@ -11,9 +11,9 @@ import lombok.*;
 @ToString
 public class PaymentIntentResponse {
 
-    @Schema(description = "결제 클라이언트 시크릿 키", example = "pi_3QULpfG1ONWjXHelloWorld_secret_JonNs9mn2gQiWonkLoveYU")
+    @Schema(description = "결제 클라이언트 시크릿 키", example = "pi_sample_1ONWjXHelloWorld_secret_JonNs9mn2gQiWonkLoveYU")
     private String clientSecret;
 
-    @Schema(description = "결제 Intent ID", example = "pi_3QULpfG1ONWjXHelloWorld")
+    @Schema(description = "결제 Intent ID", example = "pi_sample_1ONWjXHelloWorld")
     private String pi;
 }
