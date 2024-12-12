@@ -66,16 +66,16 @@ public class SecurityConfig {
 
         return http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/member/", "/api/member/login",
+                        .requestMatchers("/api/member/", "/api/member/login", "/api/members/",
                                 "/api/member/send-sms", "/api/member/validate", "/api/member/verification-code", "/api/member/join",
-                                "/api/admin/product/register", "/api/admin/product/categories", "/api/admin/product/packaging-types", //テスト段階なので、一時的に許可
-                                "/api/categories/**","/api/products/**",
-                                "/api/payment/**","/api/webhooks/stripe",
+                                "/api/admin/products/register", "/api/admin/products/packaging-types", //テスト段階なので、一時的に許可
+                                "/api/categories/**", "/api/products/**",
+                                "/api/payment/**", "/api/webhooks/stripe",
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",
                                 "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs", "/api/async/**").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
-                        .requestMatchers("/api/member/role-check").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
-                        .requestMatchers("/profile", "/api/accounts/register/", "/api/accounts/**",
-                                           "/api/review", "/api/order/create").authenticated() // 認証済みのユーザーだけアクセス可能
+                        .requestMatchers("/api/members/role-check", "/api/products/sample-data/register").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
+                        .requestMatchers(
+                                "/api/review", "/api/order/create").authenticated() // 認証済みのユーザーだけアクセス可能
                         .anyRequest().authenticated() // それ以外のリクエストは認証が必要 // 403 Forbidden
                 )
                 .formLogin(form -> form // ログインページををクライアント側で管理する場合は、設定不要

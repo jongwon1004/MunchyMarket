@@ -1,7 +1,6 @@
 package com.munchymarket.MunchyMarket.controller;
 
 import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
-import com.munchymarket.MunchyMarket.dto.MemberDto;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.MemberLoginRequest;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
@@ -10,9 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Tag(name = "회원 로그인 & 권한 확인 API", description = "회원 로그인 & 권한 확인 API 관리")
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 public class MemberController {
 
     private final MemberRepository memberRepository;

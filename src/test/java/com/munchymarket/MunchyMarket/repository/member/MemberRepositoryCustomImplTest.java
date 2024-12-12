@@ -8,6 +8,8 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.annotation.Commit;
 
 import java.util.List;
 
@@ -19,11 +21,22 @@ class MemberRepositoryCustomImplTest {
     MemberRepository memberRepository;
 
 
-
     @Test
     void findMemberByIdToDto() {
         MemberAddressDto memberByIdToDto = memberRepository.findMemberAddressByMemberId(1L);
         System.out.println("memberByIdToDto = " + memberByIdToDto);
     }
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
+    @Test
+//    @Commit
+    void passwordEncoder() {
+
+        Member member = memberRepository.findById(1L).get();
+        member.changePassword(passwordEncoder.encode("Dnflwlq1408!"));
+        memberRepository.save(member);
+
+    }
 }

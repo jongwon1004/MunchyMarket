@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/product/sample-data")
+@RequestMapping("/api/products/sample-data")
 public class SampleDataController {
 
     private final ProductService productService;

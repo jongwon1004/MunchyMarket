@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 
@@ -52,6 +53,9 @@ public class Member extends TimeBaseEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Cart cart;
+
 
     public Member(Long id, String email, String role) {
         this.id = id;
@@ -71,6 +75,11 @@ public class Member extends TimeBaseEntity {
         this.sex = sex;
         this.birth = birth;
         this.role = Role.fromKey(role);
+        this.cart = new Cart(this); // 회원가입시 해당 회원의 Cart 생성 (1:1)
+    }
+
+    public void changePassword(String password) {
+        this.password = password;
     }
 }
 
