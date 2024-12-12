@@ -35,7 +35,7 @@ class MemberRepositoryCustomImplTest {
     void passwordEncoder() {
 
         Member member = memberRepository.findById(1L).get();
-        member.changePassword(passwordEncoder.encode("Dnflwlq1408!"));
+        member.changePassword(passwordEncoder.encode("password"));
         memberRepository.save(member);
 
     }

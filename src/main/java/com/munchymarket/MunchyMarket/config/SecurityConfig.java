@@ -62,12 +62,12 @@ public class SecurityConfig {
          * setFilterProcessesUrl() 로 login 경로를 수정하고 이 필터를 밑에 .addFilterAt() 메서드에서 사용하면 된다!!!
          */
         LoginFilter loginFilter = new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil);
-        loginFilter.setFilterProcessesUrl("/api/member/login");
+        loginFilter.setFilterProcessesUrl("/api/members/login");
 
         return http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/member/", "/api/member/login", "/api/members/",
-                                "/api/member/send-sms", "/api/member/validate", "/api/member/verification-code", "/api/member/join",
+                        .requestMatchers("/api/members/", "/api/members/login", "/api/members/",
+                                "/api/members/send-sms", "/api/members/validate", "/api/members/verification-code", "/api/members/join",
                                 "/api/admin/products/register", "/api/admin/products/packaging-types", //テスト段階なので、一時的に許可
                                 "/api/categories/**", "/api/products/**",
                                 "/api/payment/**", "/api/webhooks/stripe",
@@ -91,7 +91,7 @@ public class SecurityConfig {
                 )
                 .httpBasic(auth -> auth.disable()) // HTTP基本認証はパスワードを暗号化せずに送信するため、セキュリティ上のリスクがあるため、使用しない -> JWT使用
 //                .logout(logout -> logout // LogoutControllerでカスタムログアウト処理を行う場合は、設定不要
-//                        .logoutUrl("/member/logout") // ログアウトRequestURL
+//                        .logoutUrl("/members/logout") // ログアウトRequestURL
 //                        .logoutSuccessUrl("/") // ログアウト成功時のリダイレクト先。　
 //                        .invalidateHttpSession(true) // ログアウト時にセッションを無効化するかどうか
 //                        .permitAll()
