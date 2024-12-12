@@ -137,22 +137,30 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
+//      명시적으로 허용할 Origin 지정
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000",
                 "http://localhost:5173",
                 "http://localhost:5500",
-                "http://127.0.0.1:5500",
-                "http://localhost:8080"
-        )); // 명확히 도메인 지정
+                "http://127.0.0.1:5500"
+        ));
+
+        // 허용할 HTTP 메서드 지정
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
+
+        // 허용할 헤더 지정
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With"));
+
+        // 노출할 헤더 지정
         configuration.setExposedHeaders(Arrays.asList("Authorization"));
+
+        // 쿠키 및 인증 정보 허용
         configuration.setAllowCredentials(true);
 
-
-
+        // URL 기반으로 CORS 설정 적용
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
+
         return source;
     }
 
