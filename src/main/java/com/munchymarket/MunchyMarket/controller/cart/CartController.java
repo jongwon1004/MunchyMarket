@@ -3,6 +3,7 @@ package com.munchymarket.MunchyMarket.controller.cart;
 import com.munchymarket.MunchyMarket.domain.CartProduct;
 import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
 import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ResponseWrapper;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.service.CartService;
 import lombok.*;
@@ -11,7 +12,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,21 +23,14 @@ public class CartController {
 
     private final CartService cartService;
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Getter @Setter
-    static class ResponseFormat<T> {
-        private String message;
-        private T data;
-    }
 
 
     @GetMapping("/products")
-    public ResponseEntity<?> getCartProducts(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+    public ResponseEntity<ResponseWrapper<CartProductDto>> getCartProducts(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
         List<CartProductDto> cartProducts = cartService.getCartProducts(customMemberDetails.getId());
 
-        return ResponseEntity.ok().body(new ResponseFormat<>("success", cartProducts));
+        return ResponseEntity.ok().body(new ResponseWrapper<>(cartProducts));
     }
 
 
@@ -43,11 +39,11 @@ public class CartController {
      * REQUEST EXAM: { "productId": 1, "quantity": 2 }
      */
     @PostMapping("/products")
-    public ResponseEntity<?> addProductToCart(@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
-                                              @RequestBody ProductIdAndQuantityDto productIdAndQuantityDto) {
+    public ResponseEntity<Map<String, String>> addProductToCart(@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+                                                        @RequestBody ProductIdAndQuantityDto productIdAndQuantityDto) {
 
         CartProduct cartProduct = cartService.addProductToCart(customMemberDetails.getId(), productIdAndQuantityDto);
-        return ResponseEntity.ok(new ResponseFormat<>("success", "saved cp_id = "+cartProduct.getId()));
+        return ResponseEntity.ok(Collections.singletonMap("success", "saved cp_id = "+cartProduct.getId()));
     }
 
     @AllArgsConstructor
@@ -74,7 +70,7 @@ public class CartController {
      */
     @PutMapping("/products/{productId}")
     public ResponseEntity<UpdateProductQuantityResponse> updateProductQuantity(@PathVariable("productId") Long productId,
-                                                   @RequestParam(name = "quantity", required = true) int quantity,
+                                                   @RequestParam(name = "quantity") int quantity,
                                                    @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
         List<CartProductSimpleDto> updatedData = cartService.updateProductQuantity(customMemberDetails.getId(), productId, quantity);
 
