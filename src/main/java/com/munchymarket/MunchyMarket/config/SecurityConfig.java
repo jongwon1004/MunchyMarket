@@ -66,7 +66,7 @@ public class SecurityConfig {
 
         return http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/members/", "/api/members/login", "/api/members/",
+                        .requestMatchers("/api/members/", "/api/members/login",
                                 "/api/members/send-sms", "/api/members/validate", "/api/members/verification-code", "/api/members/join",
                                 "/api/admin/products/register", "/api/admin/products/packaging-types", //テスト段階なので、一時的に許可
                                 "/api/categories/**", "/api/products/**",
@@ -75,7 +75,7 @@ public class SecurityConfig {
                                 "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs", "/api/async/**").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
                         .requestMatchers("/api/members/role-check", "/api/products/sample-data/register").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
                         .requestMatchers(
-                                "/api/review", "/api/order/create").authenticated() // 認証済みのユーザーだけアクセス可能
+                                "/api/review", "/api/orders/create", "/api/cart/**").authenticated() // 認証済みのユーザーだけアクセス可能
                         .anyRequest().authenticated() // それ以外のリクエストは認証が必要 // 403 Forbidden
                 )
                 .formLogin(form -> form // ログインページををクライアント側で管理する場合は、設定不要

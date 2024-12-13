@@ -41,6 +41,11 @@ public class CustomMemberDetails implements UserDetails {
         return member.getId();
     }
 
+    public Member getMember() {
+        return member;
+    }
+
+
     /*
         下のメソッドは一旦trueにしておく。
         MemberがExpired, Locked, Disabledの状態を持たないため。

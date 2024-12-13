@@ -1834,7 +1834,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-38" value="cart_products" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" vertex="1" parent="1">
-          <mxGeometry x="803" y="-276" width="414" height="295.3" as="geometry" />
+          <mxGeometry x="862" y="-277" width="414" height="205.53809523809514" as="geometry" />
         </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-39" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
           <mxGeometry y="30" width="414" height="25" as="geometry" />
@@ -1888,47 +1888,8 @@
             <mxRectangle width="384" height="30" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-57" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
-          <mxGeometry y="145" width="414" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-58" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-57">
-          <mxGeometry width="30" height="30" as="geometry">
-            <mxRectangle width="30" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-59" value="base_price INT NOT NULL productsのbase_price * 注文するquantity" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-57">
-          <mxGeometry x="30" width="384" height="30" as="geometry">
-            <mxRectangle width="384" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-45" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
-          <mxGeometry y="175" width="414" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-46" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-45">
-          <mxGeometry width="30" height="30" as="geometry">
-            <mxRectangle width="30" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-47" value="final_price INT NOT NULL productsのfinal_price * 注文するquantity" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-45">
-          <mxGeometry x="30" width="384" height="30" as="geometry">
-            <mxRectangle width="384" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-60" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
-          <mxGeometry y="205" width="414" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-61" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-60">
-          <mxGeometry width="30" height="30" as="geometry">
-            <mxRectangle width="30" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-62" value="discount_value INT base_price - final_price 割引値" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;align=left;spacingLeft=6;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-60">
-          <mxGeometry x="30" width="384" height="30" as="geometry">
-            <mxRectangle width="384" height="30" as="alternateBounds" />
-          </mxGeometry>
-        </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-63" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
-          <mxGeometry y="235" width="414" height="30" as="geometry" />
+          <mxGeometry y="145" width="414" height="30" as="geometry" />
         </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-64" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-63">
           <mxGeometry width="30" height="30" as="geometry">
@@ -1941,7 +1902,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-48" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=none;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=0;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-38">
-          <mxGeometry y="265" width="414" height="30" as="geometry" />
+          <mxGeometry y="175" width="414" height="30" as="geometry" />
         </mxCell>
         <mxCell id="BmimQ6ejtAaD5Aq1w6oQ-49" value="" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;editable=1;overflow=hidden;whiteSpace=wrap;html=1;" vertex="1" parent="BmimQ6ejtAaD5Aq1w6oQ-48">
           <mxGeometry width="30" height="30" as="geometry">

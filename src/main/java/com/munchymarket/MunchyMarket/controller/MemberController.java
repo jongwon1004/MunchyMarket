@@ -103,7 +103,7 @@ public class MemberController {
 
     @GetMapping("/")
     public ResponseEntity<MemberAddressDto> getAllMembers() {
-        return ResponseEntity.ok(memberRepository.findMemberAddressByMemberId(1L));
+        return ResponseEntity.ok(memberRepository.findMemberAddressByMemberId(2L));
     }
 
 }

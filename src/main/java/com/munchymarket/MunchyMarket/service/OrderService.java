@@ -5,10 +5,8 @@ import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Order;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.enums.CouponType;
-import com.munchymarket.MunchyMarket.dto.OrderDto;
 import com.munchymarket.MunchyMarket.dto.OrderPaymentRequestDto;
 import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
-import com.munchymarket.MunchyMarket.repository.coupon.CouponRepository;
 import com.munchymarket.MunchyMarket.repository.order.OrderRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
@@ -34,7 +32,7 @@ public class OrderService {
     /**
      * TODO : PaymentIntent 생성쪽은 아직 구현하지 않았음
      */
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto, Long memberId) {
 
         // 회원찾는 쿼리 1 방 ( 계: 1회 )

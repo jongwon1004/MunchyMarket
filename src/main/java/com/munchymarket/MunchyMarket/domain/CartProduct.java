@@ -2,6 +2,7 @@ package com.munchymarket.MunchyMarket.domain;
 
 import com.munchymarket.MunchyMarket.domain.base.TimeBaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,13 +26,14 @@ public class CartProduct extends TimeBaseEntity {
 
     private int quantity;
 
-    @Column(name = "base_price", nullable = false)
-    private int basePrice;
+    public void changeQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 
-    @Column(name = "final_price", nullable = false)
-    private int finalPrice;
-
-    @Column(name = "discount_value")
-    private int discountValue;
-
+    @Builder
+    public CartProduct(Cart cart, Product product, int quantity) {
+        this.cart = cart;
+        this.product = product;
+        this.quantity = quantity;
+    }
 }

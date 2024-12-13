@@ -1,9 +1,11 @@
 package com.munchymarket.MunchyMarket.service.common;
 
+import com.munchymarket.MunchyMarket.domain.Cart;
 import com.munchymarket.MunchyMarket.domain.Coupon;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
+import com.munchymarket.MunchyMarket.repository.cart.CartRepository;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
 import com.munchymarket.MunchyMarket.repository.coupon.CouponRepository;
 import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
@@ -14,7 +16,6 @@ import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.repository.review.ReviewRepository;
 import com.munchymarket.MunchyMarket.repository.sorttype.SortTypeRepository;
 import com.munchymarket.MunchyMarket.repository.verificationCode.VerificationCodeRepository;
-import com.munchymarket.MunchyMarket.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +34,7 @@ public class CommonLogicsService {
     private final VerificationCodeRepository verificationCodeRepository;
     private final PackagingTypeRepository packagingTypeRepository;
     private final CouponRepository couponRepository;
+    private final CartRepository cartRepository;
 
     public final Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
@@ -47,6 +49,11 @@ public class CommonLogicsService {
     public final Coupon findCouponById(Long couponId) {
         return couponRepository.findById(couponId)
                 .orElseThrow(() -> new IllegalArgumentException("Coupon not found"));
+    }
+
+    public final Cart findCartByMemberId(Long memberId) {
+        return cartRepository.findCartByMemberId(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Cart not found"));
     }
 
 

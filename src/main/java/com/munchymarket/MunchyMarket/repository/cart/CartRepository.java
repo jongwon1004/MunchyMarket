@@ -3,8 +3,11 @@ package com.munchymarket.MunchyMarket.repository.cart;
 import com.munchymarket.MunchyMarket.domain.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CartRepository extends JpaRepository<Cart, Long> {
+import java.util.Optional;
+
+public interface CartRepository extends JpaRepository<Cart, Long>, CartRepositoryCustom {
 
 
+    Optional<Cart> findCartByMemberId(Long memberId);
 
 }

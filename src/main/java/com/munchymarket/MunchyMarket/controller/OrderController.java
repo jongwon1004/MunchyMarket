@@ -1,14 +1,12 @@
 package com.munchymarket.MunchyMarket.controller;
 
 import com.munchymarket.MunchyMarket.dto.OrderPaymentRequestDto;
+import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.service.OrderService;
 import com.munchymarket.MunchyMarket.service.PaymentService;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
-import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import com.stripe.exception.StripeException;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +14,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -24,15 +23,13 @@ import java.util.*;
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "결제 & 주문 API", description = "결제 & 주문 API 관리")
-@RequestMapping("/api/order")
+@RequestMapping("/api/orders")
 public class OrderController {
 
     private final OrderService orderService;
     private final PaymentService paymentService;
 
     private final CommonLogicsService commonLogicsService;
-
-    private final JWTUtil jwtUtil;
 
     private static final String ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM =
             "{\n" +
@@ -46,6 +43,7 @@ public class OrderController {
     /**
      * 주문 생성 & PaymentIntent Create
      * TODO: 쿠폰 사용시 최소주문금액, 최대 할인 가능액 계산 다시 해야됨, 장바구니 구현 필요
+     *
      * @return
      */
     @Operation(
@@ -53,7 +51,7 @@ public class OrderController {
             description = "주문 생성 & PaymentIntent Create",
             responses = {
                     @ApiResponse(responseCode = "200", description = "주문 & PaymentIntent 생성 성공"
-                    ,content = @Content(
+                            , content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(
                                     type = "object",
@@ -64,13 +62,14 @@ public class OrderController {
             }
     )
     @PostMapping("/create")
-    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto, @RequestHeader("Authorization") String tk)
+    public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto,
+                                                           @AuthenticationPrincipal CustomMemberDetails customMemberDetails)
             throws StripeException {
 
         Map<String, Object> response = new HashMap<>();
 
 
-        Long memberId = jwtUtil.getId(tk);
+        Long memberId = customMemberDetails.getId();
         int orderTotal = orderService.createOrder(orderPaymentRequestDto, memberId); // amount
 
         Map<String, String> paymentIntent = paymentService.createPaymentIntent(orderPaymentRequestDto.getPayment(), memberId, orderTotal);
