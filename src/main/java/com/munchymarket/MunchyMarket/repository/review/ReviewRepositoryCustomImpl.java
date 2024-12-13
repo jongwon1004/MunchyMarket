@@ -6,17 +6,15 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static com.munchymarket.MunchyMarket.domain.QImage.image;
 import static com.munchymarket.MunchyMarket.domain.QReview.review;
 import static com.munchymarket.MunchyMarket.domain.QReviewImage.reviewImage;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 
 @Slf4j
 public class ReviewRepositoryCustomImpl implements ReviewRepositoryCustom {

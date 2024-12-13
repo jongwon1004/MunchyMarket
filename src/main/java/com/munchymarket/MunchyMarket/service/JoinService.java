@@ -10,7 +10,6 @@ import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.JoinRequest;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.munchymarket.MunchyMarket.utils.PhoneNumberUtil;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
@@ -25,6 +24,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;

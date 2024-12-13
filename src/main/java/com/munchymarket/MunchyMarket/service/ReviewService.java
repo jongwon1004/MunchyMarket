@@ -14,11 +14,11 @@ import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.repository.review.ReviewRepository;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
 import com.munchymarket.MunchyMarket.utils.FileSizeUtils;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

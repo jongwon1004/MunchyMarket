@@ -4,10 +4,10 @@ import com.munchymarket.MunchyMarket.domain.VerificationCode;
 import com.munchymarket.MunchyMarket.domain.enums.StatusType;
 import com.munchymarket.MunchyMarket.repository.verificationCode.VerificationCodeRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;

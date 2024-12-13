@@ -10,10 +10,10 @@ import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.repository.order.OrderRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class OrderService {
     /**
      * TODO : PaymentIntent 생성쪽은 아직 구현하지 않았음
      */
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto, Long memberId) {
 
         // 회원찾는 쿼리 1 방 ( 계: 1회 )

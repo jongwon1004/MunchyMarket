@@ -8,10 +8,10 @@ import com.munchymarket.MunchyMarket.dto.CartProductDto;
 import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.repository.cart.cart_products.CartProductRepository;
 import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,11 +27,12 @@ public class CartService {
     /**
      * 회원의 쇼핑카트의 상품목록
      */
+    @Transactional(readOnly = true)
     public List<CartProductDto> getCartProducts(Long memberId) {
         return cartProductRepository.findCartProductByMemberIdToDto(memberId);
     }
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public CartProduct addProductToCart(Long memberId, ProductIdAndQuantityDto productIdAndQuantityDto) {
         Product product = commonLogicsService.findProductById(productIdAndQuantityDto.getProductId());
         Cart cart = commonLogicsService.findCartByMemberId(memberId);
@@ -45,7 +46,7 @@ public class CartService {
         return cartProductRepository.save(cartProduct);
     }
 
-    @Transactional(rollbackOn = Exception.class)
+    @Transactional(rollbackFor = Exception.class)
     public List<CartController.CartProductSimpleDto> updateProductQuantity(Long memberId, Long productId, int quantity) {
 
         Cart cart = commonLogicsService.findCartByMemberId(memberId);
@@ -64,7 +65,7 @@ public class CartService {
     }
 
 
-
+    @Transactional(rollbackFor = Exception.class)
     public int deleteProductFromCart(Long memberId, Long productId) {
         Cart cart = commonLogicsService.findCartByMemberId(memberId);
         int deletedRow = cartProductRepository.deleteCartProductByCartIdAndProductId(cart.getId(), productId);

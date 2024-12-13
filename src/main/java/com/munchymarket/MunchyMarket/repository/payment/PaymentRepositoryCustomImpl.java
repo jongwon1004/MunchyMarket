@@ -6,7 +6,7 @@ import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.munchymarket.MunchyMarket.domain.QPayment.*;
 
