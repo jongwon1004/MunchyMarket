@@ -1,7 +1,7 @@
 package com.munchymarket.MunchyMarket.service;
 
 import com.munchymarket.MunchyMarket.domain.Category;
-import com.munchymarket.MunchyMarket.dto.CategoryDto;
+import com.munchymarket.MunchyMarket.dto.product.CategoryDto;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

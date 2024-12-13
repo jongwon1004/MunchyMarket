@@ -1,8 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.cart;
 
 import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.domain.QCartProduct;
-import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 

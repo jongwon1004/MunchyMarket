@@ -1,7 +1,7 @@
 package com.munchymarket.MunchyMarket.service;
 
 
-import com.munchymarket.MunchyMarket.dto.PackagingTypeDto;
+import com.munchymarket.MunchyMarket.dto.admin.PackagingTypeDto;
 import com.munchymarket.MunchyMarket.repository.packagingtype.PackagingTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.sorttype;
 
-import com.munchymarket.MunchyMarket.dto.SortTypeDto;
+import com.munchymarket.MunchyMarket.dto.product.SortTypeDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

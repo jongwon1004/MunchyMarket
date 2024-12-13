@@ -1,14 +1,9 @@
 package com.munchymarket.MunchyMarket.repository.cart.cart_products;
 
-import com.munchymarket.MunchyMarket.domain.QCart;
-import com.munchymarket.MunchyMarket.domain.QCartProduct;
-import com.munchymarket.MunchyMarket.domain.QProduct;
-import com.munchymarket.MunchyMarket.dto.CartProductDto;
+import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

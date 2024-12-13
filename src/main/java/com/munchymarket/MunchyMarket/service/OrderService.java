@@ -5,11 +5,11 @@ import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Order;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.enums.CouponType;
-import com.munchymarket.MunchyMarket.dto.OrderPaymentRequestDto;
-import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
+import com.munchymarket.MunchyMarket.dto.orderpay.OrderPaymentRequestDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.repository.order.OrderRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
-import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,11 +26,11 @@ import java.util.stream.IntStream;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final CommonLogicsService commonLogicsService;
+    private final CommonEntityService commonLogicsService;
     private final ProductRepository productRepository;
 
     /**
-     * TODO : PaymentIntent 생성쪽은 아직 구현하지 않았음
+     * TODO : 쿠폰 적용 최대가, 주문 최소가격 미구현 
      */
     @Transactional(rollbackFor = Exception.class)
     public int createOrder(OrderPaymentRequestDto orderPaymentRequestDto, Long memberId) {

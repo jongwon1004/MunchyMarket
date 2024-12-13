@@ -2,10 +2,9 @@ package com.munchymarket.MunchyMarket.service;
 
 import com.munchymarket.MunchyMarket.domain.Payment;
 import com.munchymarket.MunchyMarket.domain.enums.PaymentStatus;
-import com.munchymarket.MunchyMarket.dto.PaymentDto;
+import com.munchymarket.MunchyMarket.dto.orderpay.PaymentDto;
 import com.munchymarket.MunchyMarket.repository.payment.PaymentRepository;
-import com.munchymarket.MunchyMarket.request.PaymentRequest;
-import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentConfirmParams;
@@ -25,7 +24,7 @@ public class PaymentService {
 
     private final PaymentRepository paymentRepository;
 
-    private final CommonLogicsService commonLogicsService;
+    private final CommonEntityService commonLogicsService;
 
 
     public Map<String, String> createPaymentIntent(PaymentDto paymentDto, Long memberId, int amount) throws StripeException {

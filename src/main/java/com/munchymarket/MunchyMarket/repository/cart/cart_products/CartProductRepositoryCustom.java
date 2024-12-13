@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.cart.cart_products;
 
-import com.munchymarket.MunchyMarket.dto.CartProductDto;
+import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
 
 import java.util.List;
 

@@ -1,13 +1,13 @@
 package com.munchymarket.MunchyMarket.service;
 
-import com.munchymarket.MunchyMarket.controller.CartController;
+import com.munchymarket.MunchyMarket.controller.cart.CartController;
 import com.munchymarket.MunchyMarket.domain.Cart;
 import com.munchymarket.MunchyMarket.domain.CartProduct;
 import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.dto.CartProductDto;
-import com.munchymarket.MunchyMarket.dto.ProductIdAndQuantityDto;
+import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.repository.cart.cart_products.CartProductRepository;
-import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.List;
 public class CartService {
 
 
-    private final CommonLogicsService commonLogicsService;
+    private final CommonEntityService commonLogicsService;
     private final CartProductRepository cartProductRepository;
 
     /**

@@ -1,8 +1,8 @@
 package com.munchymarket.MunchyMarket.repository.product;
 
 import com.munchymarket.MunchyMarket.domain.Product;
-import com.munchymarket.MunchyMarket.dto.ProductDto;
-import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductDto;
+import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;

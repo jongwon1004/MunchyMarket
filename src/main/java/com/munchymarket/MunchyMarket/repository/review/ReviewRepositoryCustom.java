@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.review;
 
-import com.munchymarket.MunchyMarket.dto.ProductReviewDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductReviewDto;
 
 import java.util.List;
 

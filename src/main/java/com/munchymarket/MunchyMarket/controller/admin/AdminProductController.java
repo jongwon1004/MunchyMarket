@@ -1,8 +1,8 @@
 package com.munchymarket.MunchyMarket.controller.admin;
 
-import com.munchymarket.MunchyMarket.dto.PackagingTypeDto;
-import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
-import com.munchymarket.MunchyMarket.dto.ResponseWrapper;
+import com.munchymarket.MunchyMarket.dto.admin.PackagingTypeDto;
+import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ResponseWrapper;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
 import com.munchymarket.MunchyMarket.service.CategoryService;
 import com.munchymarket.MunchyMarket.service.PackagingTypeService;
@@ -25,6 +25,7 @@ public class AdminProductController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto) {
+
         log.info("productRequest.getCategoryId() = {}", productRequestDto.getCategoryId());
         log.info("productRequest.getProductName() = {}", productRequestDto.getProductName());
         log.info("productRequest.getBasePrice() = {}", productRequestDto.getBasePrice());

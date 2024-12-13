@@ -1,8 +1,8 @@
 package com.munchymarket.MunchyMarket.repository.member;
 
-import com.munchymarket.MunchyMarket.dto.AddressDto;
-import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
-import com.munchymarket.MunchyMarket.dto.MemberDto;
+import com.munchymarket.MunchyMarket.dto.member.AddressDto;
+import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
+import com.munchymarket.MunchyMarket.dto.member.MemberDto;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;

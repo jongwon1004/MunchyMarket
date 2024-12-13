@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.product;
 
-import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

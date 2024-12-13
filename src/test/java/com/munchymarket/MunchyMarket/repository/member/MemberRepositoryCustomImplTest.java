@@ -1,17 +1,11 @@
 package com.munchymarket.MunchyMarket.repository.member;
 
-import com.munchymarket.MunchyMarket.domain.Address;
 import com.munchymarket.MunchyMarket.domain.Member;
-import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
+import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.annotation.Commit;
-
-import java.util.List;
 
 @SpringBootTest
 class MemberRepositoryCustomImplTest {

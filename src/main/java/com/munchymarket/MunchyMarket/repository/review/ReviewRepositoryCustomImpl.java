@@ -1,7 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.review;
 
-import com.munchymarket.MunchyMarket.dto.ProductReviewDto;
-import com.munchymarket.MunchyMarket.dto.ReviewImageResponse;
+import com.munchymarket.MunchyMarket.dto.product.ProductReviewDto;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;

@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.service;
 
-import com.munchymarket.MunchyMarket.dto.SortTypeDto;
+import com.munchymarket.MunchyMarket.dto.product.SortTypeDto;
 import com.munchymarket.MunchyMarket.repository.sorttype.SortTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

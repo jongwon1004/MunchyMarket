@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.service;
 
-import com.munchymarket.MunchyMarket.dto.MemberDto;
+import com.munchymarket.MunchyMarket.dto.member.MemberDto;
 import com.munchymarket.MunchyMarket.request.MemberLoginRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

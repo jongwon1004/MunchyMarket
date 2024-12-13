@@ -1,6 +1,6 @@
 package com.munchymarket.MunchyMarket.repository.category;
 
-import com.munchymarket.MunchyMarket.dto.CategoryDto;
+import com.munchymarket.MunchyMarket.dto.product.CategoryDto;
 
 import java.util.List;
 import java.util.Optional;

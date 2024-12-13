@@ -1,12 +1,9 @@
 package com.munchymarket.MunchyMarket.repository.product;
 
-import com.munchymarket.MunchyMarket.dto.ProductDto;
-import com.munchymarket.MunchyMarket.dto.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductDto;
+import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-
-import java.util.List;
 
 public interface ProductRepositoryCustom {
 

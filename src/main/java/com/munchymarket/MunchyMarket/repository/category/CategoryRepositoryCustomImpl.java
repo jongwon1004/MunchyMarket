@@ -2,8 +2,7 @@ package com.munchymarket.MunchyMarket.repository.category;
 
 import com.munchymarket.MunchyMarket.domain.Category;
 import com.munchymarket.MunchyMarket.domain.QCategory;
-import com.munchymarket.MunchyMarket.dto.CategoryDto;
-import com.querydsl.core.types.Projections;
+import com.munchymarket.MunchyMarket.dto.product.CategoryDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 

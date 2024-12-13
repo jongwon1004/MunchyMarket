@@ -4,7 +4,7 @@ import com.munchymarket.MunchyMarket.domain.Address;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.VerificationCode;
 import com.munchymarket.MunchyMarket.domain.enums.StatusType;
-import com.munchymarket.MunchyMarket.dto.MemberAddressDto;
+import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.JoinRequest;

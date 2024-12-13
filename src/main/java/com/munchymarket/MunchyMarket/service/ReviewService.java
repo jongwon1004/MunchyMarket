@@ -4,15 +4,15 @@ import com.munchymarket.MunchyMarket.domain.Image;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.Review;
-import com.munchymarket.MunchyMarket.dto.ProductReviewDto;
-import com.munchymarket.MunchyMarket.dto.ReviewCreateDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductReviewDto;
+import com.munchymarket.MunchyMarket.dto.product.ReviewCreateDto;
 import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.repository.review.ReviewRepository;
-import com.munchymarket.MunchyMarket.service.common.CommonLogicsService;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import com.munchymarket.MunchyMarket.utils.FileSizeUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
-    private final CommonLogicsService commonLogicsService;
+    private final CommonEntityService commonLogicsService;
 
     @Transactional
     public void createReview(ReviewCreateDto reviewCreateDto) throws DuplicateReviewException {
