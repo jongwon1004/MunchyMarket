@@ -22,6 +22,7 @@ public class ProductController {
     private final ReviewService reviewService;
 
     /**
+     * 상품 상세정보
      * TODO : 상품후기, 상품후기 사진, 상품 문의 추가하니까 response DTO 새로 만들어야됨 (현재 상품 상세정보만 return)
      *
      */

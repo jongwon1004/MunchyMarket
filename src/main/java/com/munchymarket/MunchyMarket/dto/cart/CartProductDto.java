@@ -11,12 +11,14 @@ import lombok.*;
 @ToString
 public class CartProductDto {
 
+    private Long productId;
     private String productName;
     private int basePrice;
     private int finalPrice;
     private int quantity;
 
-    public CartProductDto(String productName, int basePrice, int finalPrice, int quantity) {
+    public CartProductDto(Long productId, String productName, int basePrice, int finalPrice, int quantity) {
+        this.productId = productId;
         this.productName = productName;
         this.basePrice = basePrice;
         this.finalPrice = finalPrice;

@@ -2,9 +2,9 @@ package com.munchymarket.MunchyMarket.controller.admin;
 
 import com.munchymarket.MunchyMarket.dto.admin.PackagingTypeDto;
 import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.dto.wrapper.ResponseWrapper;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
-import com.munchymarket.MunchyMarket.service.CategoryService;
 import com.munchymarket.MunchyMarket.service.PackagingTypeService;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import jakarta.validation.Valid;
@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Slf4j
 @RestController
@@ -20,11 +22,13 @@ import org.springframework.web.bind.annotation.*;
 public class AdminProductController {
 
     private final ProductService productService;
-    private final CategoryService categoryService;
     private final PackagingTypeService packagingTypeService;
 
+    /**
+     * 상품 등록
+     */
     @PostMapping("/register")
-    public ResponseEntity<?> registerProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto) {
+    public ResponseEntity<ApiResponse<RegisteredProductDto>> registerProduct(@Valid @ModelAttribute ProductRequestDto productRequestDto) {
 
         log.info("productRequest.getCategoryId() = {}", productRequestDto.getCategoryId());
         log.info("productRequest.getProductName() = {}", productRequestDto.getProductName());
@@ -50,13 +54,16 @@ public class AdminProductController {
         log.info("productRequest.getIsPurchaseStatus() = {}", productRequestDto.getIsPurchaseStatus());
 
         RegisteredProductDto registeredProductDto = productService.registerProduct(productRequestDto);
-        return registeredProductDto != null ? ResponseEntity.ok().body(registeredProductDto) : ResponseEntity.badRequest().body("商品登録に失敗しました。");
+        return ResponseEntity.ok(ApiResponse.ofSuccess(registeredProductDto));
     }
 
 
+    /**
+     *  상품 등록시에 쓸 포장 타입 리스트
+     */
     @GetMapping("/packaging-types")
-    public ResponseEntity<ResponseWrapper<PackagingTypeDto>> getAllPackagingTypes() {
-        return ResponseEntity.ok(new ResponseWrapper<>(packagingTypeService.getAllPackagingTypes()));
+    public ResponseEntity<ApiResponse<List<PackagingTypeDto>>> getAllPackagingTypes() {
+        return ResponseEntity.ok(ApiResponse.ofSuccess(packagingTypeService.getAllPackagingTypes()));
     }
 
 

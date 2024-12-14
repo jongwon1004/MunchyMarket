@@ -49,6 +49,7 @@ public class CartService {
     @Transactional(rollbackFor = Exception.class)
     public List<CartController.CartProductSimpleDto> updateProductQuantity(Long memberId, Long productId, int quantity) {
 
+        Product product = commonLogicsService.findProductById(productId);
         Cart cart = commonLogicsService.findCartByMemberId(memberId);
 
         CartProduct cartProduct = cartProductRepository.findCartProductByCartIdAndProductId(cart.getId(), productId);

@@ -43,7 +43,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public RegisteredProductDto registerProduct(ProductRequestDto productRequestDto) {
 
         List<String> errors = new ArrayList<>();

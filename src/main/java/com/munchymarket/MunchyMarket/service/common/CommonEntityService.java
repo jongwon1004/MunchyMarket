@@ -4,6 +4,7 @@ import com.munchymarket.MunchyMarket.domain.Cart;
 import com.munchymarket.MunchyMarket.domain.Coupon;
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.Product;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.cart.CartRepository;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
@@ -39,30 +40,24 @@ public class CommonEntityService {
     private final CartRepository cartRepository;
 
 
-//    public final <T> T findById(Long id, JpaRepository<T, Long> repository, String entityName) {
-//        return repository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException(entityName + " not found"));
-//    }
-
-
     public final Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Member not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "会員", memberId)));
     }
 
     public final Product findProductById(Long productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new EntityNotFoundException("Product not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "商品", productId)));
     }
 
     public final Coupon findCouponById(Long couponId) {
         return couponRepository.findById(couponId)
-                .orElseThrow(() -> new EntityNotFoundException("Coupon not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "クーポン", couponId)));
     }
 
     public final Cart findCartByMemberId(Long memberId) {
         return cartRepository.findCartByMemberId(memberId)
-                .orElseThrow(() -> new EntityNotFoundException("Cart not found"));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "会員のカート", memberId)));
     }
 
 

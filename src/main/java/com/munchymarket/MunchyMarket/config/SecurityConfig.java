@@ -3,7 +3,7 @@ package com.munchymarket.MunchyMarket.config;
 
 import com.munchymarket.MunchyMarket.filter.JWTFilter;
 import com.munchymarket.MunchyMarket.filter.LoginFilter;
-import com.munchymarket.MunchyMarket.handler.CustomAccessDeniedHandler;
+import com.munchymarket.MunchyMarket.security.CustomAuthenticationEntryPoint;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +33,9 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private final JWTUtil jwtUtil;
 
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+
 
     // AuthenticationManagerのBean登録
     @Bean
@@ -53,7 +56,7 @@ public class SecurityConfig {
      * 認証・認可、ログイン、ログアウト設定
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomAccessDeniedHandler customAccessDeniedHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         /**
          * SpringSecurity는 디폴트값으로 /login 로 URL 요청을 받는다. 타임리프나 SSR 을 사용하는 경우에는 .formLogin 설정에서 .loginProcessingUrl() 을 사용하여 경로를 바꿔줄 수 있지만
@@ -66,17 +69,35 @@ public class SecurityConfig {
 
         return http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/api/members/", "/api/members/login",
-                                "/api/members/send-sms", "/api/members/validate", "/api/members/verification-code", "/api/members/join",
-                                "/api/admin/products/register", "/api/admin/products/packaging-types", //テスト段階なので、一時的に許可
-                                "/api/categories/**", "/api/products/**",
-                                "/api/payment/**", "/api/webhooks/stripe",
-                                "/favicon.ico", "/robots.txt", "/sitemap.xml",
-                                "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs", "/api/async/**").permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
-                        .requestMatchers("/api/members/role-check", "/api/products/sample-data/register").hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
+
+                        /*  HAS ROLE ADMIN  */
                         .requestMatchers(
-                                "/api/review", "/api/orders/create", "/api/cart/**").authenticated() // 認証済みのユーザーだけアクセス可能
+                                "/api/products/sample-data/register",
+                                "/api/admin/products/register", "/api/admin/products/packaging-types",
+                                "/api/members/role-check", "/api/products/sample-data/register", "/api/members/")
+                        .hasRole("ADMIN") // ADMIN　権限を持つユーザーだけアクセス可能
+
+
+                        /*  PERMIT ALL  */
+                        .requestMatchers(
+                                "/api/members/login",
+                                "/api/members/send-sms", "/api/members/validate", "/api/members/verification-code", "/api/members/join", //テスト段階なので、一時的に許可
+                                "/api/categories/**", "/api/products/**",
+                                "/api/webhooks/stripe",
+                                "/favicon.ico", "/robots.txt", "/sitemap.xml",
+                                "/logout", "/error", "/swagger-ui/**", "/api-docs/**", "/test/**", "/v3/api-docs", "/products/*/test"
+                        ).permitAll() // 誰でもアクセス可能。requestMatchers() に記載されたURLは認証、認可がなくてもアクセス可能
+
+
+                        /*  AUTHENTICATED  */
+                        .requestMatchers(
+                                "/api/review", "/api/orders/create", "/api/cart/products/**", "/api/payment/**").authenticated() // 認証済みのユーザーだけアクセス可能
                         .anyRequest().authenticated() // それ以外のリクエストは認証が必要 // 403 Forbidden
+                )
+                // 403 Forbidden時の処理をカスタマイズ
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling
+                                .authenticationEntryPoint(customAuthenticationEntryPoint) // 커스텀 EntryPoint 등록
                 )
                 .formLogin(form -> form // ログインページををクライアント側で管理する場合は、設定不要
 //                                .usernameParameter("email")
@@ -109,10 +130,6 @@ public class SecurityConfig {
                 .addFilterAt(loginFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(csrf -> csrf
                         .disable()
-                )
-                // 403 Forbidden時の処理をカスタマイズ
-                .exceptionHandling(exceptionHandling ->
-                        exceptionHandling.accessDeniedHandler(customAccessDeniedHandler)
                 )
                 .cors(withDefaults())
 //                .oauth2Login(Customizer.withDefaults())

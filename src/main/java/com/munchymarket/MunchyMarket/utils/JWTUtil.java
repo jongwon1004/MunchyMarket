@@ -1,6 +1,5 @@
 package com.munchymarket.MunchyMarket.utils;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 @Component
@@ -72,26 +73,19 @@ public class JWTUtil {
                 .before(new Date());
     }
 
-    public Long extractMemberId(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-        return Long.parseLong(claims.get("id").toString());
-    }
 
-    public String createJwt(Long id, String loginId, String role, Long expiredMs) {
+    public String createJwt(Long id, String loginId, String role) {
 
-        log.info("System.currentTimeMillis() = {}", new Date(System.currentTimeMillis()));
-        log.info("expiredMs = {}", new Date(System.currentTimeMillis() + expiredMs));
+        ZonedDateTime nowInJst = ZonedDateTime.now(ZoneId.of("Asia/Tokyo"));// 일본 시간대 설정
+        ZonedDateTime expiredMs = nowInJst.plusHours(24);
+
 
         return Jwts.builder()
                 .claim("id", id)
                 .claim("loginId", loginId)
                 .claim("role", role)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .issuedAt(Date.from(nowInJst.toInstant()))
+                .expiration(Date.from(expiredMs.toInstant()))
                 .signWith(secretKey)
                 .compact();
     }

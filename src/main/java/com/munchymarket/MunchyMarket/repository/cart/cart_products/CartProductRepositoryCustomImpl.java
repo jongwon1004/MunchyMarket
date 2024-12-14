@@ -25,6 +25,7 @@ public class CartProductRepositoryCustomImpl implements CartProductRepositoryCus
         return queryFactory
                 .select(
                         Projections.constructor(CartProductDto.class,
+                                product.id,
                                 product.productName,
                                 product.basePrice,
                                 product.finalPrice,

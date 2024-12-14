@@ -1,6 +1,9 @@
 package com.munchymarket.MunchyMarket.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.api.Http;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import jakarta.servlet.FilterChain;
@@ -8,19 +11,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * AuthenticationManagerをInjectionして、これで検証を行う
@@ -96,7 +99,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         String role = auth.getAuthority();
 
-        String token = jwtUtil.createJwt(id, loginId, role, 60 * 60 * 1000L * 30); // 30時間
+        String token = jwtUtil.createJwt(id, loginId, role); // 30時間
         log.info("token = {}", token);
 
         response.addHeader("Authorization", "Bearer " + token);
@@ -121,12 +124,15 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", "email or password is incorrect");
+//        Map<String, String> errorResponse = new HashMap<>();
+//        errorResponse.put("error", "email or password is incorrect");
 
         // Java 객체를 JSON 문자열로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+//        String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+        String jsonResponse = objectMapper.writeValueAsString(
+                ApiResponse.ofFail(ErrorCode.LOGIN_FAILED, ErrorCode.DetailMessage.LOGIN_FAILED)
+        );
 
         response.getWriter().write(jsonResponse);
     }

@@ -1,6 +1,9 @@
 package com.munchymarket.MunchyMarket.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.munchymarket.MunchyMarket.domain.Member;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -65,7 +68,12 @@ public class JWTFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"error\": \"JWT 토큰이 만료되었습니다. 다시 로그인해주세요.\"}");
+        ObjectMapper objectMapper = new ObjectMapper();
+//        String jsonResponse = objectMapper.writeValueAsString(errorResponse);
+        String jsonResponse = objectMapper.writeValueAsString(
+                ApiResponse.ofFail(ErrorCode.TOKEN_EXPIRED, ErrorCode.DetailMessage.TOKEN_EXPIRED)
+        );
+        response.getWriter().write(jsonResponse);
     }
 
 //    private void handleOtherExceptions(HttpServletRequest request, HttpServletResponse response, Exception ex) throws IOException {

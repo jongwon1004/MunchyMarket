@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/member")
+@RequestMapping("/api/members")
 @RestController
 public class JoinController {
 

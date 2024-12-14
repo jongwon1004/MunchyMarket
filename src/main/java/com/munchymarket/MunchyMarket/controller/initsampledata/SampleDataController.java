@@ -25,6 +25,9 @@ public class SampleDataController {
 
     private final ProductService productService;
 
+    /**
+     * 클라이언트 화면에서 상품등록이 아닌, POSTMAN 으로 샘플데이터 등록 요청
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerProduct(@RequestBody List<SampleProductRequestDto> sampleProductRequestDto) {
 
@@ -35,6 +38,6 @@ public class SampleDataController {
             System.out.println("registeredProductDto = " + registeredProductDto);
         }
 
-        return ResponseEntity.ok("이미지 경로 기반 등록 성공");
+        return ResponseEntity.ok("샘플 데이터 등록완료");
     }
 }
