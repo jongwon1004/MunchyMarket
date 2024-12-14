@@ -22,23 +22,13 @@ import java.util.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "결제 & 주문 API", description = "결제 & 주문 API 관리")
 @RequestMapping("/api/orders")
 public class OrderController {
 
     private final OrderService orderService;
     private final PaymentService paymentService;
 
-    private final CommonEntityService commonLogicsService;
-
-    private static final String ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM =
-            "{\n" +
-                    "  \"paymentIntent\": {\n" +
-                    "    \"pi\": \"pi_sample_19NWjX8Wx1OhNxhwd\",\n" +
-                    "    \"clientSecret\": \"pi_sample_19NWjX8Wx1OhNxhwd_secret_WdHells9on2zWkOrLD8kLotYU\"\n" +
-                    "  },\n" +
-                    "  \"message\": \"注文が確定されました。\"\n" +
-                    "}";
+    private final CommonEntityService commonEntityService;
 
     /**
      * 주문 생성 & PaymentIntent Create
@@ -46,21 +36,6 @@ public class OrderController {
      *
      * @return
      */
-    @Operation(
-            summary = "주문 생성 & PaymentIntent Create",
-            description = "주문 생성 & PaymentIntent Create",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "주문 & PaymentIntent 생성 성공"
-                            , content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(
-                                    type = "object",
-                                    example = ORDER_PAYMENT_CREATE_SUCCESS_RESPONSE_EXAM
-                            )
-                    )),
-                    @ApiResponse(responseCode = "400", description = "잘못된 요청 데이터"),
-            }
-    )
     @PostMapping("/create")
     public ResponseEntity<Map<String, Object>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto,
                                                            @AuthenticationPrincipal CustomMemberDetails customMemberDetails)

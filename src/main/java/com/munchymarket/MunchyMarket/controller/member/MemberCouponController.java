@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class MemberCouponController {
 
-    // jwt 토큰을 통해 회원 id get -> 회원이 가지고 있는 쿠폰 목록 조회
+    //  회원이 가지고 있는 쿠폰 목록 조회
 }

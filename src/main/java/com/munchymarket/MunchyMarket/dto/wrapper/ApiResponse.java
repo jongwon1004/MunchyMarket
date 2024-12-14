@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.dto.wrapper;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,8 +12,10 @@ public class ApiResponse<T> {
 
     private boolean success;
     private T data;
-    private String code;
-    private String message;
+    @JsonProperty("error_code")
+    private String errorCode;
+    @JsonProperty("error_message")
+    private String errorMessage;
 
     public static ApiResponse<Void> ofSuccess() {
         return new ApiResponse<>(true, null, null, null);

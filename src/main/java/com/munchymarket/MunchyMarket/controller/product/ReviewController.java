@@ -1,11 +1,14 @@
 package com.munchymarket.MunchyMarket.controller.product;
 
 import com.munchymarket.MunchyMarket.dto.product.ReviewCreateDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
+import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.service.ReviewService;
 import com.munchymarket.MunchyMarket.utils.JWTUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -23,13 +26,15 @@ public class ReviewController {
 
 
     @PostMapping
-    public ResponseEntity<Map<String, String>> createReview(@ModelAttribute ReviewCreateDto reviewCreateDto, @RequestHeader("Authorization") String tk) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> createReview(@ModelAttribute ReviewCreateDto reviewCreateDto,
+                                                                         @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
-        reviewCreateDto.setMemberId(jwtUtil.getId(tk));
+        Long memberId = customMemberDetails.getId();
+        reviewCreateDto.setMemberId(memberId);
         log.info("reviewCreateDto: {}", reviewCreateDto);
 
         reviewService.createReview(reviewCreateDto);
-        return ResponseEntity.ok().body(Collections.singletonMap("message", "レビューが登録されました。"));
+        return ResponseEntity.ok().body(ApiResponse.ofSuccess(Collections.singletonMap("message", "レビューが登録されました。")));
     }
 
 

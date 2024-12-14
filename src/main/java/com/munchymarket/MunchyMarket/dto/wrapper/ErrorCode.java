@@ -39,7 +39,6 @@ public enum ErrorCode {
 
 
         // CLIENT
-        public static final String URL_NOT_FOUND = "%s : 해당 경로는 존재하지 않는 경로입니다.";
         public static final String METHOD_NOT_ALLOWED = "%s : 해당 HTTP 메소드는 지원되지 않습니다. 허용 메소드 : %s";
         public static final String METHOD_ARGUMENT_TYPE_MISMATCH = "요청 파라미터에서 %s 값은 %s 타입이어야 합니다.";
         public static final String MISSING_REQUEST_PARAMETER = "요청 파라미터에서 %s 값은 필수입니다.";

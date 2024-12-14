@@ -29,7 +29,6 @@ public class CartController {
     public ResponseEntity<ApiResponse<List<CartProductDto>>> getCartProducts(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
         List<CartProductDto> cartProducts = cartService.getCartProducts(customMemberDetails.getId());
-
         return ResponseEntity.ok().body(ApiResponse.ofSuccess(cartProducts));
     }
 
@@ -37,14 +36,13 @@ public class CartController {
     /**
      * 카트에 상품추가
      * REQUEST EXAM: { "productId": 1, "quantity": 2 }
-     * TODO : 이미 카트에 해당 상품이 추가되어있으면, 수량 + 업데이트 해주고 프론트쪽에서는 이미 담은 상품의 수량을 추가했습니다 표시
      */
     @PostMapping("/products")
-    public ResponseEntity<ApiResponse<Map<String, Long>>> addProductToCart(@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
+    public ResponseEntity<ApiResponse<Map<String, Object>>> addProductToCart(@AuthenticationPrincipal CustomMemberDetails customMemberDetails,
                                                         @RequestBody ProductIdAndQuantityDto productIdAndQuantityDto) {
 
-        CartProduct cartProduct = cartService.addProductToCart(customMemberDetails.getId(), productIdAndQuantityDto);
-        return ResponseEntity.ok(ApiResponse.ofSuccess(Collections.singletonMap("saved_cart_product_id", +cartProduct.getId())));
+        Map<String, Object> response = cartService.addProductToCart(customMemberDetails.getId(), productIdAndQuantityDto);
+        return ResponseEntity.ok(ApiResponse.ofSuccess(response));
     }
 
 
@@ -56,6 +54,7 @@ public class CartController {
         private int quantity;
         private LocalDateTime lastModifiedDate;
     }
+
 
     /**
      * 카트에 상품수량 업데이트
@@ -76,10 +75,10 @@ public class CartController {
      * REQUEST EXAM: /api/cart/products/{productId}
      */
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<?> deleteProductFromCart(@PathVariable("productId") Long productId,
+    public ResponseEntity<ApiResponse<Map<String, Long>>> deleteProductFromCart(@PathVariable("productId") Long productId,
                                                    @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
-        cartService.deleteProductFromCart(customMemberDetails.getId(), productId);
-        return ResponseEntity.ok().build();
+        Long deletedCartProductId = cartService.deleteProductFromCart(customMemberDetails.getId(), productId);
+        return ResponseEntity.ok(ApiResponse.ofSuccess(Collections.singletonMap("deleted_cart_product_id", deletedCartProductId)));
     }
 
 }

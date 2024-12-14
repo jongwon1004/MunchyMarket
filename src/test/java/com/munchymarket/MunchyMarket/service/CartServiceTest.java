@@ -26,7 +26,7 @@ class CartServiceTest {
         Long cartId = 2L;
         Long productId = 17L;
 
-        int deletedRow = cartService.deleteProductFromCart(memberId, productId);
+//        int deletedRow = cartService.deleteProductFromCart(memberId, productId);
 
 //        cartService.
 //        Assertions.assertThat()

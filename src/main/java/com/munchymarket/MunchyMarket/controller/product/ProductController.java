@@ -2,6 +2,7 @@ package com.munchymarket.MunchyMarket.controller.product;
 
 
 import com.munchymarket.MunchyMarket.dto.product.ProductDetailDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import com.munchymarket.MunchyMarket.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ProductController {
      *
      */
     @GetMapping("/{productId}")
-    public ResponseEntity<ProductDetailDto> getProduct(@PathVariable Long productId) {
+    public ResponseEntity<ApiResponse<ProductDetailDto>> getProduct(@PathVariable Long productId) {
 
         ProductDetailDto productDetailDto = new ProductDetailDto();
         productDetailDto.setProduct(productService.getProduct(productId));
@@ -36,7 +37,7 @@ public class ProductController {
         log.info("productDetailDto: {}", productDetailDto);
 
 
-        return ResponseEntity.ok().body(productDetailDto);
+        return ResponseEntity.ok().body(ApiResponse.ofSuccess(productDetailDto));
 
     }
 

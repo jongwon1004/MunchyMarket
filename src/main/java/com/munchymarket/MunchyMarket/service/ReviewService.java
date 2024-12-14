@@ -93,8 +93,8 @@ public class ReviewService {
 
     @Transactional
     public List<ProductReviewDto> getReviewsByProductId(Long productId) {
-        List<ProductReviewDto> productReviews = reviewRepository.getProductReviewsByProductId(productId);
 
+        List<ProductReviewDto> productReviews = reviewRepository.getProductReviewsByProductId(productId);
         // 각 DTO에 대해 GCP 스토리지 URL 설정
         productReviews.forEach(review -> review.setFinalReviewImages(bucketName));
 
