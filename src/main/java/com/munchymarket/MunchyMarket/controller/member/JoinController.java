@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.controller.member;
 
 import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.request.JoinRequest;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.munchymarket.MunchyMarket.request.SmsSendRequest;
@@ -8,7 +9,6 @@ import com.munchymarket.MunchyMarket.service.JoinService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,15 +25,10 @@ public class JoinController {
 
     /**
      * 会員登録時ログインID、EMAILの重複チェック　→　Service階層でパラメータによって処理を分岐
-     * @return true: 重複なし, false: 重複あり
      */
     @PostMapping("/validate")
-    public ResponseEntity<Map<String, Object>> validate(@RequestBody LoginValidateCheckRequest loginValidateCheckRequest) {
-        Map<String, Object> responseMap = joinService.validateCheck(loginValidateCheckRequest);
-        log.info("responseMap: {}", responseMap);
-        Boolean result = (Boolean) responseMap.get("result");
-        log.info("result: {}", result);
-        return result ? ResponseEntity.ok(responseMap) : ResponseEntity.status(HttpStatus.CONFLICT).body(responseMap);
+    public ResponseEntity<ApiResponse<Map<String, String>>> validate(@RequestBody LoginValidateCheckRequest loginValidateCheckRequest) {
+        return ResponseEntity.ok().body(ApiResponse.ofSuccess(joinService.validateCheck(loginValidateCheckRequest)));
     }
 
 

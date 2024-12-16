@@ -1,9 +1,6 @@
 package com.munchymarket.MunchyMarket.service.common;
 
-import com.munchymarket.MunchyMarket.domain.Cart;
-import com.munchymarket.MunchyMarket.domain.Coupon;
-import com.munchymarket.MunchyMarket.domain.Member;
-import com.munchymarket.MunchyMarket.domain.Product;
+import com.munchymarket.MunchyMarket.domain.*;
 import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.cart.CartRepository;
@@ -58,6 +55,21 @@ public class CommonEntityService {
     public final Cart findCartByMemberId(Long memberId) {
         return cartRepository.findCartByMemberId(memberId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "会員のカート", memberId)));
+    }
+
+    public final PackagingType findPackagingTypeById(Long packagingTypeId) {
+        return packagingTypeRepository.findById(packagingTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "包装タイプ", packagingTypeId)));
+    }
+
+    public final Category findCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "カテゴリ", categoryId)));
+    }
+
+    public final SortType findSortTypeById(Long sortTypeId) {
+        return sortTypeRepository.findById(sortTypeId)
+                .orElseThrow(() -> new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "ソートタイプ", sortTypeId)));
     }
 
 

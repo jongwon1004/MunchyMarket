@@ -1,14 +1,12 @@
 package com.munchymarket.MunchyMarket.service;
 
-import com.munchymarket.MunchyMarket.domain.Category;
-import com.munchymarket.MunchyMarket.domain.Image;
-import com.munchymarket.MunchyMarket.domain.PackagingType;
-import com.munchymarket.MunchyMarket.domain.Product;
+import com.munchymarket.MunchyMarket.domain.*;
 import com.munchymarket.MunchyMarket.dto.product.ProductDto;
+import com.munchymarket.MunchyMarket.dto.product.ProductPageResponseDto;
 import com.munchymarket.MunchyMarket.dto.product.RegisteredProductDto;
 import com.munchymarket.MunchyMarket.dto.initsampledata.CustomMultipartFile;
 import com.munchymarket.MunchyMarket.dto.initsampledata.SampleProductRequestDto;
-import com.munchymarket.MunchyMarket.exception.ErrorCode;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
 import com.munchymarket.MunchyMarket.repository.category.CategoryRepository;
@@ -16,17 +14,19 @@ import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
 import com.munchymarket.MunchyMarket.repository.packagingtype.PackagingTypeRepository;
 import com.munchymarket.MunchyMarket.repository.product.ProductRepository;
 import com.munchymarket.MunchyMarket.request.ProductRequestDto;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.munchymarket.MunchyMarket.utils.FileSizeUtils.readableFileSize;
@@ -39,21 +39,14 @@ public class ProductService {
     private final GcsUploadService gcsUploadService;
 
     private final ProductRepository productRepository;
-    private final PackagingTypeRepository packagingTypeRepository;
-    private final CategoryRepository categoryRepository;
     private final ImageRepository imageRepository;
+    private final CommonEntityService commonEntityService;
 
     @Transactional(rollbackFor = Exception.class)
     public RegisteredProductDto registerProduct(ProductRequestDto productRequestDto) {
 
-        List<String> errors = new ArrayList<>();
-
-        PackagingType packagingType = fetchPackagingType(productRequestDto.getPackagingTypeId(), errors);
-        Category category = fetchCategory(productRequestDto.getCategoryId(), errors);
-
-        if (!errors.isEmpty()) {
-            throw new ProductRegisterException(errors);
-        }
+        PackagingType packagingType = commonEntityService.findPackagingTypeById(productRequestDto.getPackagingTypeId());
+        Category category = commonEntityService.findCategoryById(productRequestDto.getCategoryId());
 
         Map<String, MultipartFile> images = productRequestDto.getImages();
         Image mainImage = null;
@@ -65,7 +58,7 @@ public class ProductService {
             subImage = buildAndSaveImage(images.get("subImage"));
 
         } catch (IOException e) {
-            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR.getMessage(), e);
+            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR, ErrorCode.DetailMessage.GCS_FILE_UPLOAD_ERROR);
         }
 
         Product product = productRequestDto.toEntity(category, packagingType, mainImage, subImage);
@@ -88,26 +81,26 @@ public class ProductService {
         return imageRepository.save(image);
     }
 
-    private PackagingType fetchPackagingType(Long packagingTypeId, List<String> errors) {
-        return packagingTypeRepository.findById(packagingTypeId).orElseGet(() -> {
-            errors.add(ErrorCode.PACKAGING_TYPE_NOT_FOUND.formatMessage(packagingTypeId));
-            return null;
-        });
-    }
 
-    private Category fetchCategory(Long categoryId, List<String> errors) {
-        return categoryRepository.findById(categoryId).orElseGet(() -> {
-            errors.add(ErrorCode.CATEGORY_NOT_FOUND.formatMessage(categoryId));
-            return null;
-        });
-    }
+    public ProductPageResponseDto getProductsByCategoryId(Long categoryId, int page, int size, Long sortId) {
+        SortType sortType = commonEntityService.findSortTypeById(sortId);
 
-    public Page<ProductDto> getProductsByCategoryId(Long categoryId, PageRequest pageRequest) {
-        return productRepository.findProductsByCategoryId(categoryId, pageRequest);
+        Sort sort = Sort.by(sortType.getSortTypeField());
+        sort = sortType.getSortDirection()
+                .equals("desc") ? sort.descending() : sort.ascending();
+
+        PageRequest pageRequest = PageRequest.of(page - 1, size, sort);
+
+        Page<ProductDto> productsByCategoryId = productRepository.findProductsByCategoryId(categoryId, pageRequest);
+        return new ProductPageResponseDto(productsByCategoryId, pageRequest, sortType);
     }
 
     public RegisteredProductDto getProduct(Long productId) {
-        return productRepository.findByProductId(productId);
+        RegisteredProductDto product = productRepository.findByProductId(productId);
+        if (product == null) {
+            throw new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "商品", productId));
+        }
+        return product;
     }
 
 
@@ -117,14 +110,8 @@ public class ProductService {
     @Transactional
     public RegisteredProductDto registerSampleProduct(SampleProductRequestDto sampleProductRequestDto) {
 
-        List<String> errors = new ArrayList<>();
-
-        PackagingType packagingType = fetchPackagingType(sampleProductRequestDto.getPackagingTypeId(), errors);
-        Category category = fetchCategory(sampleProductRequestDto.getCategoryId(), errors);
-
-        if (!errors.isEmpty()) {
-            throw new ProductRegisterException(errors);
-        }
+        PackagingType packagingType = commonEntityService.findPackagingTypeById(sampleProductRequestDto.getPackagingTypeId());
+        Category category = commonEntityService.findCategoryById(sampleProductRequestDto.getCategoryId());
 
         Map<String, String> images = sampleProductRequestDto.getProductImages();
         Image mainImage = null;
@@ -133,9 +120,8 @@ public class ProductService {
         try {
             mainImage = buildAndSaveImage(new CustomMultipartFile(images.get("mainImage")));
             subImage = buildAndSaveImage(new CustomMultipartFile(images.get("subImage")));
-
         } catch (IOException e) {
-            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR.getMessage(), e);
+            throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR, ErrorCode.DetailMessage.GCS_FILE_UPLOAD_ERROR);
         }
 
         Product product = sampleProductRequestDto.toEntity(category, packagingType, mainImage, subImage);

@@ -6,6 +6,7 @@ import com.munchymarket.MunchyMarket.domain.CartProduct;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
 import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.repository.cart.cart_products.CartProductRepository;
 import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import jakarta.persistence.EntityNotFoundException;
@@ -67,10 +68,11 @@ public class CartService {
         public static final String PRODUCT_ADDED_TO_CART = "商品をカートに追加しました";
         public static final String PRODUCT_QUANTITY_UPDATED = "商品の数量を更新しました";
         public static final String PRODUCT_ALREADY_IN_CART = "既にカートに商品が追加されているため、数量を追加しました";
+        public static final String PRODUCT_REMOVED_FROM_CART = "商品をカートから削除しました";
     }
 
     public enum MethodFrom{
-        ADD_PRODUCT, UPDATE_PRODUCT
+        ADD_PRODUCT, UPDATE_PRODUCT, DELETE_PRODUCT
     }
 
 
@@ -83,12 +85,21 @@ public class CartService {
 
         if (cartProduct == null) {
             if (from == MethodFrom.UPDATE_PRODUCT) {
-                throw new IllegalArgumentException("Product not found in cart for update.");
+                throw new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "商品", productId));
             }
-            return new CommonResult(cart, product, null, MessageConstants.PRODUCT_ADDED_TO_CART);
+
+            if(from == MethodFrom.ADD_PRODUCT) {
+                return new CommonResult(cart, product, null, MessageConstants.PRODUCT_ADDED_TO_CART);
+            }
+
+            throw new EntityNotFoundException(String.format(ErrorCode.DetailMessage.RESOURCE_NOT_FOUND, "カートの商品", productId));
         } else {
             if(from == MethodFrom.ADD_PRODUCT) {
                 return new CommonResult(cart, product, cartProduct, MessageConstants.PRODUCT_ALREADY_IN_CART);
+            }
+
+            if(from == MethodFrom.DELETE_PRODUCT) {
+                return new CommonResult(cart, product, cartProduct, MessageConstants.PRODUCT_REMOVED_FROM_CART);
             }
         }
         // cartProduct != null && from == MethodFrom.UPDATEPRODUCT
@@ -114,12 +125,8 @@ public class CartService {
 
     @Transactional(rollbackFor = Exception.class)
     public Long deleteProductFromCart(Long memberId, Long productId) {
-        Cart cart = commonEntityService.findCartByMemberId(memberId);
-        CartProduct cartProduct = cartProductRepository.findCartProductByCartIdAndProductId(cart.getId(), productId);
-        if (cartProduct == null) {
-            throw new EntityNotFoundException("cartProduct not found");
-        }
-        return cartProductRepository.deleteCartProductByCartIdAndProductId(cart.getId(), productId);
+        CommonResult commonResult = commonLogics(memberId, productId, MethodFrom.DELETE_PRODUCT);
+        return cartProductRepository.deleteCartProductByCartIdAndProductId(commonResult.cart().getId(), productId);
     }
 
 

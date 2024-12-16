@@ -31,12 +31,13 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             String token = extractToken(request);
+            log.info("여기들어옴 ?????????????????????????");
 
             // JWT가 있는 경우
             if (token != null) {
                 // 토큰 만료 여부 확인
                 if (jwtUtil.isExpired(token)) {
-                    throw new ExpiredJwtException(null, null, "JWT 토큰이 만료되었습니다.");
+                    throw new ExpiredJwtException(null, null, ErrorCode.DetailMessage.TOKEN_EXPIRED);
                 }
 
                 // 인증 설정
@@ -71,7 +72,7 @@ public class JWTFilter extends OncePerRequestFilter {
         ObjectMapper objectMapper = new ObjectMapper();
 //        String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         String jsonResponse = objectMapper.writeValueAsString(
-                ApiResponse.ofFail(ErrorCode.TOKEN_EXPIRED, ErrorCode.DetailMessage.TOKEN_EXPIRED)
+                ApiResponse.ofFail(ErrorCode.TOKEN_EXPIRED,ErrorCode.DetailMessage.TOKEN_EXPIRED)
         );
         response.getWriter().write(jsonResponse);
     }

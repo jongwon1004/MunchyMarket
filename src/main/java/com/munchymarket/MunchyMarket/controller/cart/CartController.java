@@ -1,11 +1,8 @@
 package com.munchymarket.MunchyMarket.controller.cart;
 
-import com.munchymarket.MunchyMarket.domain.CartProduct;
 import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
 import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
-import com.munchymarket.MunchyMarket.dto.wrapper.MessageResponseWrapper;
-import com.munchymarket.MunchyMarket.dto.wrapper.ResponseWrapper;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
 import com.munchymarket.MunchyMarket.service.CartService;
 import lombok.*;
@@ -34,7 +31,7 @@ public class CartController {
 
 
     /**
-     * 카트에 상품추가
+     * 카트에 상품 추가
      * REQUEST EXAM: { "productId": 1, "quantity": 2 }
      */
     @PostMapping("/products")

@@ -4,8 +4,10 @@ import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
+import com.munchymarket.MunchyMarket.exception.JoinRequestValidationException;
 import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
 import com.stripe.exception.StripeException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,11 +54,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GcsFileUploadFailException.class)
-    public ResponseEntity<Map<String, Object>> handleGcsFileUploadFailException(GcsFileUploadFailException ex) {
-        Map<String, Object> errorResponse = new HashMap<>();
-        errorResponse.put("error", ex.getMessage());
-        errorResponse.put("cause", ex.getCause() != null ? ex.getCause().getMessage() : "Unknown cause");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    public ResponseEntity<ApiResponse<Void>> handleGcsFileUploadFailException(GcsFileUploadFailException ex) {
+        return ResponseEntity.internalServerError().body(
+                ApiResponse.ofFail(ex.getErrorCode(), ex.getMessage())
+        );
     }
 
 
@@ -67,8 +68,11 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(StripeException.class)
-    public ResponseEntity<Map<String, String>> handleStripeException(StripeException e) {
-        return ResponseEntity.badRequest().body(Collections.singletonMap("message", e.getMessage()));
+    public ResponseEntity<ApiResponse<Void>> handleStripeException(StripeException e) {
+        log.error("StripeException occurred: {}", e.getMessage(), e);
+        String detailedMessage = e.getMessage() != null ? e.getMessage() : ErrorCode.DetailMessage.SERVER_ERROR;
+
+        return ResponseEntity.badRequest().body(ApiResponse.ofFail(ErrorCode.SERVER_ERROR, detailedMessage));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -112,6 +116,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.ofFail(ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH, errorMessage));
     }
+
+    @ExceptionHandler(JoinRequestValidationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleJoinRequestValidationException(JoinRequestValidationException ex) {
+
+        return ResponseEntity.status(ex.getErrorCode().getHttpStatusCode())
+                .body(ApiResponse.ofFail(ex.getErrorCode(), ex.getMessage()));
+    }
+
+
+
+//    JwtFilter 의 handleExpiredJwtException 에서 처리
+//    @ExceptionHandler(ExpiredJwtException.class)
+//    public ResponseEntity<ApiResponse<Void>> handleExpiredJwtException(ExpiredJwtException ex) {
+//
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                .body(ApiResponse.ofFail(ErrorCode.TOKEN_EXPIRED, ErrorCode.DetailMessage.TOKEN_EXPIRED));
+//    }
 
 
 }

@@ -6,6 +6,7 @@ import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.domain.Review;
 import com.munchymarket.MunchyMarket.dto.product.ProductReviewDto;
 import com.munchymarket.MunchyMarket.dto.product.ReviewCreateDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
 import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
 import com.munchymarket.MunchyMarket.repository.image.ImageRepository;
@@ -70,7 +71,7 @@ public class ReviewService {
 
                 review.addReviewImage(image); // cascade
             } catch (IOException e) {
-                throw new GcsFileUploadFailException(e.getMessage());
+                throw new GcsFileUploadFailException(ErrorCode.GCS_FILE_UPLOAD_ERROR, ErrorCode.DetailMessage.GCS_FILE_UPLOAD_ERROR);
             }
 
         }

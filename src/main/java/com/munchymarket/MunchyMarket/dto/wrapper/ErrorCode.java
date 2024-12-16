@@ -20,11 +20,16 @@ public enum ErrorCode {
     SC_UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "C011"),
     LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "C013"),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "C014"),
+    LOGIN_ID_INVALID(BAD_REQUEST, "C016"),
+    LOGIN_ID_EXISTS(CONFLICT, "C017"),
+    EMAIL_INVALID(BAD_REQUEST, "C018"),
+    EMAIL_EXISTS(CONFLICT, "C019"),
 
 
 
     // SERVER
-    SERVER_ERROR(INTERNAL_SERVER_ERROR, "S001");
+    SERVER_ERROR(INTERNAL_SERVER_ERROR, "S001"),
+    GCS_FILE_UPLOAD_ERROR(INTERNAL_SERVER_ERROR, "S002");
 
     private final HttpStatus httpStatusCode;
     private final String code;
@@ -48,6 +53,11 @@ public enum ErrorCode {
         public static final String LOGIN_FAILED = "パスワードまたはログインIDが間違っています";
         public static final String TOKEN_EXPIRED = "トークンの有効期限が切れています";
 
+        public static final String LOGIN_ID_INVALID = "ログインIDは英字と数字を含む8文字以上20文字以下で入力してください";
+        public static final String LOGIN_ID_EXISTS = "既に登録されているログインIDです";
+        public static final String EMAIL_INVALID = "メールアドレスの形式で入力してください";
+        public static final String EMAIL_EXISTS = "既に登録されているメールアドレスです";
+
 
 
 
@@ -55,5 +65,8 @@ public enum ErrorCode {
 
         // SERVER
         public static final String SERVER_ERROR = "서버 내부에 문제가 생겼습니다.";
+        public static final String GCS_FILE_UPLOAD_ERROR = "GCSファイルアップロードに失敗しました";
+
+
     }
 }

@@ -5,14 +5,19 @@ import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.domain.VerificationCode;
 import com.munchymarket.MunchyMarket.domain.enums.StatusType;
 import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
+import com.munchymarket.MunchyMarket.exception.JoinRequestValidationException;
 import com.munchymarket.MunchyMarket.repository.address.AddressRepository;
 import com.munchymarket.MunchyMarket.repository.member.MemberRepository;
 import com.munchymarket.MunchyMarket.request.JoinRequest;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.munchymarket.MunchyMarket.utils.PhoneNumberUtil;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -20,6 +25,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.hibernate.mapping.Join;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -29,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -93,49 +100,51 @@ public class JoinService {
         return verificationCodeService.validateVerificationCode(PhoneNumberUtil.phoneNumberFormat(phoneNumber), code);
     }
 
-    public Map<String, Object> validateCheck(LoginValidateCheckRequest loginValidateCheckRequest) {
 
-        Map<String, Object> response = new HashMap<>();
-        String param = null;
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class JoinResponse {
+        public static final String LOGIN_ID_AVAILABLE_MESSAGE = "使用可能なログインIDです";
+        public static final String EMAIL_AVAILABLE_MESSAGE = "使用可能なEMAILです";
+    }
 
-        if (loginValidateCheckRequest.getLoginId() != null) {
-            param = "loginId";
-            if (!loginValidateCheckRequest.getLoginId().matches("^(?=.*\\d)[a-zA-Z\\d]{8,20}$")) {
-                response.put("result", false);
-                response.put("message", "ログインIDは英字と数字を含む8文字以上20文字以下で入力してください");
-                return response;
-            } else {
-                return buildResponse(memberRepository.findMemberByLoginIdOrEmail(param, loginValidateCheckRequest), param);
-            }
-
-        } else if (loginValidateCheckRequest.getEmail() != null) {
-            param = "email";
-
-            if (!loginValidateCheckRequest.getEmail().matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
-                response.put("result", false);
-                response.put("message", "メールアドレスの形式で入力してください");
-                return response;
-            } else {
-                return buildResponse(memberRepository.findMemberByLoginIdOrEmail(param, loginValidateCheckRequest), param);
-            }
+    private String validateLoginId(String loginId) {
+        if (!loginId.matches("^(?=.*\\d)[a-zA-Z\\d]{8,20}$")) {
+            throw new JoinRequestValidationException(ErrorCode.LOGIN_ID_INVALID, ErrorCode.DetailMessage.LOGIN_ID_INVALID);
         }
 
-        response.put("result", false);
-        response.put("message", "エラーが発生しました、再度お試しください");
-        return response;
+        if (memberRepository.existsByLoginId(loginId)) {
+            throw new JoinRequestValidationException(ErrorCode.LOGIN_ID_EXISTS, ErrorCode.DetailMessage.LOGIN_ID_EXISTS);
+        }
+        return JoinResponse.LOGIN_ID_AVAILABLE_MESSAGE;
+    }
+
+    private String validateEmail(String email) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
+            throw new JoinRequestValidationException(ErrorCode.EMAIL_INVALID, ErrorCode.DetailMessage.EMAIL_INVALID);
+        }
+
+        if (memberRepository.existsByEmail(email)) {
+            throw  new JoinRequestValidationException(ErrorCode.EMAIL_EXISTS, ErrorCode.DetailMessage.EMAIL_EXISTS);
+        }
+        return JoinResponse.EMAIL_AVAILABLE_MESSAGE;
     }
 
 
-    private Map<String, Object> buildResponse(boolean notExist, String param) {
-        Map<String, Object> response = new HashMap<>();
-        if (notExist) {
-            response.put("result", true);
-            response.put("message", param.equals("loginId") ? "使用可能なログインIDです" : "使用可能なEMAILです");
+    public Map<String, String> validateCheck(LoginValidateCheckRequest loginValidateCheckRequest) {
+
+        Map<String, String> result = new HashMap<>();
+
+        if (loginValidateCheckRequest.getLoginId() != null) {
+            result.put("message", validateLoginId(loginValidateCheckRequest.getLoginId()));
+            result.put("login_id", loginValidateCheckRequest.getLoginId());
+        } else if (loginValidateCheckRequest.getEmail() != null) {
+            result.put("message", validateEmail(loginValidateCheckRequest.getEmail()));
+            result.put("email", loginValidateCheckRequest.getEmail());
         } else {
-            response.put("result", false);
-            response.put("message", param.equals("loginId") ? "既に登録されているログインIDです" : "既に登録されているEMAILです");
+            throw new JoinRequestValidationException(ErrorCode.SERVER_ERROR, ErrorCode.DetailMessage.SERVER_ERROR);
         }
-        return response;
+
+        return result;
     }
 
 

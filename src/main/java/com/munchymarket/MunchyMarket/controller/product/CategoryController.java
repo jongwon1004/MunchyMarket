@@ -1,16 +1,15 @@
 package com.munchymarket.MunchyMarket.controller.product;
 
 import com.munchymarket.MunchyMarket.domain.SortType;
-import com.munchymarket.MunchyMarket.dto.product.CategoryDto;
-import com.munchymarket.MunchyMarket.dto.product.ProductDto;
-import com.munchymarket.MunchyMarket.dto.product.ProductListResponseDto;
-import com.munchymarket.MunchyMarket.dto.product.SortTypeDto;
+import com.munchymarket.MunchyMarket.dto.product.*;
+import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.dto.wrapper.ResponseWrapper;
 import com.munchymarket.MunchyMarket.exception.ErrorCode;
 import com.munchymarket.MunchyMarket.repository.sorttype.SortTypeRepository;
 import com.munchymarket.MunchyMarket.service.CategoryService;
 import com.munchymarket.MunchyMarket.service.ProductService;
 import com.munchymarket.MunchyMarket.service.SortTypeService;
+import com.munchymarket.MunchyMarket.service.common.CommonEntityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
@@ -18,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
@@ -28,13 +28,11 @@ public class CategoryController {
 
     private final ProductService productService;
     private final SortTypeRepository sortTypeRepository;
-    private final SortTypeService sortTypeService;
     private final CategoryService categoryService;
 
-
     @GetMapping
-    public ResponseEntity<ResponseWrapper<CategoryDto>> getAllCategories() {
-        return ResponseEntity.ok(new ResponseWrapper<>(categoryService.getAllCategories()));
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAllCategories() {
+        return ResponseEntity.ok(ApiResponse.ofSuccess(categoryService.getAllCategories()));
     }
 
     @GetMapping("/{categoryId}")
@@ -54,15 +52,14 @@ public class CategoryController {
 
 
     @GetMapping("/sort-types")
-    public ResponseEntity<ResponseWrapper<SortTypeDto>> sortType() {
-
+    public ResponseEntity<ApiResponse<List<SortTypeDto>>> sortType() {
         List<SortTypeDto> sortTypes = sortTypeRepository.getSortTypes();
-        return ResponseEntity.ok().body(new ResponseWrapper<>(sortTypes));
+        return ResponseEntity.ok().body(ApiResponse.ofSuccess(sortTypes));
     }
 
 
     @GetMapping("/{categoryId}/products")
-    public ResponseEntity<ProductListResponseDto> products(@PathVariable("categoryId") Long categoryId,
+    public ResponseEntity<ApiResponse<ProductListResponseDto>> products(@PathVariable("categoryId") Long categoryId,
                                                            @RequestParam(value = "page", defaultValue = "1", required = false) int page,
                                                            @RequestParam(value = "size", defaultValue = "9") int size,
                                                            @RequestParam(value = "sorted_type", defaultValue = "1") long sortId){
@@ -82,29 +79,20 @@ public class CategoryController {
          * +--------------+---------------------+----------------+
          */
 
-        log.info("sortId = {}", sortId);
 
+        ProductPageResponseDto productsByCategoryId = productService.getProductsByCategoryId(categoryId, page, size, sortId);
+        ProductListResponseDto productListResponseDto = getProductListResponseDto(productsByCategoryId);
 
-        SortType sortType = sortTypeRepository.findById(sortId)
-                .orElseThrow(() -> new IllegalArgumentException(ErrorCode.SORT_TYPE_NOT_FOUND.getMessage()));
+        return ResponseEntity.ok().body(ApiResponse.ofSuccess(productListResponseDto));
+    }
 
-        Sort sort = Sort.by(sortType.getSortTypeField());
-        sort = sortType.getSortDirection()
-                .equals("desc") ? sort.descending() : sort.ascending();
-
-        log.info("sort = {}", sort); // #############
-
-        PageRequest pageRequest = PageRequest.of(page-1, size, sort);
-        log.info("pageRequest = {}", pageRequest);
-        log.info("pageRequest.getOffset() = {}", pageRequest.getOffset());
-
-        Page<ProductDto> productPage = productService.getProductsByCategoryId(categoryId, pageRequest);
+    private ProductListResponseDto getProductListResponseDto(ProductPageResponseDto productsByCategoryId) {
+        Page<ProductDto> productPage = productsByCategoryId.getProductsByCategoryId();
+        PageRequest pageRequest = productsByCategoryId.getPageRequest();
+        SortType sortType = productsByCategoryId.getSortType();
 
         Slice<ProductDto> productSlice = new SliceImpl<>(productPage.getContent(), pageRequest, productPage.hasNext());
-        ProductListResponseDto productListResponseDto =
-                new ProductListResponseDto(sortType.getDisplayName(), productSlice, productPage.getTotalElements(), productPage.getTotalPages());
-
-        return ResponseEntity.ok().body(productListResponseDto);
+        return new ProductListResponseDto(sortType.getDisplayName(), productSlice, productPage.getTotalElements(), productPage.getTotalPages());
     }
 
 }
