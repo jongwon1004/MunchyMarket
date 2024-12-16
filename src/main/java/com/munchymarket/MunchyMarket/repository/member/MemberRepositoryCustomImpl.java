@@ -1,8 +1,9 @@
 package com.munchymarket.MunchyMarket.repository.member;
 
+import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.dto.member.AddressDto;
 import com.munchymarket.MunchyMarket.dto.member.MemberAddressDto;
-import com.munchymarket.MunchyMarket.dto.member.MemberDto;
+import com.munchymarket.MunchyMarket.dto.member.MemberLoginResponseDto;
 import com.munchymarket.MunchyMarket.request.LoginValidateCheckRequest;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,10 +38,10 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
         return response;
     }
 
-    @Override
-    public MemberDto findMemberById(Long memberId) {
+//    @Override
+    public MemberLoginResponseDto findMemberById(Long memberId) {
         return queryFactory.select(
-                        Projections.constructor(MemberDto.class,
+                        Projections.constructor(MemberLoginResponseDto.class,
                                 member.id,
                                 member.loginId,
                                 member.name,
@@ -57,32 +58,40 @@ public class MemberRepositoryCustomImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public MemberAddressDto findMemberAddressByMemberId(Long memberId) {
-        return queryFactory.select(
-                        Projections.constructor(MemberAddressDto.class,
-                                member.id,
-                                member.loginId,
-                                member.name,
-                                member.ruby,
-                                member.email,
-                                member.phoneNumber,
-                                member.sex,
-                                member.birth,
-                                member.role,
-                                Projections.constructor(AddressDto.class,
-                                        address.id,
-                                        address.postalCode,
-                                        address.regionAddress,
-                                        address.detailAddress,
-                                        address.isBaseAddress,
-                                        address.createdDate,
-                                        address.lastModifiedDate)
-                        )
-                )
-                .from(member)
-                .leftJoin(address).on(member.id.eq(address.member.id))
+    public Member findMemberAddressByMemberId(Long memberId) {
+        return queryFactory.selectFrom(member)
+                .leftJoin(member.addresses, address).fetchJoin()
                 .where(member.id.eq(memberId))
                 .fetchOne();
-
     }
+
+//    @Override
+//    public MemberAddressDto findMemberAddressByMemberId(Long memberId) {
+//        return queryFactory.select(
+//                        Projections.constructor(MemberAddressDto.class,
+//                                member.id,
+//                                member.loginId,
+//                                member.name,
+//                                member.ruby,
+//                                member.email,
+//                                member.phoneNumber,
+//                                member.sex,
+//                                member.birth,
+//                                member.role,
+//                                Projections.constructor(AddressDto.class,
+//                                        address.id,
+//                                        address.postalCode,
+//                                        address.regionAddress,
+//                                        address.detailAddress,
+//                                        address.isBaseAddress,
+//                                        address.createdDate,
+//                                        address.lastModifiedDate)
+//                        )
+//                )
+//                .from(member)
+//                .leftJoin(address).on(member.id.eq(address.member.id))
+//                .where(member.id.eq(memberId))
+//                .fetchOne();
+//
+//    }
 }

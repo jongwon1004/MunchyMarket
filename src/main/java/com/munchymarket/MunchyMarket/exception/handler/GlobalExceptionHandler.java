@@ -2,10 +2,7 @@ package com.munchymarket.MunchyMarket.exception.handler;
 
 import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
-import com.munchymarket.MunchyMarket.exception.DuplicateReviewException;
-import com.munchymarket.MunchyMarket.exception.GcsFileUploadFailException;
-import com.munchymarket.MunchyMarket.exception.JoinRequestValidationException;
-import com.munchymarket.MunchyMarket.exception.ProductRegisterException;
+import com.munchymarket.MunchyMarket.exception.*;
 import com.stripe.exception.StripeException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,8 +13,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,7 +58,6 @@ public class GlobalExceptionHandler {
                 ApiResponse.ofFail(ex.getErrorCode(), ex.getMessage())
         );
     }
-
 
 
     @ExceptionHandler(DuplicateReviewException.class)
@@ -117,11 +115,43 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.ofFail(ErrorCode.METHOD_ARGUMENT_TYPE_MISMATCH, errorMessage));
     }
 
-    @ExceptionHandler(JoinRequestValidationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleJoinRequestValidationException(JoinRequestValidationException ex) {
-
+    @ExceptionHandler(TextBeltRequestException.class)
+    public ResponseEntity<ApiResponse<Void>> handleTextBeltRequestException(TextBeltRequestException ex) {
         return ResponseEntity.status(ex.getErrorCode().getHttpStatusCode())
                 .body(ApiResponse.ofFail(ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(JoinRequestValidationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleJoinRequestValidationException(JoinRequestValidationException ex) {
+        return ResponseEntity.status(ex.getErrorCode().getHttpStatusCode())
+                .body(ApiResponse.ofFail(ex.getErrorCode(), ex.getMessage()));
+    }
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNotFoundError(NoHandlerFoundException ex) {
+
+        return ResponseEntity.status(ex.getStatusCode())
+                .body(ApiResponse.ofFail(ErrorCode.NO_HANDLER_FOUND, ErrorCode.DetailMessage.NO_HANDLER_FOUND));
+    }
+
+    @ExceptionHandler({InvalidVerificationCodeException.class, VerificationCodeExpiredException.class})
+    public ResponseEntity<ApiResponse<Void>> handleVerificationCodeException(RuntimeException ex) {
+        ErrorCode errorCode = null;
+        String message = null;
+
+        if (ex instanceof InvalidVerificationCodeException) {
+            InvalidVerificationCodeException exception = (InvalidVerificationCodeException) ex;
+            errorCode = exception.getErrorCode();
+            message = exception.getMessage();
+        } else if (ex instanceof VerificationCodeExpiredException) {
+            VerificationCodeExpiredException exception = (VerificationCodeExpiredException) ex;
+            errorCode = exception.getErrorCode();
+            message = exception.getMessage();
+        }
+
+        return ResponseEntity
+                .status(errorCode.getHttpStatusCode())
+                .body(ApiResponse.ofFail(errorCode, message));
     }
 
 

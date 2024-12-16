@@ -2,6 +2,9 @@ package com.munchymarket.MunchyMarket.service;
 
 import com.munchymarket.MunchyMarket.domain.VerificationCode;
 import com.munchymarket.MunchyMarket.domain.enums.StatusType;
+import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
+import com.munchymarket.MunchyMarket.exception.InvalidVerificationCodeException;
+import com.munchymarket.MunchyMarket.exception.VerificationCodeExpiredException;
 import com.munchymarket.MunchyMarket.repository.verificationCode.VerificationCodeRepository;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -34,27 +37,28 @@ public class VerificationCodeService {
 
 
     @Transactional
-    public Map<String, Object> validateVerificationCode(String phoneNumber, String code) {
+    public Map<String, String> validateVerificationCode(String phoneNumber, String code) {
         VerificationCode result = verificationCodeRepository.validateVerificationCode(phoneNumber, code);
 
-        Map<String, Object> response = new HashMap<>();
+        log.info("phoneNumber ={}", phoneNumber);
+
+        log.info("result = {}", result);
+
+        Map<String, String> response = new HashMap<>();
 
         // null 일 경우는 해당 번호의 인증번호가 없다는 뜻
         if (result != null) {
             // 만료일이 현재 시간보다 이후인지 확인
             if (result.getExpiredDate().isBefore(LocalDateTime.now())) {
-                response.put("result", false);
-                response.put("message", "認証番号の有効期限が切れました。再度認証番号を発行してください");
+                throw new VerificationCodeExpiredException(ErrorCode.VERIFICATION_CODE_EXPIRED, ErrorCode.DetailMessage.VERIFICATION_CODE_EXPIRED);
             } else {
                 // 만료일이 안지났고 인증번호가 일치하면 Status 를 SUCCESS 로 변경
                 // 회원가입 최종단계 에서 인증번호가 인증되었는지 유효성 검사를 하고 Status 확인 후 삭제
                 result.changeStatus(StatusType.SUCCESS); // Dirty Checking
-                response.put("result", true);
                 response.put("message", "認証に成功しました");
             }
         } else {
-            response.put("result", false);
-            response.put("message", "認証番号が一致しません。再度確認してください");
+            throw new InvalidVerificationCodeException(ErrorCode.INVALID_VERIFICATION_CODE, ErrorCode.DetailMessage.INVALID_VERIFICATION_CODE);
         }
         return response;
     }

@@ -8,9 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -56,6 +57,9 @@ public class Member extends TimeBaseEntity {
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Cart cart;
 
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Address> addresses = new ArrayList<>(); // Address 와 1:N 관계 설정
+
 
     public Member(Long id, String email, String role) {
         this.id = id;
@@ -81,5 +85,6 @@ public class Member extends TimeBaseEntity {
     public void changePassword(String password) {
         this.password = password;
     }
+
 }
 

@@ -1,4 +1,4 @@
-package com.munchymarket.MunchyMarket.request;
+package com.munchymarket.MunchyMarket.dto.member.join;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

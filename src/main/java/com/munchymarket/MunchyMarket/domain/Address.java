@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.domain;
 
 import com.munchymarket.MunchyMarket.domain.base.TimeBaseEntity;
+import com.munchymarket.MunchyMarket.dto.member.join.JoinRequest;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,5 +40,17 @@ public class Address extends TimeBaseEntity {
         this.regionAddress = regionAddress;
         this.detailAddress = detailAddress;
         this.isBaseAddress = isBaseAddress;
+    }
+
+
+    // 회원가입시 클라이언트가 입력한 주소 엔티티화
+    public static Address createForJoin(Member member, JoinRequest joinRequest) {
+        return Address.builder()
+                .member(member)
+                .postalCode(joinRequest.getPostalCode())
+                .regionAddress(joinRequest.getRegionAddress())
+                .detailAddress(joinRequest.getDetailAddress())
+                .isBaseAddress(true)
+                .build();
     }
 }

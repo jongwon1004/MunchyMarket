@@ -80,8 +80,9 @@ public class SecurityConfig {
 
                         /*  PERMIT ALL  */
                         .requestMatchers(
-                                "/api/members/login",
-                                "/api/members/send-sms", "/api/members/validate", "/api/members/verification-code", "/api/members/join", //テスト段階なので、一時的に許可
+                                "/api/members/login", "/api/members/logout",
+                                "/api/members/sms", "/api/members/verification", "/api/members/sms/verification", "/api/members",
+                                "/api/members/test", // 요청 테스트
                                 "/api/categories/**", "/api/products/**",
                                 "/api/webhooks/stripe",
                                 "/favicon.ico", "/robots.txt", "/sitemap.xml",

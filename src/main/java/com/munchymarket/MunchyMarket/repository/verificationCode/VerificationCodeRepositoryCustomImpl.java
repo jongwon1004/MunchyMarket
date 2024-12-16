@@ -22,9 +22,8 @@ public class VerificationCodeRepositoryCustomImpl implements VerificationCodeRep
         // 해당 번호와 인증번호가 존재하는지 확인
         return queryFactory
                 .selectFrom(verificationCode)
-                .where(verificationCode.phoneNumber.eq(phoneNumber)
-                        .and(verificationCode.code.eq(code))
-                        .and(verificationCode.expiredDate.after(LocalDateTime.now())))
+                .where(verificationCode.phoneNumber.eq(phoneNumber))
+//                        .and(verificationCode.code.eq(code)))
                 .fetchOne();
     }
 

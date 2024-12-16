@@ -24,12 +24,18 @@ public enum ErrorCode {
     LOGIN_ID_EXISTS(CONFLICT, "C017"),
     EMAIL_INVALID(BAD_REQUEST, "C018"),
     EMAIL_EXISTS(CONFLICT, "C019"),
+    NO_HANDLER_FOUND(BAD_REQUEST, "C020"),
+    SMS_AUTH_NOT_COMPLETED(BAD_REQUEST, "C021"),
+    VERIFICATION_CODE_EXPIRED(BAD_REQUEST, "C022"),
+    INVALID_VERIFICATION_CODE(BAD_REQUEST, "S023"),
 
 
 
     // SERVER
     SERVER_ERROR(INTERNAL_SERVER_ERROR, "S001"),
-    GCS_FILE_UPLOAD_ERROR(INTERNAL_SERVER_ERROR, "S002");
+    GCS_FILE_UPLOAD_ERROR(INTERNAL_SERVER_ERROR, "S002"),
+    TEXT_BELT_REQUEST_FAILURE(INTERNAL_SERVER_ERROR, "S003"),
+    TEXT_BELT_REQUEST_ERROR(INTERNAL_SERVER_ERROR, "S004");
 
     private final HttpStatus httpStatusCode;
     private final String code;
@@ -60,12 +66,17 @@ public enum ErrorCode {
 
 
 
-
-
-
         // SERVER
         public static final String SERVER_ERROR = "서버 내부에 문제가 생겼습니다.";
         public static final String GCS_FILE_UPLOAD_ERROR = "GCSファイルアップロードに失敗しました";
+        public static final String NO_HANDLER_FOUND = "指定されたAPIは存在しません。";
+        public static final String SMS_AUTH_NOT_COMPLETED = "SMS認証がまだ完了してない状態です。再度認証を行ってください。";
+        public static final String TEXT_BELT_REQUEST_FAILURE = "TextBelt リクエスト失敗";
+        public static final String TEXT_BELT_REQUEST_ERROR = "TextBelt API リクエスト中にエラーが発生しました";
+        public static final String VERIFICATION_CODE_EXPIRED = "認証番号の有効期限が切れました。再度認証番号を発行してください";
+        public static final String INVALID_VERIFICATION_CODE = "認証番号が一致しません。再度確認してください";
+
+
 
 
     }

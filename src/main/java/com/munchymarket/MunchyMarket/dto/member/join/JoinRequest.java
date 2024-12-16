@@ -1,4 +1,4 @@
-package com.munchymarket.MunchyMarket.request;
+package com.munchymarket.MunchyMarket.dto.member.join;
 
 import com.munchymarket.MunchyMarket.domain.Member;
 import com.munchymarket.MunchyMarket.utils.PhoneNumberUtil;
@@ -57,9 +57,10 @@ public class JoinRequest{
     @NotBlank(message = "性別を選択してください")
     private String sex; // "男", "女", "選択なし"
 
-    @NotBlank(message = "生年月日を入力してください")
+    @NotNull(message = "生年月日を入力してください")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birth;
+
 
     @NotBlank(message = "郵便番号を入力してください")
     @Pattern(regexp = "^\\d{3}-\\d{4}$", message = "郵便番号はXXX-XXXXの形式で入力してください")
@@ -77,7 +78,7 @@ public class JoinRequest{
     @Size(min = 6, max = 6, message = "SMS認証コードは6文字で入力してください")
     private String code;
 
-    @NotBlank(message = "SMS認証が完了していません")
+    @NotNull(message = "SMS認証が完了していません")
     private Boolean smsVerified;
 
     public void changePassword(String password) {

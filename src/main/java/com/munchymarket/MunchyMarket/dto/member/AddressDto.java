@@ -1,9 +1,7 @@
 package com.munchymarket.MunchyMarket.dto.member;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.munchymarket.MunchyMarket.domain.Address;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,13 +9,23 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @AllArgsConstructor
+@Builder
 public class AddressDto {
     private Long id;
     private String postalCode;
     private String regionAddress;
     private String detailAddress;
     private Boolean isBaseAddress;
-    private LocalDateTime createdDate;
-    private LocalDateTime lastModifiedDate;
+
+
+    public static AddressDto FromEntity(Address address) {
+        return AddressDto.builder()
+                .id(address.getId())
+                .postalCode(address.getPostalCode())
+                .regionAddress(address.getRegionAddress())
+                .detailAddress(address.getDetailAddress())
+                .isBaseAddress(address.getIsBaseAddress())
+                .build();
+    }
 
 }
