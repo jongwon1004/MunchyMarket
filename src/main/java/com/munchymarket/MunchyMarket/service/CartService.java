@@ -1,10 +1,10 @@
 package com.munchymarket.MunchyMarket.service;
 
-import com.munchymarket.MunchyMarket.controller.cart.CartController;
 import com.munchymarket.MunchyMarket.domain.Cart;
 import com.munchymarket.MunchyMarket.domain.CartProduct;
 import com.munchymarket.MunchyMarket.domain.Product;
 import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
+import com.munchymarket.MunchyMarket.dto.cart.CartProductQuantityUpdateDto;
 import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.dto.wrapper.ErrorCode;
 import com.munchymarket.MunchyMarket.repository.cart.cart_products.CartProductRepository;
@@ -109,7 +109,7 @@ public class CartService {
 
 
     @Transactional(rollbackFor = Exception.class)
-    public List<CartController.CartProductSimpleDto> updateProductQuantity(Long memberId, Long productId, int quantity) {
+    public List<CartProductQuantityUpdateDto> updateProductQuantity(Long memberId, Long productId, int quantity) {
 
         CommonResult commonResult = commonLogics(memberId, productId, MethodFrom.UPDATE_PRODUCT);
 
@@ -118,7 +118,7 @@ public class CartService {
 
         return cartProductRepository.findCartProductsByCartId(commonResult.cart().getId())
                 .stream()
-                .map(i -> new CartController.CartProductSimpleDto(i.getProduct().getId(), i.getQuantity(), i.getLastModifiedDate()))
+                .map(i -> new CartProductQuantityUpdateDto(i.getProduct().getId(), i.getQuantity(), i.getLastModifiedDate()))
                 .toList();
     }
 

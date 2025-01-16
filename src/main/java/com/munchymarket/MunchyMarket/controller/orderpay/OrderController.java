@@ -29,8 +29,6 @@ public class OrderController {
     /**
      * 주문 생성 & PaymentIntent Create
      * TODO: 쿠폰 사용시 최소주문금액, 최대 할인 가능액 계산 다시 해야됨, 장바구니 구현 필요
-     *
-     * @return
      */
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<Map<String, Object>>> createOrder(@RequestBody OrderPaymentRequestDto orderPaymentRequestDto,

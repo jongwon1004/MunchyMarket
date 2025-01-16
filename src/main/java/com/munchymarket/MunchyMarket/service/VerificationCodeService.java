@@ -40,10 +40,6 @@ public class VerificationCodeService {
     public Map<String, String> validateVerificationCode(String phoneNumber, String code) {
         VerificationCode result = verificationCodeRepository.validateVerificationCode(phoneNumber, code);
 
-        log.info("phoneNumber ={}", phoneNumber);
-
-        log.info("result = {}", result);
-
         Map<String, String> response = new HashMap<>();
 
         // null 일 경우는 해당 번호의 인증번호가 없다는 뜻

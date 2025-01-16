@@ -10,20 +10,26 @@ import lombok.*;
 @Setter @Getter
 @ToString
 public class CartProductDto {
+    /**
+     * 사진,
+     */
 
     private Long productId;
     private String productName;
+    private String mainImage;
     private int basePrice;
     private int finalPrice;
     private int quantity;
 
-    public CartProductDto(Long productId, String productName, int basePrice, int finalPrice, int quantity) {
+    public CartProductDto(Long productId, String productName, String mainImage, int basePrice, int finalPrice, int quantity) {
         this.productId = productId;
         this.productName = productName;
+        this.mainImage = mainImage;
         this.basePrice = basePrice;
         this.finalPrice = finalPrice;
         this.quantity = quantity;
     }
+
 }
 
 /*

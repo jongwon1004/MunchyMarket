@@ -1,6 +1,7 @@
 package com.munchymarket.MunchyMarket.controller.cart;
 
 import com.munchymarket.MunchyMarket.dto.cart.CartProductDto;
+import com.munchymarket.MunchyMarket.dto.cart.CartProductQuantityUpdateDto;
 import com.munchymarket.MunchyMarket.dto.product.ProductIdAndQuantityDto;
 import com.munchymarket.MunchyMarket.dto.wrapper.ApiResponse;
 import com.munchymarket.MunchyMarket.security.CustomMemberDetails;
@@ -10,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,9 @@ public class CartController {
 
     private final CartService cartService;
 
+    /**
+     * 회원 카트의 상품 목록 조회
+     */
     @GetMapping("/products")
     public ResponseEntity<ApiResponse<List<CartProductDto>>> getCartProducts(@AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
 
@@ -43,25 +46,15 @@ public class CartController {
     }
 
 
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Setter @Getter
-    public static class CartProductSimpleDto {
-        private Long productId;
-        private int quantity;
-        private LocalDateTime lastModifiedDate;
-    }
-
-
     /**
      * 카트에 상품수량 업데이트
      * REQUEST EXAM: /api/cart/products/{productId}?quantity=3
      */
     @PutMapping("/products/{productId}")
-    public ResponseEntity<ApiResponse<List<CartProductSimpleDto>>> updateProductQuantity(@PathVariable("productId") Long productId,
-                                                                        @RequestParam(name = "quantity") int quantity,
-                                                                        @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
-        List<CartProductSimpleDto> updatedData = cartService.updateProductQuantity(customMemberDetails.getId(), productId, quantity);
+    public ResponseEntity<ApiResponse<List<CartProductQuantityUpdateDto>>> updateProductQuantity(@PathVariable("productId") Long productId,
+                                                                                                 @RequestParam(name = "quantity") int quantity,
+                                                                                                 @AuthenticationPrincipal CustomMemberDetails customMemberDetails) {
+        List<CartProductQuantityUpdateDto> updatedData = cartService.updateProductQuantity(customMemberDetails.getId(), productId, quantity);
 
         return ResponseEntity.ok().body(ApiResponse.ofSuccess(updatedData));
     }
